@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour
 {
     public LayerMask platformsLayerMask; // what counts as a platform (will trigger isGrounded)
+    public LayerMask wallsLayerMask; // what counts as a wall (will trigger isOnWall)
     public SpriteMask crouchSpriteMask;
     public float health = 3;
     public float jumpVelocity = 10f;
@@ -13,6 +14,7 @@ public class Player : MonoBehaviour
     public float dashVelocity = 25f;
     public float forceFallVelocity = 50f;
     public float sideSpeed = 1f;
+    public float slideSpeed = 1f;
     public Text healthDisplay;
 
     private Rigidbody2D rigidbody2d;
@@ -47,6 +49,14 @@ public class Player : MonoBehaviour
         if (isGrounded)
         {
             canDash = true;
+        }
+
+        // prevent adding velocity into the walls - this stops the character from getting stuck on a wall if you are moving towards it while you're on it
+        bool isOnLeftWall = IsOnLeftWall();
+        bool isOnRightWall = IsOnRightWall();
+        if ((isOnLeftWall && x < 0) || (isOnRightWall && x > 0)) // on left wall and moving left or on right wall and moving right
+        {
+            x = 0; // deaden x velocity
         }
 
         // reset drag (after dash)
@@ -90,6 +100,11 @@ public class Player : MonoBehaviour
             {
                 rigidbody2d.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
             }
+
+            if ((isOnLeftWall || isOnRightWall) && !isGrounded)
+            {
+                WallSlide();
+            }
         }
 
         // dash
@@ -101,7 +116,17 @@ public class Player : MonoBehaviour
 
     private bool IsGrounded()
     {
-        return Physics2D.OverlapCircle(new Vector2(boxCollider2d.bounds.center.x, boxCollider2d.bounds.center.y - boxCollider2d.bounds.size.y / 2), 0.1f, platformsLayerMask);
+        return Physics2D.OverlapCircle(new Vector2(boxCollider2d.bounds.center.x, boxCollider2d.bounds.center.y - boxCollider2d.bounds.size.y / 2), 0.01f, platformsLayerMask);
+    }
+
+    private bool IsOnLeftWall()
+    {
+        return Physics2D.OverlapCircle(new Vector2(boxCollider2d.bounds.center.x - boxCollider2d.bounds.size.x / 2, boxCollider2d.bounds.center.y), 0.01f, wallsLayerMask);
+    }
+
+    private bool IsOnRightWall()
+    {
+        return Physics2D.OverlapCircle(new Vector2(boxCollider2d.bounds.center.x + boxCollider2d.bounds.size.x / 2, boxCollider2d.bounds.center.y), 0.01f, wallsLayerMask);
     }
 
     public void Crouch(bool shouldCrouch)
@@ -122,7 +147,8 @@ public class Player : MonoBehaviour
             spriteMaskPos.y = verticalOffset;
             crouchSpriteMask.transform.localPosition = spriteMaskPos;
         }
-        else {
+        else
+        {
             float standSize = 1f;
             float verticalOffset = 0f;
 
@@ -147,5 +173,10 @@ public class Player : MonoBehaviour
         isDashing = true;
         rigidbody2d.drag = 10;
         rigidbody2d.gravityScale = 0;
+    }
+
+    public void WallSlide()
+    {
+        rigidbody2d.velocity = new Vector2(rigidbody2d.velocity.x, -slideSpeed);
     }
 }
