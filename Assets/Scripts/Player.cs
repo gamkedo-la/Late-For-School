@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
     public float lowJumpMultiplier = 2f;
     public float dashVelocity = 25f;
     public float forceFallVelocity = 50f;
-    public float sideSpeed = 1f;
+    public float speed = 10f;
     public float slideSpeed = 1f;
     public Text healthDisplay;
 
@@ -21,11 +21,13 @@ public class Player : MonoBehaviour
     private BoxCollider2D boxCollider2d;
     private bool canDash = false;
     private bool isDashing = false;
+    private float rigidBodyGravityScale;
 
     void Start()
     {
         rigidbody2d = GetComponent<Rigidbody2D>();
         boxCollider2d = GetComponent<BoxCollider2D>();
+        rigidBodyGravityScale = rigidbody2d.gravityScale;
     }
 
     void Update()
@@ -33,6 +35,12 @@ public class Player : MonoBehaviour
         // Get horizontal and vertical input
         float x = Input.GetAxisRaw("Horizontal");
         float y = Input.GetAxisRaw("Vertical");
+
+        bool isGrounded = IsGrounded();
+
+        bool isOnWall = IsOnWall();
+
+        bool isGrabbingWall = !isGrounded && isOnWall && Input.GetKey(KeyCode.LeftShift);
 
         // dispay health
         healthDisplay.text = "Health: " + health.ToString();
@@ -43,30 +51,33 @@ public class Player : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
-        bool isGrounded = IsGrounded();
-
         // reset dash
         if (isGrounded)
         {
             canDash = true;
         }
 
-        // prevent adding velocity into the walls - this stops the character from getting stuck on a wall if you are moving towards it while you're on it
-        bool isOnLeftWall = IsOnLeftWall();
-        bool isOnRightWall = IsOnRightWall();
-        if ((isOnLeftWall && x < 0) || (isOnRightWall && x > 0)) // on left wall and moving left or on right wall and moving right
+        if (isGrabbingWall)
         {
-            x = 0; // deaden x velocity
-        }
-
-        // reset drag (after dash)
-        if (rigidbody2d.drag > 0)
-        {
-            rigidbody2d.drag -= 0.2f;
+            if (rigidbody2d.gravityScale != 0)
+            {
+                rigidBodyGravityScale = rigidbody2d.gravityScale;
+                rigidbody2d.gravityScale = 0;
+            }
         }
         else
         {
-            rigidbody2d.gravityScale = 3; // Todo: store old gravity, and reset it to that value
+            rigidbody2d.gravityScale = rigidBodyGravityScale;
+        }
+
+        // reset drag (after dash)
+        if (rigidbody2d.drag > 0) // drag is set to 10 after dash
+        {
+            rigidbody2d.drag -= 0.2f;
+        }
+        else if (!isGrabbingWall) // don't want to reset gravity scale if we are grabbing wall
+        {
+            rigidbody2d.gravityScale = rigidBodyGravityScale;
             isDashing = false;
         }
 
@@ -79,7 +90,7 @@ public class Player : MonoBehaviour
             }
 
             // force fall
-            if (!isGrounded && y == -1)
+            if (!isGrounded && !isOnWall && y == -1)
             {
                 rigidbody2d.AddForce(Vector2.down * forceFallVelocity);
             }
@@ -89,7 +100,7 @@ public class Player : MonoBehaviour
 
 
             // move sidewards
-            rigidbody2d.velocity = new Vector2(x * sideSpeed, rigidbody2d.velocity.y);
+            rigidbody2d.velocity = new Vector2(x * speed, rigidbody2d.velocity.y);
 
             // falling
             if (rigidbody2d.velocity.y < 0)
@@ -101,7 +112,12 @@ public class Player : MonoBehaviour
                 rigidbody2d.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
             }
 
-            if ((isOnLeftWall || isOnRightWall) && !isGrounded)
+            // wall grab and wall slide
+            if (isGrabbingWall)
+            {
+                rigidbody2d.velocity = new Vector2(rigidbody2d.velocity.x, y * speed);
+            }
+            else if (isOnWall && !isGrounded)
             {
                 WallSlide();
             }
@@ -119,14 +135,10 @@ public class Player : MonoBehaviour
         return Physics2D.OverlapCircle(new Vector2(boxCollider2d.bounds.center.x, boxCollider2d.bounds.center.y - boxCollider2d.bounds.size.y / 2), 0.01f, platformsLayerMask);
     }
 
-    private bool IsOnLeftWall()
+    private bool IsOnWall()
     {
-        return Physics2D.OverlapCircle(new Vector2(boxCollider2d.bounds.center.x - boxCollider2d.bounds.size.x / 2, boxCollider2d.bounds.center.y), 0.01f, wallsLayerMask);
-    }
-
-    private bool IsOnRightWall()
-    {
-        return Physics2D.OverlapCircle(new Vector2(boxCollider2d.bounds.center.x + boxCollider2d.bounds.size.x / 2, boxCollider2d.bounds.center.y), 0.01f, wallsLayerMask);
+        return Physics2D.OverlapCircle(new Vector2(boxCollider2d.bounds.center.x - boxCollider2d.bounds.size.x / 2, boxCollider2d.bounds.center.y), 0.01f, wallsLayerMask) ||
+               Physics2D.OverlapCircle(new Vector2(boxCollider2d.bounds.center.x + boxCollider2d.bounds.size.x / 2, boxCollider2d.bounds.center.y), 0.01f, wallsLayerMask);
     }
 
     public void Crouch(bool shouldCrouch)
@@ -172,7 +184,12 @@ public class Player : MonoBehaviour
         canDash = false;
         isDashing = true;
         rigidbody2d.drag = 10;
-        rigidbody2d.gravityScale = 0;
+
+        if (rigidbody2d.gravityScale != 0)
+        {
+            rigidBodyGravityScale = rigidbody2d.gravityScale;
+            rigidbody2d.gravityScale = 0;
+        }
     }
 
     public void WallSlide()
