@@ -38,7 +38,9 @@ public class Player : MonoBehaviour
 
         bool isGrounded = IsGrounded();
 
-        bool isOnWall = IsOnWall();
+        bool isOnLeftWall = IsOnLeftWall();
+        bool isOnRightWall = IsOnRightWall();
+        bool isOnWall = isOnLeftWall || isOnRightWall;
 
         bool isGrabbingWall = !isGrounded && isOnWall && Input.GetKey(KeyCode.LeftShift);
 
@@ -111,7 +113,7 @@ public class Player : MonoBehaviour
             {
                 rigidbody2d.velocity = new Vector2(rigidbody2d.velocity.x, y * speed);
             }
-            else if (isOnWall && !isGrounded)
+            else if ((isOnLeftWall && !isGrounded && x < 0) || (isOnRightWall && !isGrounded && x > 0)) // only wall slide if player is moving towards wall
             {
                 WallSlide();
             }
@@ -129,10 +131,14 @@ public class Player : MonoBehaviour
         return Physics2D.OverlapCircle(new Vector2(boxCollider2d.bounds.center.x, boxCollider2d.bounds.center.y - boxCollider2d.bounds.size.y / 2), 0.01f, platformsLayerMask);
     }
 
-    private bool IsOnWall()
+    private bool IsOnLeftWall()
     {
-        return Physics2D.OverlapCircle(new Vector2(boxCollider2d.bounds.center.x - boxCollider2d.bounds.size.x / 2, boxCollider2d.bounds.center.y), 0.01f, wallsLayerMask) ||
-               Physics2D.OverlapCircle(new Vector2(boxCollider2d.bounds.center.x + boxCollider2d.bounds.size.x / 2, boxCollider2d.bounds.center.y), 0.01f, wallsLayerMask);
+        return Physics2D.OverlapCircle(new Vector2(boxCollider2d.bounds.center.x - boxCollider2d.bounds.size.x / 2, boxCollider2d.bounds.center.y), 0.01f, wallsLayerMask);
+    }
+
+    private bool IsOnRightWall()
+    {
+        return Physics2D.OverlapCircle(new Vector2(boxCollider2d.bounds.center.x + boxCollider2d.bounds.size.x / 2, boxCollider2d.bounds.center.y), 0.01f, wallsLayerMask);
     }
 
     public void Crouch(bool shouldCrouch)
