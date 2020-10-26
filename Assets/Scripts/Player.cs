@@ -89,14 +89,8 @@ public class Player : MonoBehaviour
                 rigidbody2d.velocity = Vector2.up * jumpVelocity;
             }
 
-            // force fall
-            if (!isGrounded && !isOnWall && y == -1)
-            {
-                rigidbody2d.AddForce(Vector2.down * forceFallVelocity);
-            }
-
             // crouch
-            Crouch(y == -1);
+            Crouch(y == -1 && isGrounded);
 
 
             // move sidewards
