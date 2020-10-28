@@ -22,6 +22,8 @@ public class Player : MonoBehaviour
     private bool canDash = false;
     private bool isDashing = false;
     private float rigidBodyGravityScale;
+    private bool isWallJumpingLeft = false;
+    private bool isWallJumpingRight = false;
 
     void Start()
     {
@@ -44,6 +46,8 @@ public class Player : MonoBehaviour
 
         bool isGrabbingWall = !isGrounded && isOnWall && Input.GetKey(KeyCode.LeftShift);
 
+        bool isWallJumping = isWallJumpingLeft || isWallJumpingRight;
+
         // dispay health
         healthDisplay.text = "Health: " + health.ToString();
 
@@ -59,6 +63,16 @@ public class Player : MonoBehaviour
             canDash = true;
         }
 
+        // reset isWallJumping
+        if (isGrounded || isOnLeftWall)
+        {
+            isWallJumpingLeft = false;
+        }
+        if (isGrounded || isOnRightWall)
+        {
+            isWallJumpingRight = false;
+        }
+
         if (isGrabbingWall)
         {
             if (rigidbody2d.gravityScale != 0)
@@ -71,7 +85,7 @@ public class Player : MonoBehaviour
         {
             rigidbody2d.gravityScale = rigidBodyGravityScale;
         }
-
+       
         // reset drag (after dash)
         if (rigidbody2d.drag > 0) // drag is set to 10 after dash
         {
@@ -94,9 +108,11 @@ public class Player : MonoBehaviour
             // crouch
             Crouch(y == -1 && isGrounded);
 
-
             // move sidewards
-            rigidbody2d.velocity = new Vector2(x * speed, rigidbody2d.velocity.y);
+            if (!isGrabbingWall && !isWallJumping)
+            {
+                rigidbody2d.velocity = new Vector2(x * speed, rigidbody2d.velocity.y);
+            }
 
             // falling
             if (rigidbody2d.velocity.y < 0)
@@ -109,13 +125,31 @@ public class Player : MonoBehaviour
             }
 
             // wall grab and wall slide
-            if (isGrabbingWall)
+            if (isGrabbingWall && !isWallJumping)
             {
                 rigidbody2d.velocity = new Vector2(rigidbody2d.velocity.x, y * speed);
             }
             else if ((isOnLeftWall && !isGrounded && x < 0) || (isOnRightWall && !isGrounded && x > 0)) // only wall slide if player is moving towards wall
             {
                 WallSlide();
+            }
+
+            // wall jump
+            if (isGrabbingWall && Input.GetKeyDown(KeyCode.Space) && !isWallJumping)
+            {
+                float velocityX;
+                if (isOnLeftWall)
+                {
+                    velocityX = jumpVelocity;
+                    isWallJumpingRight = true;
+                }
+                else
+                {
+                    velocityX = -jumpVelocity;
+                    isWallJumpingLeft = true;
+                }
+
+                rigidbody2d.velocity = new Vector2(velocityX, jumpVelocity);
             }
         }
 
