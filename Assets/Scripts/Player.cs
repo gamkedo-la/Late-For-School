@@ -15,6 +15,8 @@ public class Player : MonoBehaviour
     public float forceFallVelocity = 50f;
     public float speed = 10f;
     public float slideSpeed = 1f;
+    public float wallJumpVelocity = 10f;
+    public float wallJumpStopMultiplier = 2f; // amount that player using the direction against the current wall jump will stop the wall jump
     public Text healthDisplay;
 
     private Rigidbody2D rigidbody2d;
@@ -109,9 +111,16 @@ public class Player : MonoBehaviour
             Crouch(y == -1 && isGrounded);
 
             // move sidewards
-            if (!isGrabbingWall && !isWallJumping)
+            if (!isGrabbingWall)
             {
-                rigidbody2d.velocity = new Vector2(x * speed, rigidbody2d.velocity.y);
+                if (!isWallJumping)
+                {
+                    rigidbody2d.velocity = new Vector2(x * speed, rigidbody2d.velocity.y);
+                }
+                else
+                {
+                    rigidbody2d.velocity = Vector2.Lerp(rigidbody2d.velocity, new Vector2(x * speed, rigidbody2d.velocity.y), 2f * Time.deltaTime);
+                }
             }
 
             // falling
@@ -140,16 +149,16 @@ public class Player : MonoBehaviour
                 float velocityX;
                 if (isOnLeftWall)
                 {
-                    velocityX = jumpVelocity;
+                    velocityX = wallJumpVelocity;
                     isWallJumpingRight = true;
                 }
                 else
                 {
-                    velocityX = -jumpVelocity;
+                    velocityX = -wallJumpVelocity;
                     isWallJumpingLeft = true;
                 }
 
-                rigidbody2d.velocity = new Vector2(velocityX, jumpVelocity);
+                rigidbody2d.velocity = new Vector2(velocityX, wallJumpVelocity);
             }
         }
 
