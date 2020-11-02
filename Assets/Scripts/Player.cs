@@ -65,7 +65,7 @@ public class Player : MonoBehaviour
             canDash = true;
         }
 
-        // reset isWallJumping
+        // reset isWallJumping // TODO: make this time based, so that can say the jump is ended mid-air, and allow the player to jump back onto the same side and jump again after that
         if (isGrounded || isOnLeftWall)
         {
             isWallJumpingLeft = false;
@@ -133,14 +133,17 @@ public class Player : MonoBehaviour
                 rigidbody2d.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
             }
 
-            // wall grab and wall slide
-            if (isGrabbingWall && !isWallJumping)
+            // wall climb and wall slide
+            if (!isWallJumping)
             {
-                rigidbody2d.velocity = new Vector2(rigidbody2d.velocity.x, y * speed);
-            }
-            else if ((isOnLeftWall && !isGrounded && x < 0) || (isOnRightWall && !isGrounded && x > 0)) // only wall slide if player is moving towards wall
-            {
-                WallSlide();
+                if (isGrabbingWall) // wall climb
+                {
+                    rigidbody2d.velocity = new Vector2(rigidbody2d.velocity.x, y * speed);
+                }
+                else if ((isOnLeftWall && !isGrounded && x < 0) || (isOnRightWall && !isGrounded && x > 0)) // only wall slide if player is moving towards wall
+                {
+                    WallSlide();
+                }
             }
 
             // wall jump
@@ -163,7 +166,7 @@ public class Player : MonoBehaviour
         }
 
         // dash
-        if (canDash && !isGrounded && Input.GetKeyDown(KeyCode.J) && (x != 0 || y != 0))
+        if (canDash && !isGrounded && !isGrabbingWall && Input.GetKeyDown(KeyCode.J) && (x != 0 || y != 0)) // TODO: prevent dash during middle of wall jump
         {
             Dash(x, y);
         }
