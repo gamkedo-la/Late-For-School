@@ -16,7 +16,7 @@ public class Player : MonoBehaviour
     public float speed = 10f;
     public float slideSpeed = 1f;
     public float wallJumpVelocity = 10f;
-    public float wallJumpStopMultiplier = 2f; // amount that player using the direction against the current wall jump will stop the wall jump
+    public float wallJumpStopMultiplier = 2f; // higher amount = player is able to move back towards a wall they just jumped away from more easily
     public Text healthDisplay;
 
     private Rigidbody2D rigidbody2d;
@@ -119,7 +119,7 @@ public class Player : MonoBehaviour
                 }
                 else
                 {
-                    rigidbody2d.velocity = Vector2.Lerp(rigidbody2d.velocity, new Vector2(x * speed, rigidbody2d.velocity.y), 2f * Time.deltaTime);
+                    rigidbody2d.velocity = Vector2.Lerp(rigidbody2d.velocity, new Vector2(x * speed, rigidbody2d.velocity.y), wallJumpStopMultiplier * Time.deltaTime);
                 }
             }
 
