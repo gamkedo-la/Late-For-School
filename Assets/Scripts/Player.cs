@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
     public float speed = 10f;
     public float slideSpeed = 1f;
     public float wallJumpVelocity = 10f;
+    public float wallJumpResetTime = 1f;
     public float wallJumpStopMultiplier = 2f; // higher amount = player is able to move back towards a wall they just jumped away from more easily
     public Text healthDisplay;
 
@@ -26,6 +27,7 @@ public class Player : MonoBehaviour
     private float rigidBodyGravityScale;
     private bool isWallJumpingLeft = false;
     private bool isWallJumpingRight = false;
+    private float wallJumpTimeLeft = 0;
 
     void Start()
     {
@@ -46,9 +48,17 @@ public class Player : MonoBehaviour
         bool isOnRightWall = IsOnRightWall();
         bool isOnWall = isOnLeftWall || isOnRightWall;
 
-        bool isGrabbingWall = !isGrounded && isOnWall && Input.GetKey(KeyCode.LeftShift);
-
         bool isWallJumping = isWallJumpingLeft || isWallJumpingRight;
+
+        bool justStartedWallJumping = wallJumpTimeLeft > wallJumpResetTime - 0.1;
+
+        bool isGrabbingWall = !isGrounded && isOnWall && Input.GetKey(KeyCode.LeftShift) && !justStartedWallJumping;
+
+        //Debug.Log($"!isGrounded: {!isGrounded}, isOnWall: {isOnWall}, leftshift: {Input.GetKey(KeyCode.LeftShift)}, !justStartedWallJumping: {!justStartedWallJumping}");
+        // isOnLeftWall turns to false which then sets isGrounded to false and makes player fall off wall - HOW TO FIX?
+        //Debug.Log($"isOnLeftWall: {isOnLeftWall}, isOnRightWall: {isOnRightWall}");
+        // So it seems that the player is slowly getting pushed off the left wall when grabbing it, only after wall jumping - how strange
+        //Debug.Log(transform.position.x);
 
         // dispay health
         healthDisplay.text = "Health: " + health.ToString();
@@ -64,17 +74,21 @@ public class Player : MonoBehaviour
         {
             canDash = true;
         }
+        
+        if (wallJumpTimeLeft > 0)
+        {
+            wallJumpTimeLeft -= Time.deltaTime;
+        }
 
-        // reset isWallJumping // TODO: make this time based, so that can say the jump is ended mid-air, and allow the player to jump back onto the same side and jump again after that
-        if (isGrounded || isOnLeftWall)
+        // reset wall jump
+        if (isGrounded || isGrabbingWall || wallJumpTimeLeft <= 0)
         {
             isWallJumpingLeft = false;
-        }
-        if (isGrounded || isOnRightWall)
-        {
             isWallJumpingRight = false;
+            wallJumpTimeLeft = 0;
         }
 
+        // set gravity scale to 0 if we're grabbing wall to stay stuck to it
         if (isGrabbingWall)
         {
             if (rigidbody2d.gravityScale != 0)
@@ -91,11 +105,11 @@ public class Player : MonoBehaviour
         // reset drag (after dash)
         if (rigidbody2d.drag > 0) // drag is set to 10 after dash
         {
-            rigidbody2d.drag -= 0.2f;
+            rigidbody2d.drag -= 50f * Time.deltaTime; // TODO: make this value configurable in inspector
         }
         else if (!isGrabbingWall) // don't want to reset gravity scale if we are grabbing wall
         {
-            rigidbody2d.gravityScale = rigidBodyGravityScale;
+            rigidbody2d.gravityScale = rigidBodyGravityScale; // TODO: why did I write this??
             isDashing = false;
         }
 
@@ -111,7 +125,7 @@ public class Player : MonoBehaviour
             Crouch(y == -1 && isGrounded);
 
             // move sidewards
-            if (!isGrabbingWall)
+            if (!isGrabbingWall) // TODO: maybe all air movement should be lerped?
             {
                 if (!isWallJumping)
                 {
@@ -162,11 +176,12 @@ public class Player : MonoBehaviour
                 }
 
                 rigidbody2d.velocity = new Vector2(velocityX, wallJumpVelocity);
+                wallJumpTimeLeft = wallJumpResetTime;
             }
         }
 
         // dash
-        if (canDash && !isGrounded && !isGrabbingWall && Input.GetKeyDown(KeyCode.J) && (x != 0 || y != 0)) // TODO: prevent dash during middle of wall jump
+        if (canDash && !isGrounded && !isGrabbingWall && Input.GetKeyDown(KeyCode.J) && (x != 0 || y != 0)) // TODO: dashing into wall means you can't grab it
         {
             Dash(x, y);
         }
@@ -229,7 +244,7 @@ public class Player : MonoBehaviour
         rigidbody2d.velocity += new Vector2(x, y).normalized * dashVelocity;
         canDash = false;
         isDashing = true;
-        rigidbody2d.drag = 10;
+        rigidbody2d.drag = 10; // TODO: make this value configurable in inspector
 
         if (rigidbody2d.gravityScale != 0)
         {

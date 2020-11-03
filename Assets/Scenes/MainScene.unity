@@ -912,6 +912,9 @@ MonoBehaviour:
   forceFallVelocity: 30
   speed: 10
   slideSpeed: 1
+  wallJumpVelocity: 10
+  wallJumpResetTime: 1
+  wallJumpStopMultiplier: 2
   healthDisplay: {fileID: 1660769659}
 --- !u!212 &1578492303
 SpriteRenderer:
