@@ -54,12 +54,6 @@ public class Player : MonoBehaviour
 
         bool isGrabbingWall = !isGrounded && isOnWall && Input.GetKey(KeyCode.LeftShift) && !justStartedWallJumping;
 
-        //Debug.Log($"!isGrounded: {!isGrounded}, isOnWall: {isOnWall}, leftshift: {Input.GetKey(KeyCode.LeftShift)}, !justStartedWallJumping: {!justStartedWallJumping}");
-        // isOnLeftWall turns to false which then sets isGrounded to false and makes player fall off wall - HOW TO FIX?
-        //Debug.Log($"isOnLeftWall: {isOnLeftWall}, isOnRightWall: {isOnRightWall}");
-        // So it seems that the player is slowly getting pushed off the left wall when grabbing it, only after wall jumping - how strange
-        //Debug.Log(transform.position.x);
-
         // dispay health
         healthDisplay.text = "Health: " + health.ToString();
 
@@ -152,7 +146,7 @@ public class Player : MonoBehaviour
             {
                 if (isGrabbingWall) // wall climb
                 {
-                    rigidbody2d.velocity = new Vector2(rigidbody2d.velocity.x, y * speed);
+                    rigidbody2d.velocity = new Vector2(0, y * speed);
                 }
                 else if ((isOnLeftWall && !isGrounded && x < 0) || (isOnRightWall && !isGrounded && x > 0)) // only wall slide if player is moving towards wall
                 {
@@ -255,6 +249,6 @@ public class Player : MonoBehaviour
 
     public void WallSlide()
     {
-        rigidbody2d.velocity = new Vector2(rigidbody2d.velocity.x, -slideSpeed);
+        rigidbody2d.velocity = new Vector2(0, -slideSpeed);
     }
 }
