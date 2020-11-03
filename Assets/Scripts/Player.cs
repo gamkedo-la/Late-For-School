@@ -68,7 +68,7 @@ public class Player : MonoBehaviour
         {
             canDash = true;
         }
-        
+
         if (wallJumpTimeLeft > 0)
         {
             wallJumpTimeLeft -= Time.deltaTime;
@@ -95,16 +95,16 @@ public class Player : MonoBehaviour
         {
             rigidbody2d.gravityScale = rigidBodyGravityScale;
         }
-       
-        // reset drag (after dash)
-        if (rigidbody2d.drag > 0) // drag is set to 10 after dash
+
+        // reset isDashing, and drag (after dash)
+        if (isOnWall || rigidbody2d.drag <= 0)
         {
-            rigidbody2d.drag -= 50f * Time.deltaTime; // TODO: make this value configurable in inspector
-        }
-        else if (!isGrabbingWall) // don't want to reset gravity scale if we are grabbing wall
-        {
-            rigidbody2d.gravityScale = rigidBodyGravityScale; // TODO: why did I write this??
             isDashing = false;
+            rigidbody2d.drag = 0;
+        }
+        else if (rigidbody2d.drag > 0)
+        {
+            rigidbody2d.drag -= 40f * Time.deltaTime; // TODO: make this value configurable in inspector
         }
 
         if (!isDashing)
@@ -175,7 +175,7 @@ public class Player : MonoBehaviour
         }
 
         // dash
-        if (canDash && !isGrounded && !isGrabbingWall && Input.GetKeyDown(KeyCode.J) && (x != 0 || y != 0)) // TODO: dashing into wall means you can't grab it
+        if (canDash && !isGrounded && !isGrabbingWall && Input.GetKeyDown(KeyCode.J) && (x != 0 || y != 0))
         {
             Dash(x, y);
         }
