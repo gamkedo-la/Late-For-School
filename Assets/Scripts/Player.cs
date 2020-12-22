@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
     public float wallJumpVelocity = 10f;
     public float wallJumpResetTime = 1f; // Prevents player from getting back to the wall
     public float wallJumpStopMultiplier = 2f; // higher amount = player is able to move back towards a wall they just jumped away from more easily
-    public float nearWallDistance = 0.4f; // Allows wall jumping even if not exactly touching the wall
+    public float nearWallDistance = 0.5f; // Allows wall jumping even if not exactly touching the wall
     public float slideTime = 1f;
     public Text healthDisplay;
 
