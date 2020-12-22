@@ -33,6 +33,11 @@ public class Player : MonoBehaviour
     private bool isSliding = false;
     private float slideTimeLeft = 0;
 
+    private const KeyCode GrabWallKey = KeyCode.LeftShift;
+    private const KeyCode JumpKey = KeyCode.Space;
+    private const KeyCode DashKey = KeyCode.J;
+
+
     void Start()
     {
         rigidbody2d = GetComponent<Rigidbody2D>();
@@ -56,7 +61,7 @@ public class Player : MonoBehaviour
 
         bool justStartedWallJumping = wallJumpTimeLeft > wallJumpResetTime - 0.1;
 
-        bool isGrabbingWall = !isGrounded && isOnWall && Input.GetKey(KeyCode.LeftShift) && !justStartedWallJumping;
+        bool isGrabbingWall = !isGrounded && isOnWall && Input.GetKey(GrabWallKey) && !justStartedWallJumping;
 
         // dispay health
         healthDisplay.text = "Health: " + health.ToString();
@@ -128,7 +133,7 @@ public class Player : MonoBehaviour
             }
 
             // jump
-            if (isGrounded && Input.GetKeyDown(KeyCode.Space))
+            if (isGrounded && Input.GetKeyDown(JumpKey))
             {
                 if (isSliding)
                 {
@@ -156,7 +161,7 @@ public class Player : MonoBehaviour
             {
                 rigidbody2d.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
             }
-            else if (rigidbody2d.velocity.y > 0 && !Input.GetKey(KeyCode.Space))
+            else if (rigidbody2d.velocity.y > 0 && !Input.GetKey(JumpKey))
             {
                 rigidbody2d.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
             }
@@ -175,7 +180,7 @@ public class Player : MonoBehaviour
             }
 
             // wall jump
-            if (isGrabbingWall && Input.GetKeyDown(KeyCode.Space) && !isWallJumping)
+            if (isGrabbingWall && Input.GetKeyDown(JumpKey) && !isWallJumping)
             {
                 float velocityX;
                 if (isOnLeftWall)
@@ -195,7 +200,7 @@ public class Player : MonoBehaviour
         }
 
         // dash
-        if (canDash && !isGrounded && !isGrabbingWall && Input.GetKeyDown(KeyCode.J) && (x != 0 || y != 0))
+        if (canDash && !isGrounded && !isGrabbingWall && Input.GetKeyDown(DashKey) && (x != 0 || y != 0))
         {
             Dash(x, y);
         }
