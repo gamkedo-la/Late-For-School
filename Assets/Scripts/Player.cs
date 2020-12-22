@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using NUnit.Framework;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -18,6 +19,7 @@ public class Player : MonoBehaviour
     public float wallJumpVelocity = 10f;
     public float wallJumpResetTime = 1f;
     public float wallJumpStopMultiplier = 2f; // higher amount = player is able to move back towards a wall they just jumped away from more easily
+    public float slideTime = 1f;
     public Text healthDisplay;
 
     private Rigidbody2D rigidbody2d;
@@ -28,6 +30,8 @@ public class Player : MonoBehaviour
     private bool isWallJumpingLeft = false;
     private bool isWallJumpingRight = false;
     private float wallJumpTimeLeft = 0;
+    private bool isSliding = false;
+    private float slideTimeLeft = 0;
 
     void Start()
     {
@@ -109,14 +113,30 @@ public class Player : MonoBehaviour
 
         if (!isDashing)
         {
+            // slide
+            if (y == -1 && isGrounded && !isSliding)
+            {
+                StartSlide();
+            }
+            if (isSliding && slideTimeLeft > 0)
+            {
+                slideTimeLeft -= Time.deltaTime;
+            }
+            else if (isSliding && slideTimeLeft <= 0)
+            {
+                StopSlide();
+            }
+
             // jump
             if (isGrounded && Input.GetKeyDown(KeyCode.Space))
             {
+                if (isSliding)
+                {
+                    StopSlide();
+                }
+
                 rigidbody2d.velocity = Vector2.up * jumpVelocity;
             }
-
-            // crouch
-            Crouch(y == -1 && isGrounded);
 
             // move sidewards
             if (!isGrabbingWall) // TODO: maybe all air movement should be lerped?
@@ -196,40 +216,45 @@ public class Player : MonoBehaviour
         return Physics2D.OverlapCircle(new Vector2(boxCollider2d.bounds.center.x + boxCollider2d.bounds.size.x / 2, boxCollider2d.bounds.center.y), 0.01f, wallsLayerMask);
     }
 
-    public void Crouch(bool shouldCrouch)
+    public void StartSlide()
     {
-        if (shouldCrouch)
-        {
-            float crouchSize = 0.5f;
-            float verticalOffset = -0.25f;
+        isSliding = true;
+        slideTimeLeft = slideTime;
 
-            boxCollider2d.size = new Vector2(boxCollider2d.size.x, crouchSize);
-            boxCollider2d.offset = new Vector2(boxCollider2d.offset.x, verticalOffset);
+        // Set sprite to half size
+        float crouchSize = 0.5f;
+        float verticalOffset = -0.25f;
 
-            Vector3 spriteMaskScale = crouchSpriteMask.transform.localScale;
-            spriteMaskScale.y = crouchSize;
-            crouchSpriteMask.transform.localScale = spriteMaskScale;
+        boxCollider2d.size = new Vector2(boxCollider2d.size.x, crouchSize);
+        boxCollider2d.offset = new Vector2(boxCollider2d.offset.x, verticalOffset);
 
-            Vector3 spriteMaskPos = crouchSpriteMask.transform.localPosition;
-            spriteMaskPos.y = verticalOffset;
-            crouchSpriteMask.transform.localPosition = spriteMaskPos;
-        }
-        else
-        {
-            float standSize = 1f;
-            float verticalOffset = 0f;
+        Vector3 spriteMaskScale = crouchSpriteMask.transform.localScale;
+        spriteMaskScale.y = crouchSize;
+        crouchSpriteMask.transform.localScale = spriteMaskScale;
 
-            boxCollider2d.size = new Vector2(boxCollider2d.size.x, standSize);
-            boxCollider2d.offset = new Vector2(boxCollider2d.offset.x, verticalOffset);
+        Vector3 spriteMaskPos = crouchSpriteMask.transform.localPosition;
+        spriteMaskPos.y = verticalOffset;
+        crouchSpriteMask.transform.localPosition = spriteMaskPos;
+    }
 
-            Vector3 spriteMaskScale = crouchSpriteMask.transform.localScale;
-            spriteMaskScale.y = standSize;
-            crouchSpriteMask.transform.localScale = spriteMaskScale;
+    public void StopSlide()
+    {
+        isSliding = false;
 
-            Vector3 spriteMaskPos = crouchSpriteMask.transform.localPosition;
-            spriteMaskPos.y = -verticalOffset;
-            crouchSpriteMask.transform.localPosition = spriteMaskPos;
-        }
+        // Set sprite to half size
+        float standSize = 1f;
+        float verticalOffset = 0f;
+
+        boxCollider2d.size = new Vector2(boxCollider2d.size.x, standSize);
+        boxCollider2d.offset = new Vector2(boxCollider2d.offset.x, verticalOffset);
+
+        Vector3 spriteMaskScale = crouchSpriteMask.transform.localScale;
+        spriteMaskScale.y = standSize;
+        crouchSpriteMask.transform.localScale = spriteMaskScale;
+
+        Vector3 spriteMaskPos = crouchSpriteMask.transform.localPosition;
+        spriteMaskPos.y = -verticalOffset;
+        crouchSpriteMask.transform.localPosition = spriteMaskPos;
     }
 
     public void Dash(float x, float y)
