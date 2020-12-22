@@ -24,7 +24,7 @@ public class Player : MonoBehaviour
 
     private Rigidbody2D rigidbody2d;
     private BoxCollider2D boxCollider2d;
-    private bool canDash = false;
+    private bool dashAvailable = false;
     private bool isDashing = false;
     private float rigidBodyGravityScale;
     private bool isWallJumpingLeft = false;
@@ -80,7 +80,7 @@ public class Player : MonoBehaviour
         // reset dash
         if (isGrounded)
         {
-            canDash = true;
+            dashAvailable = true;
         }
 
         if (wallJumpTimeLeft > 0)
@@ -149,7 +149,7 @@ public class Player : MonoBehaviour
             }
 
             // move sidewards
-            if (!isGrabbingWall) // TODO: maybe all air movement should be lerped?
+            if (!isGrabbingWall && !justStartedWallJumping)
             {
                 if (!isWallJumping)
                 {
@@ -176,13 +176,13 @@ public class Player : MonoBehaviour
             {
                 rigidbody2d.velocity = new Vector2(0, y * speed);
             }
-            else if ((isOnLeftWall && !isGrounded && x < 0) || (isOnRightWall && !isGrounded && x > 0)) // only wall slide if player is moving towards wall
+            else if (((isOnLeftWall && !isGrounded && x < 0) || (isOnRightWall && !isGrounded && x > 0)) && !justStartedWallJumping) // only wall slide if player is moving towards wall
             {
                 WallSlide();
             }
 
             // wall jump TODO: make it so that you can wall jump even when you're just really close to the wall
-            if (isGrabbingWall && Input.GetKeyDown(JumpAndDashKey) && !isWallJumping)
+            if (isOnWall && Input.GetKeyDown(JumpAndDashKey) && !justStartedWallJumping)
             {
                 float velocityX;
                 if (isOnLeftWall)
@@ -202,7 +202,7 @@ public class Player : MonoBehaviour
         }
 
         // dash
-        if (canDash && !isGrounded && !isGrabbingWall && Input.GetKeyDown(JumpAndDashKey) && (x != 0 || y != 0))
+        if (dashAvailable && !isGrounded && !isOnWall && !isWallJumping && Input.GetKeyDown(JumpAndDashKey) && (x != 0 || y != 0))
         {
             Dash(x, y);
         }
@@ -268,7 +268,7 @@ public class Player : MonoBehaviour
     {
         rigidbody2d.velocity = Vector2.zero;
         rigidbody2d.velocity += new Vector2(x, y).normalized * dashVelocity;
-        canDash = false;
+        dashAvailable = false;
         isDashing = true;
         rigidbody2d.drag = 10; // TODO: make this value configurable in inspector
 
