@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
     public float wallJumpVelocity = 10f;
     public float wallJumpResetTime = 1f; // Prevents player from getting back to the wall
     public float wallJumpStopMultiplier = 2f; // higher amount = player is able to move back towards a wall they just jumped away from more easily
+    public float nearWallDistance = 0.4f; // Allows wall jumping even if not exactly touching the wall
     public float slideTime = 1f;
     public Text healthDisplay;
 
@@ -56,6 +57,10 @@ public class Player : MonoBehaviour
         bool isOnLeftWall = IsOnLeftWall();
         bool isOnRightWall = IsOnRightWall();
         bool isOnWall = isOnLeftWall || isOnRightWall;
+
+        bool isNearLeftWall = IsNearLeftWall();
+        bool isNearRightWall = IsNearRightWall();
+        bool isNearWall = isNearLeftWall || isNearRightWall;
 
         bool isWallJumping = isWallJumpingLeft || isWallJumpingRight;
 
@@ -181,11 +186,11 @@ public class Player : MonoBehaviour
                 WallSlide();
             }
 
-            // wall jump TODO: make it so that you can wall jump even when you're just really close to the wall
-            if (isOnWall && Input.GetKeyDown(JumpAndDashKey) && !justStartedWallJumping)
+            // wall jump
+            if (isNearWall && Input.GetKeyDown(JumpAndDashKey) && !justStartedWallJumping)
             {
                 float velocityX;
-                if (isOnLeftWall)
+                if (isNearLeftWall)
                 {
                     velocityX = wallJumpVelocity;
                     isWallJumpingRight = true;
@@ -202,7 +207,7 @@ public class Player : MonoBehaviour
         }
 
         // dash
-        if (dashAvailable && !isGrounded && !isOnWall && !isWallJumping && Input.GetKeyDown(JumpAndDashKey) && (x != 0 || y != 0))
+        if (dashAvailable && !isGrounded && !isNearWall && !isWallJumping && Input.GetKeyDown(JumpAndDashKey) && (x != 0 || y != 0))
         {
             Dash(x, y);
         }
@@ -221,6 +226,16 @@ public class Player : MonoBehaviour
     private bool IsOnRightWall()
     {
         return Physics2D.OverlapCircle(new Vector2(boxCollider2d.bounds.center.x + boxCollider2d.bounds.size.x / 2, boxCollider2d.bounds.center.y), 0.01f, wallsLayerMask);
+    }
+
+    private bool IsNearLeftWall()
+    {
+        return Physics2D.OverlapCircle(new Vector2(boxCollider2d.bounds.center.x - boxCollider2d.bounds.size.x / 2, boxCollider2d.bounds.center.y), nearWallDistance, wallsLayerMask);
+    }
+
+    private bool IsNearRightWall()
+    {
+        return Physics2D.OverlapCircle(new Vector2(boxCollider2d.bounds.center.x + boxCollider2d.bounds.size.x / 2, boxCollider2d.bounds.center.y), nearWallDistance, wallsLayerMask);
     }
 
     public void StartSlide()

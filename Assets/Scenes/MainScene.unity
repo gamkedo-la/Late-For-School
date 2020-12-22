@@ -915,6 +915,7 @@ MonoBehaviour:
   wallJumpVelocity: 10
   wallJumpResetTime: 1
   wallJumpStopMultiplier: 2
+  nearWallDistance: 0.4
   slideTime: 1
   healthDisplay: {fileID: 1660769659}
 --- !u!212 &1578492303
