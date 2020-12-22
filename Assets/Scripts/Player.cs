@@ -1,5 +1,4 @@
-﻿using NUnit.Framework;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -48,6 +47,22 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        // display health
+        healthDisplay.text = "Health: " + health.ToString();
+
+        // reset level if dead
+        if (health <= 0)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+
+        HandlePlayerControl();
+    }
+
+    // Handle all player control, forces, and sprite changes
+    // TODO: refactor into smaller & neater functions
+    private void HandlePlayerControl()
+    {
         // Get horizontal and vertical input
         float x = Input.GetAxisRaw("Horizontal");
         float y = Input.GetAxisRaw("Vertical");
@@ -72,15 +87,6 @@ public class Player : MonoBehaviour
         if (canGrabWall && Input.GetKeyDown(GrabWallKey)) { grabWallToggle = !grabWallToggle; } // Toggle whether we're grabbing the wall or not
 
         bool isGrabbingWall = canGrabWall && grabWallToggle;
-
-        // display health
-        healthDisplay.text = "Health: " + health.ToString();
-
-        // reset level if dead
-        if (health <= 0)
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
 
         // reset dash
         if (isGrounded)
