@@ -17,7 +17,7 @@ public class Player : MonoBehaviour
     public float speed = 10f;
     public float slideSpeed = 1f;
     public float wallJumpVelocity = 10f;
-    public float wallJumpResetTime = 1f;
+    public float wallJumpResetTime = 1f; // Prevents player from getting back to the wall
     public float wallJumpStopMultiplier = 2f; // higher amount = player is able to move back towards a wall they just jumped away from more easily
     public float slideTime = 1f;
     public Text healthDisplay;
@@ -172,19 +172,16 @@ public class Player : MonoBehaviour
             }
 
             // wall climb and wall slide
-            if (!isWallJumping)
+            if (isGrabbingWall) // wall climb
             {
-                if (isGrabbingWall) // wall climb
-                {
-                    rigidbody2d.velocity = new Vector2(0, y * speed);
-                }
-                else if ((isOnLeftWall && !isGrounded && x < 0) || (isOnRightWall && !isGrounded && x > 0)) // only wall slide if player is moving towards wall
-                {
-                    WallSlide();
-                }
+                rigidbody2d.velocity = new Vector2(0, y * speed);
+            }
+            else if ((isOnLeftWall && !isGrounded && x < 0) || (isOnRightWall && !isGrounded && x > 0)) // only wall slide if player is moving towards wall
+            {
+                WallSlide();
             }
 
-            // wall jump
+            // wall jump TODO: make it so that you can wall jump even when you're just really close to the wall
             if (isGrabbingWall && Input.GetKeyDown(JumpAndDashKey) && !isWallJumping)
             {
                 float velocityX;
