@@ -32,6 +32,7 @@ public class Player : MonoBehaviour
     private float wallJumpTimeLeft = 0;
     private bool isSliding = false;
     private float slideTimeLeft = 0;
+    private bool grabWallToggle = false;
 
     private const KeyCode GrabWallKey = KeyCode.LeftShift;
     private const KeyCode JumpAndDashKey = KeyCode.Space;
@@ -60,9 +61,14 @@ public class Player : MonoBehaviour
 
         bool justStartedWallJumping = wallJumpTimeLeft > wallJumpResetTime - 0.1;
 
-        bool isGrabbingWall = !isGrounded && isOnWall && Input.GetKey(GrabWallKey) && !justStartedWallJumping;
+        // check if we can grab the wall
+        bool canGrabWall = !isGrounded && isOnWall && !justStartedWallJumping;
+        if (!canGrabWall) { grabWallToggle = false; } // Reset toggle if we're no longer in a place to use it
+        if (canGrabWall && Input.GetKeyDown(GrabWallKey)) { grabWallToggle = !grabWallToggle; } // Toggle whether we're grabbing the wall or not
 
-        // dispay health
+        bool isGrabbingWall = canGrabWall && grabWallToggle;
+
+        // display health
         healthDisplay.text = "Health: " + health.ToString();
 
         // reset level if dead
@@ -155,7 +161,7 @@ public class Player : MonoBehaviour
                 }
             }
 
-            // falling
+            // falling - takes into account whether we're mid jump
             if (rigidbody2d.velocity.y < 0)
             {
                 rigidbody2d.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
