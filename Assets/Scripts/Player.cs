@@ -34,8 +34,7 @@ public class Player : MonoBehaviour
     private float slideTimeLeft = 0;
 
     private const KeyCode GrabWallKey = KeyCode.LeftShift;
-    private const KeyCode JumpKey = KeyCode.Space;
-    private const KeyCode DashKey = KeyCode.J;
+    private const KeyCode JumpAndDahKey = KeyCode.Space;
 
 
     void Start()
@@ -133,7 +132,7 @@ public class Player : MonoBehaviour
             }
 
             // jump
-            if (isGrounded && Input.GetKeyDown(JumpKey))
+            if (isGrounded && Input.GetKeyDown(JumpAndDahKey))
             {
                 if (isSliding)
                 {
@@ -161,7 +160,7 @@ public class Player : MonoBehaviour
             {
                 rigidbody2d.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
             }
-            else if (rigidbody2d.velocity.y > 0 && !Input.GetKey(JumpKey))
+            else if (rigidbody2d.velocity.y > 0 && !Input.GetKey(JumpAndDahKey))
             {
                 rigidbody2d.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
             }
@@ -180,7 +179,7 @@ public class Player : MonoBehaviour
             }
 
             // wall jump
-            if (isGrabbingWall && Input.GetKeyDown(JumpKey) && !isWallJumping)
+            if (isGrabbingWall && Input.GetKeyDown(JumpAndDahKey) && !isWallJumping)
             {
                 float velocityX;
                 if (isOnLeftWall)
@@ -200,7 +199,7 @@ public class Player : MonoBehaviour
         }
 
         // dash
-        if (canDash && !isGrounded && !isGrabbingWall && Input.GetKeyDown(DashKey) && (x != 0 || y != 0))
+        if (canDash && !isGrounded && !isGrabbingWall && Input.GetKeyDown(JumpAndDahKey) && (x != 0 || y != 0))
         {
             Dash(x, y);
         }
