@@ -193,7 +193,7 @@ public class Player : MonoBehaviour
             }
 
             // wall jump
-            if (isNearWall && Input.GetKeyDown(JumpAndDashKey) && !justStartedWallJumping)
+            if (isNearWall && !isGrounded && Input.GetKeyDown(JumpAndDashKey) && !justStartedWallJumping)
             {
                 float velocityX;
                 if (isNearLeftWall)
