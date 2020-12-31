@@ -1936,6 +1936,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 858fc8d31a8c2fe49bc47ff925a8e63d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speedScale: 2
   backgroundSprites:
   - {fileID: 730444363}
   - {fileID: 822100752}
