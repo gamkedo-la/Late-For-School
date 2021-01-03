@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Obstacle : MonoBehaviour
+public class DangerousObstacle : MonoBehaviour
 {
     public int damage = 1;
     public float speed = 5;

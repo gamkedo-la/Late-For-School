@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 
-public class Spawner : MonoBehaviour
+public class DangerousObstacleSpawner : MonoBehaviour
 {
+    public int randomSeed;
     public GameObject obstacle;
     public float startTimeBetweenSpawn;
     public float decreaseTime;
@@ -10,7 +11,6 @@ public class Spawner : MonoBehaviour
     public float minY = -1;
 
     private float timeBetweenSpawn;
-    private int randomSeed;
 
     void Update()
     {
@@ -18,7 +18,7 @@ public class Spawner : MonoBehaviour
         {
             Random.InitState(randomSeed);
             float posY = Random.Range(minY, maxY);
-            Instantiate(obstacle, new Vector2(transform.position.x, posY), Quaternion.identity);
+            Instantiate(obstacle, new Vector2(transform.position.x, posY), Quaternion.identity, transform);
             timeBetweenSpawn = startTimeBetweenSpawn;
             if (startTimeBetweenSpawn > minTime)
             {
