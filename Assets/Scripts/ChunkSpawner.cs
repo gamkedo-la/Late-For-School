@@ -21,7 +21,6 @@ public class ChunkSpawner : MonoBehaviour
 
             // Prevent spawning new chunk if there is one in the way
             float diff = Mathf.Abs(transform.position.x - newPos.x);
-            Debug.Log(transform.position.x);
             if (diff < chunk.width/2)
             {
                 spawnNewChunk = false;
@@ -31,7 +30,9 @@ public class ChunkSpawner : MonoBehaviour
         if (spawnNewChunk)
         {
             Random.InitState(randomSeed);
-            int chunkIndex = Mathf.Max(0, Random.Range(0, chunks.Count-1));
+            int chunkIndex = Random.Range(0, chunks.Count);
+
+            Debug.Log(chunkIndex);
 
             Chunk newChunk = new Chunk();
             newChunk.width = chunks[chunkIndex].width;
@@ -39,6 +40,7 @@ public class ChunkSpawner : MonoBehaviour
             newChunk.contents = Instantiate(chunks[chunkIndex].contents, spawnPos, Quaternion.identity, transform);
 
             activeChunks.Add(newChunk);
+            randomSeed++;
         }
 
         // If a chunk's full width is offscreen, remove the chunk

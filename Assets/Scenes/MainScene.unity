@@ -472,8 +472,11 @@ MonoBehaviour:
   randomSeed: 0
   speed: 2.5
   chunks:
-  - width: 9
+  - width: 12
     contents: {fileID: 8397681959016776686, guid: cd8a02707b1383b44bb6ec7a171f3b22,
+      type: 3}
+  - width: 12
+    contents: {fileID: 4871256840104187725, guid: ece8598989dee3e4c8dfa9c3c4a15141,
       type: 3}
 --- !u!4 &618240592
 Transform:
@@ -1239,8 +1242,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1403026194}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -4, z: 0}
-  m_LocalScale: {x: 25, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: -5, z: 0}
+  m_LocalScale: {x: 25, y: 3, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
