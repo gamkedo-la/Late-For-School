@@ -40,6 +40,8 @@ public class Player : MonoBehaviour
     private float inputVerticalAxis = 0f;
     private float inputHorizontalAxis = 0f;
 
+    private bool useMobileInput = false;
+
 
     void Start()
     {
@@ -65,8 +67,11 @@ public class Player : MonoBehaviour
 
     private void GetPlayerInput()
     {
-        inputHorizontalAxis = Input.GetAxisRaw("Horizontal");
-        inputVerticalAxis = Input.GetAxisRaw("Vertical");
+        if (!useMobileInput)
+        {
+            inputHorizontalAxis = Input.GetAxisRaw("Horizontal");
+            inputVerticalAxis = Input.GetAxisRaw("Vertical");
+        }
     }
 
     // Handle all player control, forces, and sprite changes
@@ -313,5 +318,20 @@ public class Player : MonoBehaviour
     public void WallSlide()
     {
         rigidbody2d.velocity = new Vector2(0, -slideSpeed);
+    }
+
+    public void SetHorizontalAxisInput(float value)
+    {
+        inputHorizontalAxis = value;
+    }
+
+    public void SetVerticalAxisInput(float value)
+    {
+        inputVerticalAxis = value;
+    }
+
+    public void SetUseMobileInput(bool value)
+    {
+        useMobileInput = value;
     }
 }
