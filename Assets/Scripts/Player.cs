@@ -37,6 +37,9 @@ public class Player : MonoBehaviour
     private const KeyCode GrabWallKey = KeyCode.LeftShift;
     private const KeyCode JumpAndDashKey = KeyCode.Space;
 
+    private float inputVerticalAxis = 0f;
+    private float inputHorizontalAxis = 0f;
+
 
     void Start()
     {
@@ -56,7 +59,14 @@ public class Player : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
+        GetPlayerInput();
         HandlePlayerControl();
+    }
+
+    private void GetPlayerInput()
+    {
+        inputHorizontalAxis = Input.GetAxisRaw("Horizontal");
+        inputVerticalAxis = Input.GetAxisRaw("Vertical");
     }
 
     // Handle all player control, forces, and sprite changes
@@ -64,8 +74,8 @@ public class Player : MonoBehaviour
     private void HandlePlayerControl()
     {
         // Get horizontal and vertical input
-        float x = Input.GetAxisRaw("Horizontal");
-        float y = Input.GetAxisRaw("Vertical");
+        // float x = Input.GetAxisRaw("Horizontal");
+        // float y = Input.GetAxisRaw("Vertical");
 
         bool isGrounded = IsGrounded();
 
@@ -135,7 +145,7 @@ public class Player : MonoBehaviour
         if (!isDashing)
         {
             // slide
-            if (y == -1 && isGrounded && !isSliding)
+            if (inputVerticalAxis == -1 && isGrounded && !isSliding)
             {
                 StartSlide();
             }
@@ -164,11 +174,11 @@ public class Player : MonoBehaviour
             {
                 if (!isWallJumping)
                 {
-                    rigidbody2d.velocity = new Vector2(x * speed, rigidbody2d.velocity.y);
+                    rigidbody2d.velocity = new Vector2(inputHorizontalAxis * speed, rigidbody2d.velocity.y);
                 }
                 else
                 {
-                    rigidbody2d.velocity = Vector2.Lerp(rigidbody2d.velocity, new Vector2(x * speed, rigidbody2d.velocity.y), wallJumpStopMultiplier * Time.deltaTime);
+                    rigidbody2d.velocity = Vector2.Lerp(rigidbody2d.velocity, new Vector2(inputHorizontalAxis * speed, rigidbody2d.velocity.y), wallJumpStopMultiplier * Time.deltaTime);
                 }
             }
 
@@ -185,9 +195,9 @@ public class Player : MonoBehaviour
             // wall climb and wall slide
             if (isGrabbingWall) // wall climb
             {
-                rigidbody2d.velocity = new Vector2(0, y * speed);
+                rigidbody2d.velocity = new Vector2(0, inputVerticalAxis * speed);
             }
-            else if (((isOnLeftWall && !isGrounded && x < 0) || (isOnRightWall && !isGrounded && x > 0)) && !justStartedWallJumping) // only wall slide if player is moving towards wall
+            else if (((isOnLeftWall && !isGrounded && inputHorizontalAxis < 0) || (isOnRightWall && !isGrounded && inputHorizontalAxis > 0)) && !justStartedWallJumping) // only wall slide if player is moving towards wall
             {
                 WallSlide();
             }
@@ -213,9 +223,9 @@ public class Player : MonoBehaviour
         }
 
         // dash
-        if (dashAvailable && !isGrounded && !isNearWall && !isWallJumping && Input.GetKeyDown(JumpAndDashKey) && (x != 0 || y != 0))
+        if (dashAvailable && !isGrounded && !isNearWall && !isWallJumping && Input.GetKeyDown(JumpAndDashKey) && (inputHorizontalAxis != 0 || inputVerticalAxis != 0))
         {
-            Dash(x, y);
+            Dash(inputHorizontalAxis, inputVerticalAxis);
         }
     }
 
