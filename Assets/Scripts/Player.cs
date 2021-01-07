@@ -65,6 +65,12 @@ public class Player : MonoBehaviour
 
         GetPlayerInput();
         HandlePlayerControl();
+
+        if (useMobileInput) // Reset wall and grab button to not pressed
+        {
+            isGrabWallPressed = false;
+            isJumpAndDashPressed = false;
+        }
     }
 
     private void GetPlayerInput()
@@ -332,6 +338,16 @@ public class Player : MonoBehaviour
     public void SetVerticalAxisInput(float value)
     {
         inputVerticalAxis = value;
+    }
+
+    public void SetJumpAndDashInput(bool value)
+    {
+        isJumpAndDashPressed = value;
+    }
+
+    public void SetGrabWallInput(bool value)
+    {
+        isGrabWallPressed = value;
     }
 
     public void SetUseMobileInput(bool value)

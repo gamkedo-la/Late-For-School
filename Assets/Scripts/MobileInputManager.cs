@@ -9,6 +9,9 @@ public class MobileInputManager : MonoBehaviour
 
     private Player player;
 
+    private bool isJumpAndDashPressed = false;
+    private bool isGrabWallPressed = false;
+
     private void Start() 
     {
         player = FindObjectOfType<Player>();
@@ -38,4 +41,32 @@ public class MobileInputManager : MonoBehaviour
     {
         player.SetHorizontalAxisInput(value);
     }
+    public void PressJumpAndDashButton()
+    {
+        if (!isJumpAndDashPressed)
+        {
+            player.SetJumpAndDashInput(true);
+            isJumpAndDashPressed = true;
+        }
+    }
+
+    public void StopPressingJumpAndDashButton()
+    {
+        isJumpAndDashPressed = false;
+    }
+
+    public void PressGrabWallButton()
+    {
+        if (!isGrabWallPressed)
+        {
+            player.SetGrabWallInput(true);
+            isGrabWallPressed = true;
+        }
+    }
+
+    public void StopPressingGrabWallButton()
+    {
+        isGrabWallPressed = false;
+    }
+
 }
