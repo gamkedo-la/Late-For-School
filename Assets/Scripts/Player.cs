@@ -39,6 +39,8 @@ public class Player : MonoBehaviour
 
     private float inputVerticalAxis = 0f;
     private float inputHorizontalAxis = 0f;
+    private bool isJumpAndDashPressed = false;
+    private bool isGrabWallPressed = false;
 
     private bool useMobileInput = false;
 
@@ -71,6 +73,8 @@ public class Player : MonoBehaviour
         {
             inputHorizontalAxis = Input.GetAxisRaw("Horizontal");
             inputVerticalAxis = Input.GetAxisRaw("Vertical");
+            isGrabWallPressed = Input.GetKeyDown(GrabWallKey);
+            isJumpAndDashPressed = Input.GetKeyDown(JumpAndDashKey);
         }
     }
 
@@ -99,7 +103,7 @@ public class Player : MonoBehaviour
         // check if we can grab the wall
         bool canGrabWall = !isGrounded && isOnWall && !justStartedWallJumping;
         if (!canGrabWall) { grabWallToggle = false; } // Reset toggle if we're no longer in a place to use it
-        if (canGrabWall && Input.GetKeyDown(GrabWallKey)) { grabWallToggle = !grabWallToggle; } // Toggle whether we're grabbing the wall or not
+        if (canGrabWall && isGrabWallPressed) { grabWallToggle = !grabWallToggle; } // Toggle whether we're grabbing the wall or not
 
         bool isGrabbingWall = canGrabWall && grabWallToggle;
 
@@ -164,7 +168,7 @@ public class Player : MonoBehaviour
             }
 
             // jump
-            if (isGrounded && Input.GetKeyDown(JumpAndDashKey))
+            if (isGrounded && isJumpAndDashPressed)
             {
                 if (isSliding)
                 {
@@ -208,7 +212,7 @@ public class Player : MonoBehaviour
             }
 
             // wall jump
-            if (isNearWall && !isGrounded && Input.GetKeyDown(JumpAndDashKey) && !justStartedWallJumping)
+            if (isNearWall && !isGrounded && isJumpAndDashPressed && !justStartedWallJumping)
             {
                 float velocityX;
                 if (isNearLeftWall)
@@ -228,7 +232,7 @@ public class Player : MonoBehaviour
         }
 
         // dash
-        if (dashAvailable && !isGrounded && !isNearWall && !isWallJumping && Input.GetKeyDown(JumpAndDashKey) && (inputHorizontalAxis != 0 || inputVerticalAxis != 0))
+        if (dashAvailable && !isGrounded && !isNearWall && !isWallJumping && isJumpAndDashPressed && (inputHorizontalAxis != 0 || inputVerticalAxis != 0))
         {
             Dash(inputHorizontalAxis, inputVerticalAxis);
         }
