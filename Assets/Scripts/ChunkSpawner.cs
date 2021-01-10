@@ -6,31 +6,41 @@ public class ChunkSpawner : MonoBehaviour
     public int randomSeed;
     public float speed = 2.5f;
     public float offScreenX = -10f;
-    public List<Chunk> chunks;
+    public List<GameObject> chunks;
 
-    private List<Chunk> activeChunks = new List<Chunk>();
+    private List<GameObject> activeChunks = new List<GameObject>();
 
     void FixedUpdate() // Atleast the move needs to be in FixedUpdate to work correctly, just keeping it all in here for now
     {
-        List<Chunk> toRemove = new List<Chunk>();
+        List<GameObject> toRemove = new List<GameObject>();
 
         bool spawnNewChunk = true;
-        foreach (Chunk chunk in activeChunks)
+        foreach (GameObject chunk in activeChunks)
         {
             // Move chunks
-            Vector2 newPos = chunk.contents.transform.position;
+            Vector2 newPos = chunk.transform.position;
             newPos.x -= speed * Time.deltaTime;
-            chunk.contents.transform.position = newPos;
+            chunk.transform.position = newPos;
 
             // Prevent spawning new chunk if there is one in the way
-            float diff = Mathf.Abs(transform.position.x - newPos.x);
-            if (diff < chunk.width / 2)
+            ChunkBounds[] chunkBounds = chunk.GetComponentsInChildren<ChunkBounds>();
+            float chunkEndX = 0;
+            foreach (ChunkBounds bounds in chunkBounds)
+            {
+
+                if (bounds.chunkEnd)
+                {
+                    chunkEndX = bounds.transform.position.x;
+                }
+            }
+
+            if (chunkEndX > transform.position.x)
             {
                 spawnNewChunk = false;
             }
 
             // Remove chunks that have gone off the screen
-            if (newPos.x + chunk.width / 2 < offScreenX)
+            if (chunkEndX < offScreenX)
             {
                 toRemove.Add(chunk);
             }
@@ -41,19 +51,26 @@ public class ChunkSpawner : MonoBehaviour
             Random.InitState(randomSeed);
             int chunkIndex = Random.Range(0, chunks.Count);
 
-            Chunk newChunk = new Chunk();
-            newChunk.width = chunks[chunkIndex].width;
-            Vector2 spawnPos = new Vector2(transform.position.x + newChunk.width / 2, transform.position.y);
-            newChunk.contents = Instantiate(chunks[chunkIndex].contents, spawnPos, Quaternion.identity, transform);
+            ChunkBounds[] chunkBounds = chunks[chunkIndex].GetComponentsInChildren<ChunkBounds>();
+            float chunkOffset = 0f;
+            foreach (ChunkBounds bounds in chunkBounds)
+            {
+                if (bounds.chunkStart)
+                {
+                    chunkOffset = -bounds.transform.localPosition.x;
+                }
+            }
+            Vector2 spawnPos = new Vector2(transform.position.x + chunkOffset, transform.position.y);
+            GameObject newChunk = Instantiate(chunks[chunkIndex], spawnPos, Quaternion.identity, transform);
 
             activeChunks.Add(newChunk);
             randomSeed++;
         }
 
-        foreach (Chunk chunk in toRemove)
+        foreach (GameObject chunk in toRemove)
         {
             activeChunks.Remove(chunk);
-            Destroy(chunk.contents);
+            Destroy(chunk);
         }
     }
 }
