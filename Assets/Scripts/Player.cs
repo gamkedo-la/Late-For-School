@@ -37,6 +37,13 @@ public class Player : MonoBehaviour
     private const KeyCode GrabWallKey = KeyCode.LeftShift;
     private const KeyCode JumpAndDashKey = KeyCode.Space;
 
+    private float inputVerticalAxis = 0f;
+    private float inputHorizontalAxis = 0f;
+    private bool isJumpAndDashPressed = false;
+    private bool isGrabWallPressed = false;
+
+    private bool useMobileInput = false;
+
 
     void Start()
     {
@@ -56,7 +63,25 @@ public class Player : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
+        GetPlayerInput();
         HandlePlayerControl();
+
+        if (useMobileInput) // Reset wall and grab button to not pressed
+        {
+            isGrabWallPressed = false;
+            isJumpAndDashPressed = false;
+        }
+    }
+
+    private void GetPlayerInput()
+    {
+        if (!useMobileInput)
+        {
+            inputHorizontalAxis = Input.GetAxisRaw("Horizontal");
+            inputVerticalAxis = Input.GetAxisRaw("Vertical");
+            isGrabWallPressed = Input.GetKeyDown(GrabWallKey);
+            isJumpAndDashPressed = Input.GetKeyDown(JumpAndDashKey);
+        }
     }
 
     // Handle all player control, forces, and sprite changes
@@ -64,8 +89,8 @@ public class Player : MonoBehaviour
     private void HandlePlayerControl()
     {
         // Get horizontal and vertical input
-        float x = Input.GetAxisRaw("Horizontal");
-        float y = Input.GetAxisRaw("Vertical");
+        // float x = Input.GetAxisRaw("Horizontal");
+        // float y = Input.GetAxisRaw("Vertical");
 
         bool isGrounded = IsGrounded();
 
@@ -84,7 +109,7 @@ public class Player : MonoBehaviour
         // check if we can grab the wall
         bool canGrabWall = !isGrounded && isOnWall && !justStartedWallJumping;
         if (!canGrabWall) { grabWallToggle = false; } // Reset toggle if we're no longer in a place to use it
-        if (canGrabWall && Input.GetKeyDown(GrabWallKey)) { grabWallToggle = !grabWallToggle; } // Toggle whether we're grabbing the wall or not
+        if (canGrabWall && isGrabWallPressed) { grabWallToggle = !grabWallToggle; } // Toggle whether we're grabbing the wall or not
 
         bool isGrabbingWall = canGrabWall && grabWallToggle;
 
@@ -135,7 +160,7 @@ public class Player : MonoBehaviour
         if (!isDashing)
         {
             // slide
-            if (y == -1 && isGrounded && !isSliding)
+            if (inputVerticalAxis == -1 && isGrounded && !isSliding)
             {
                 StartSlide();
             }
@@ -149,7 +174,7 @@ public class Player : MonoBehaviour
             }
 
             // jump
-            if (isGrounded && Input.GetKeyDown(JumpAndDashKey))
+            if (isGrounded && isJumpAndDashPressed)
             {
                 if (isSliding)
                 {
@@ -164,11 +189,11 @@ public class Player : MonoBehaviour
             {
                 if (!isWallJumping)
                 {
-                    rigidbody2d.velocity = new Vector2(x * speed, rigidbody2d.velocity.y);
+                    rigidbody2d.velocity = new Vector2(inputHorizontalAxis * speed, rigidbody2d.velocity.y);
                 }
                 else
                 {
-                    rigidbody2d.velocity = Vector2.Lerp(rigidbody2d.velocity, new Vector2(x * speed, rigidbody2d.velocity.y), wallJumpStopMultiplier * Time.deltaTime);
+                    rigidbody2d.velocity = Vector2.Lerp(rigidbody2d.velocity, new Vector2(inputHorizontalAxis * speed, rigidbody2d.velocity.y), wallJumpStopMultiplier * Time.deltaTime);
                 }
             }
 
@@ -185,15 +210,15 @@ public class Player : MonoBehaviour
             // wall climb and wall slide
             if (isGrabbingWall) // wall climb
             {
-                rigidbody2d.velocity = new Vector2(0, y * speed);
+                rigidbody2d.velocity = new Vector2(0, inputVerticalAxis * speed);
             }
-            else if (((isOnLeftWall && !isGrounded && x < 0) || (isOnRightWall && !isGrounded && x > 0)) && !justStartedWallJumping) // only wall slide if player is moving towards wall
+            else if (((isOnLeftWall && !isGrounded && inputHorizontalAxis < 0) || (isOnRightWall && !isGrounded && inputHorizontalAxis > 0)) && !justStartedWallJumping) // only wall slide if player is moving towards wall
             {
                 WallSlide();
             }
 
             // wall jump
-            if (isNearWall && !isGrounded && Input.GetKeyDown(JumpAndDashKey) && !justStartedWallJumping)
+            if (isNearWall && !isGrounded && isJumpAndDashPressed && !justStartedWallJumping)
             {
                 float velocityX;
                 if (isNearLeftWall)
@@ -213,9 +238,9 @@ public class Player : MonoBehaviour
         }
 
         // dash
-        if (dashAvailable && !isGrounded && !isNearWall && !isWallJumping && Input.GetKeyDown(JumpAndDashKey) && (x != 0 || y != 0))
+        if (dashAvailable && !isGrounded && !isNearWall && !isWallJumping && isJumpAndDashPressed && (inputHorizontalAxis != 0 || inputVerticalAxis != 0))
         {
-            Dash(x, y);
+            Dash(inputHorizontalAxis, inputVerticalAxis);
         }
     }
 
@@ -303,5 +328,30 @@ public class Player : MonoBehaviour
     public void WallSlide()
     {
         rigidbody2d.velocity = new Vector2(0, -slideSpeed);
+    }
+
+    public void SetHorizontalAxisInput(float value)
+    {
+        inputHorizontalAxis = value;
+    }
+
+    public void SetVerticalAxisInput(float value)
+    {
+        inputVerticalAxis = value;
+    }
+
+    public void SetJumpAndDashInput(bool value)
+    {
+        isJumpAndDashPressed = value;
+    }
+
+    public void SetGrabWallInput(bool value)
+    {
+        isGrabWallPressed = value;
+    }
+
+    public void SetUseMobileInput(bool value)
+    {
+        useMobileInput = value;
     }
 }
