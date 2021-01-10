@@ -140,6 +140,7 @@ public class Player : MonoBehaviour
         {
             isWallJumpingLeft = false;
             isWallJumpingRight = false;
+            isWallJumping = false;
             wallJumpTimeLeft = 0;
         }
 
@@ -249,9 +250,10 @@ public class Player : MonoBehaviour
         }
 
         // dash
-        if (dashAvailable && !isGrounded && !isNearWall && !isWallJumping && isJumpAndDashPressed && (inputHorizontalAxis != 0 || inputVerticalAxis != 0))
+        if (dashAvailable && !isGrounded && !isNearWall && !justStartedWallJumping && isJumpAndDashPressed && (inputHorizontalAxis != 0 || inputVerticalAxis != 0))
         {
             Dash(inputHorizontalAxis, inputVerticalAxis);
+            wallJumpTimeLeft = 0; // if we dash mid wall jump, we don't want to still be in the wall jump state
         }
     }
 
