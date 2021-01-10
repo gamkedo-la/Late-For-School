@@ -257,17 +257,26 @@ public class Player : MonoBehaviour
 
     private bool IsGrounded()
     {
-        return Physics2D.OverlapCircle(new Vector2(boxCollider2d.bounds.center.x, boxCollider2d.bounds.center.y - boxCollider2d.bounds.size.y / 2), 0.01f, platformsLayerMask);
+        Bounds bounds = boxCollider2d.bounds;
+        Vector2 topLeft = new Vector2(bounds.center.x - bounds.extents.x + 0.01f, bounds.center.y - bounds.extents.y + 0.01f);
+        Vector2 bottomRight = new Vector2(bounds.center.x + bounds.extents.x - 0.01f, bounds.center.y - bounds.extents.y - 0.01f);
+        return Physics2D.OverlapArea(topLeft, bottomRight, platformsLayerMask);
     }
 
     private Collider2D IsOnLeftWall()
     {
-        return Physics2D.OverlapCircle(new Vector2(boxCollider2d.bounds.center.x - boxCollider2d.bounds.size.x / 2, boxCollider2d.bounds.center.y), 0.01f, wallsLayerMask);
+        Bounds bounds = boxCollider2d.bounds;
+        Vector2 topLeft = new Vector2(bounds.center.x - bounds.extents.x - 0.01f, bounds.center.y + bounds.extents.y - 0.01f);
+        Vector2 bottomRight = new Vector2(bounds.center.x - bounds.extents.x + 0.01f, bounds.center.y - bounds.extents.y + 0.01f);
+        return Physics2D.OverlapArea(topLeft, bottomRight, platformsLayerMask);
     }
 
     private Collider2D IsOnRightWall()
     {
-        return Physics2D.OverlapCircle(new Vector2(boxCollider2d.bounds.center.x + boxCollider2d.bounds.size.x / 2, boxCollider2d.bounds.center.y), 0.01f, wallsLayerMask);
+        Bounds bounds = boxCollider2d.bounds;
+        Vector2 topLeft = new Vector2(bounds.center.x + bounds.extents.x - 0.01f, bounds.center.y + bounds.extents.y - 0.01f);
+        Vector2 bottomRight = new Vector2(bounds.center.x + bounds.extents.x + 0.01f, bounds.center.y - bounds.extents.y + 0.01f);
+        return Physics2D.OverlapArea(topLeft, bottomRight, platformsLayerMask);
     }
 
     private bool IsNearLeftWall()
