@@ -10,7 +10,7 @@ public class ChunkSpawner : MonoBehaviour
 
     private List<Chunk> activeChunks = new List<Chunk>();
 
-    void Update()
+    void FixedUpdate() // Atleast the move needs to be in FixedUpdate to work correctly, just keeping it all in here for now
     {
         List<Chunk> toRemove = new List<Chunk>();
 

@@ -41,6 +41,7 @@ public class Player : MonoBehaviour
     private float inputHorizontalAxis = 0f;
     private bool isJumpAndDashPressed = false;
     private bool isGrabWallPressed = false;
+    private Collider2D wallPlayerIsOn;
 
     private bool useMobileInput = false;
 
@@ -88,15 +89,25 @@ public class Player : MonoBehaviour
     // TODO: refactor into smaller & neater functions
     private void HandlePlayerControl()
     {
-        // Get horizontal and vertical input
-        // float x = Input.GetAxisRaw("Horizontal");
-        // float y = Input.GetAxisRaw("Vertical");
-
         bool isGrounded = IsGrounded();
 
-        bool isOnLeftWall = IsOnLeftWall();
-        bool isOnRightWall = IsOnRightWall();
+        Collider2D isOnLeftWall = IsOnLeftWall();
+        Collider2D isOnRightWall = IsOnRightWall();
         bool isOnWall = isOnLeftWall || isOnRightWall;
+
+        // attach player to the wall - this is necessary for wall sliding, grabbing, and climbing to work correctly on moving walls
+        if (isOnLeftWall && gameObject.transform.parent != isOnLeftWall.transform)
+        {
+            gameObject.transform.parent = isOnLeftWall.transform;
+        }
+        else if (isOnRightWall && gameObject.transform.parent  != isOnRightWall.transform)
+        {
+            gameObject.transform.parent = isOnRightWall.transform;
+        }
+        else if (!isOnLeftWall && !isOnRightWall && gameObject.transform.parent != null)
+        {
+            gameObject.transform.parent = null;
+        }
 
         bool isNearLeftWall = IsNearLeftWall();
         bool isNearRightWall = IsNearRightWall();
@@ -249,12 +260,12 @@ public class Player : MonoBehaviour
         return Physics2D.OverlapCircle(new Vector2(boxCollider2d.bounds.center.x, boxCollider2d.bounds.center.y - boxCollider2d.bounds.size.y / 2), 0.01f, platformsLayerMask);
     }
 
-    private bool IsOnLeftWall()
+    private Collider2D IsOnLeftWall()
     {
         return Physics2D.OverlapCircle(new Vector2(boxCollider2d.bounds.center.x - boxCollider2d.bounds.size.x / 2, boxCollider2d.bounds.center.y), 0.01f, wallsLayerMask);
     }
 
-    private bool IsOnRightWall()
+    private Collider2D IsOnRightWall()
     {
         return Physics2D.OverlapCircle(new Vector2(boxCollider2d.bounds.center.x + boxCollider2d.bounds.size.x / 2, boxCollider2d.bounds.center.y), 0.01f, wallsLayerMask);
     }
