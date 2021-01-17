@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using NUnit.Framework;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -20,7 +22,7 @@ public class Player : MonoBehaviour
     public float wallJumpStopMultiplier = 2f; // higher amount = player is able to move back towards a wall they just jumped away from more easily
     public float nearWallDistance = 0.5f; // Allows wall jumping even if not exactly touching the wall
     public float slideTime = 1f;
-    public Text healthDisplay;
+    public List<GameObject> healthContainers;
 
     private int health = 3;
     private Rigidbody2D rigidbody2d;
@@ -42,7 +44,6 @@ public class Player : MonoBehaviour
     private float inputHorizontalAxis = 0f;
     private bool isJumpAndDashPressed = false;
     private bool isGrabWallPressed = false;
-    private Collider2D wallPlayerIsOn;
 
     private bool useMobileInput = false;
 
@@ -57,7 +58,17 @@ public class Player : MonoBehaviour
     void Update()
     {
         // display health
-        healthDisplay.text = "Health: " + health.ToString();
+        for (int i = 0; i < healthContainers.Count; i++)
+        {
+            if (i < health)
+            {
+                healthContainers[i].SetActive(true);
+            }
+            else
+            {
+                healthContainers[i].SetActive(false);
+            }
+        }
 
         // reset level if dead
         if (health <= 0)
