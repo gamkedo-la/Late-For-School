@@ -868,7 +868,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   randomSeed: 0
-  speed: 2.5
+  speed: 4
   offScreenX: -10
   chunks:
   - {fileID: 8397681959016776686, guid: cd8a02707b1383b44bb6ec7a171f3b22, type: 3}
