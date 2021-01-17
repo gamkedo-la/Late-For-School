@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
     public LayerMask platformsLayerMask; // what counts as a platform (will trigger isGrounded)
     public LayerMask wallsLayerMask; // what counts as a wall (will trigger isOnWall)
     public SpriteMask crouchSpriteMask;
-    public float health = 3;
+    public int maxHealth = 3;
     public float jumpVelocity = 10f;
     public float fallMultiplier = 2.5f;
     public float lowJumpMultiplier = 2f;
@@ -22,6 +22,7 @@ public class Player : MonoBehaviour
     public float slideTime = 1f;
     public Text healthDisplay;
 
+    private int health = 3;
     private Rigidbody2D rigidbody2d;
     private BoxCollider2D boxCollider2d;
     private bool dashAvailable = false;
@@ -375,5 +376,22 @@ public class Player : MonoBehaviour
     public void SetUseMobileInput(bool value)
     {
         useMobileInput = value;
+    }
+
+    public void AddHealth(int healthToAdd)
+    {
+        health += healthToAdd;
+        if (health > maxHealth) { health = maxHealth; }
+    }
+
+    public void RemoveHealth(int healthToRemove)
+    {
+        health -= healthToRemove;
+        if (health < 0) { health = 0; }
+    }
+
+    public void AddDash()
+    {
+        dashAvailable = true;
     }
 }
