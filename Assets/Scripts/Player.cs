@@ -23,11 +23,12 @@ public class Player : MonoBehaviour
     public float nearWallDistance = 0.5f; // Allows wall jumping even if not exactly touching the wall
     public float slideTime = 1f;
     public List<GameObject> healthContainers;
+    public GameObject dashContainer;
 
     private int health = 3;
     private Rigidbody2D rigidbody2d;
     private BoxCollider2D boxCollider2d;
-    private bool dashAvailable = false;
+    private bool dashAvailable = true;
     private bool isDashing = false;
     private float rigidBodyGravityScale;
     private bool isWallJumpingLeft = false;
@@ -57,7 +58,27 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        // display health
+        GetPlayerInput();
+        HandlePlayerControl();
+
+        DisplayHealth();
+        DisplayDashAvailability();
+
+        // reset level if dead
+        if (health <= 0)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+
+        if (useMobileInput) // Reset wall and grab button to not pressed
+        {
+            isGrabWallPressed = false;
+            isJumpAndDashPressed = false;
+        }
+    }
+
+    private void DisplayHealth()
+    {
         for (int i = 0; i < healthContainers.Count; i++)
         {
             if (i < health)
@@ -69,20 +90,17 @@ public class Player : MonoBehaviour
                 healthContainers[i].SetActive(false);
             }
         }
+    }
 
-        // reset level if dead
-        if (health <= 0)
+    private void DisplayDashAvailability()
+    {
+        if (dashAvailable)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            dashContainer.SetActive(true);
         }
-
-        GetPlayerInput();
-        HandlePlayerControl();
-
-        if (useMobileInput) // Reset wall and grab button to not pressed
+        else
         {
-            isGrabWallPressed = false;
-            isJumpAndDashPressed = false;
+            dashContainer.SetActive(false);
         }
     }
 
