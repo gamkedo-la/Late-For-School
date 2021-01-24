@@ -73,4 +73,13 @@ public class ChunkSpawner : MonoBehaviour
             Destroy(chunk);
         }
     }
+
+    public void DestroyChunks()
+    {
+        foreach(GameObject chunk in activeChunks)
+        {
+            Destroy(chunk);
+        }
+        activeChunks.Clear();
+    }
 }

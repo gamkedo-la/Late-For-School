@@ -9,6 +9,18 @@ public class ScoreManager : MonoBehaviour
     private float timeLeftForNextPoint;
     private int score;
 
+    public static ScoreManager instance;
+
+    public static ScoreManager GetInstance()
+    {
+        return instance;
+    }
+
+    private void Awake()
+    {
+        instance = this;
+    }
+
     void Update()
     {
         scoreDisplay.text = "Score: " + score.ToString();
@@ -19,5 +31,10 @@ public class ScoreManager : MonoBehaviour
             score++;
             timeLeftForNextPoint += timeForEachPoint;
         }
+    }
+
+    public void ResetScore()
+    {
+        score = 0;
     }
 }

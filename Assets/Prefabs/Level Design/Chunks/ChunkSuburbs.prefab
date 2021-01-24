@@ -200,7 +200,7 @@ GameObject:
   - component: {fileID: 5586145847969022976}
   - component: {fileID: 4491546497190892486}
   - component: {fileID: 1369457673106967451}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: roof
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -583,7 +583,7 @@ GameObject:
   - component: {fileID: 5970365653931066110}
   - component: {fileID: 2858891766624558896}
   - component: {fileID: 3265866535972995561}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: roof
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -696,7 +696,7 @@ GameObject:
   - component: {fileID: 3696710019169389040}
   - component: {fileID: 5100263737166643501}
   - component: {fileID: 669466608169816298}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: roof
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1448,7 +1448,7 @@ GameObject:
   - component: {fileID: 7363841284615945174}
   - component: {fileID: 5614551784582722118}
   - component: {fileID: 4555640372463129586}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: roof
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1561,7 +1561,7 @@ GameObject:
   - component: {fileID: 4621646330929154080}
   - component: {fileID: 680831418334441647}
   - component: {fileID: 167025623049812105}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: roof
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1674,7 +1674,7 @@ GameObject:
   - component: {fileID: 3796338968928681316}
   - component: {fileID: 7165667528230617308}
   - component: {fileID: 12421185310715964}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: roof
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2345,7 +2345,7 @@ GameObject:
   - component: {fileID: 3260749894112846842}
   - component: {fileID: 8969922987471139669}
   - component: {fileID: 1994022945307243313}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: roof
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2472,7 +2472,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7533515112657059688}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -4.5, z: -1}
+  m_LocalPosition: {x: 0, y: -4.5, z: 1}
   m_LocalScale: {x: 50, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8397681959016776685}
@@ -2809,7 +2809,7 @@ GameObject:
   - component: {fileID: 4355887192404782706}
   - component: {fileID: 7979912166943249334}
   - component: {fileID: 354744658224854770}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: roof
   m_TagString: Untagged
   m_Icon: {fileID: 0}
