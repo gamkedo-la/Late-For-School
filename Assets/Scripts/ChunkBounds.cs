@@ -10,6 +10,7 @@ public class ChunkBounds : MonoBehaviour
 
     private bool chunkStartPrevValue;
     private bool chunkEndPrevValue;
+    private bool hasPoppedMilestone = false;
 
     private void OnValidate()
     {
@@ -33,9 +34,11 @@ public class ChunkBounds : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Player") &&
            chunkStart &&
-           isMilestone)
+           isMilestone &&
+           !hasPoppedMilestone)
         {
             Debug.Log("Hooray! YOU ROCK! **crows fly in the distance**");
+            hasPoppedMilestone = true; // Stops player from triggering milestone more than once
         }
     }
 }
