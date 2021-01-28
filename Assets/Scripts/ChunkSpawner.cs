@@ -7,8 +7,11 @@ public class ChunkSpawner : MonoBehaviour
     public float speed = 2.5f;
     public float offScreenX = -10f;
     public List<GameObject> chunks;
+    public int milestoneInterval = 1;
 
     private List<GameObject> activeChunks = new List<GameObject>();
+    private GameObject milestoneChunk;
+    private int milestoneChunkCounter;
 
     void FixedUpdate() // Atleast the move needs to be in FixedUpdate to work correctly, just keeping it all in here for now
     {
@@ -62,7 +65,16 @@ public class ChunkSpawner : MonoBehaviour
             }
             Vector2 spawnPos = new Vector2(transform.position.x + chunkOffset, transform.position.y);
             GameObject newChunk = Instantiate(chunks[chunkIndex], spawnPos, Quaternion.identity, transform);
-
+            
+            if(milestoneChunkCounter >= milestoneInterval)
+            {
+                newChunk.GetComponent<ChunkController>().chunkStart.GetComponent<ChunkBounds>().isMilestone = true;
+                milestoneChunkCounter = 0;
+            } else
+            {
+                milestoneChunkCounter++;
+            }
+            
             activeChunks.Add(newChunk);
             randomSeed++;
         }

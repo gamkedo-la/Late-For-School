@@ -6,6 +6,7 @@ public class ChunkBounds : MonoBehaviour
 {
     public bool chunkStart = true;
     public bool chunkEnd = false;
+    public bool isMilestone = false;
 
     private bool chunkStartPrevValue;
     private bool chunkEndPrevValue;
@@ -25,6 +26,16 @@ public class ChunkBounds : MonoBehaviour
             chunkEndPrevValue = chunkEnd;
             chunkStart = !chunkEnd;
             chunkStartPrevValue = chunkStart;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.gameObject.CompareTag("Player") &&
+           chunkStart &&
+           isMilestone)
+        {
+            Debug.Log("Hooray! YOU ROCK! **crows fly in the distance**");
         }
     }
 }
