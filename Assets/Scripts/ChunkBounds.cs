@@ -33,6 +33,12 @@ public class ChunkBounds : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if(other.gameObject.CompareTag("Player") &&
+           chunkEnd)
+        {
+            Destroy(transform.parent.gameObject, 3f);
+        }
+        
+        if(other.gameObject.CompareTag("Player") &&
            chunkStart &&
            isMilestone &&
            !hasPoppedMilestone)
