@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
     public MenuBlock CreditsBlock;
     public MenuBlock BackBlock;
     public ChunkSpawner ChunkSpawner;
+    public ParticleSystem LeavesSlow;
+    public ParticleSystem LeavesFast;
 
     private ScoreManager scoreManager;
 
@@ -80,9 +82,13 @@ public class GameManager : MonoBehaviour
         CreditsBlock.gameObject.SetActive(true);
         scoreManager.scoreDisplay.gameObject.SetActive(false);
         BackBlock.gameObject.SetActive(false);
+        LeavesSlow.gameObject.SetActive(true);
+        LeavesFast.gameObject.SetActive(false);
 
         BackBlock.SetPlayerCollisionAction(null);
 
+        // Doing this prevents the block that appears in the 
+        // main menu screen from being hit immediately
         Invoke("InitialiseMainMenuBlocks", 0.5f);
     }
 
@@ -97,6 +103,8 @@ public class GameManager : MonoBehaviour
         scoreManager.scoreDisplay.gameObject.SetActive(true);
         scoreManager.ResetScore();
         BackBlock.gameObject.SetActive(false);
+        LeavesSlow.gameObject.SetActive(false);
+        LeavesFast.gameObject.SetActive(true);
 
         PlayBlock.SetPlayerCollisionAction(null);
         LevelManagerBlock.SetPlayerCollisionAction(null);
