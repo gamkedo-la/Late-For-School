@@ -551,6 +551,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b93f36cccd8518247a4ceca18cb63880, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blockHitSound: event:/Block Hit
 --- !u!1 &508786048
 GameObject:
   m_ObjectHideFlags: 0
@@ -6543,6 +6544,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b93f36cccd8518247a4ceca18cb63880, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blockHitSound: event:/Block Hit
 --- !u!1 &882414870
 GameObject:
   m_ObjectHideFlags: 0
@@ -11438,6 +11440,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b93f36cccd8518247a4ceca18cb63880, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blockHitSound: event:/Block Hit
 --- !u!212 &966423648
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -11659,6 +11662,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b93f36cccd8518247a4ceca18cb63880, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blockHitSound: event:/Block Hit
 --- !u!212 &988427134
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -13215,6 +13219,7 @@ MonoBehaviour:
   - {fileID: 1308361419}
   - {fileID: 508786048}
   dashContainer: {fileID: 745158793}
+  jumpSound: event:/Jump
 --- !u!212 &1578492303
 SpriteRenderer:
   m_ObjectHideFlags: 0

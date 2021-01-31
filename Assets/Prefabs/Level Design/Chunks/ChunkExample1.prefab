@@ -47,6 +47,7 @@ MonoBehaviour:
   chunkStart: 0
   chunkEnd: 1
   isMilestone: 0
+  milestoneSound: event:/Milestone
 --- !u!61 &4447077492194262533
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -120,6 +121,7 @@ MonoBehaviour:
   chunkStart: 1
   chunkEnd: 0
   isMilestone: 0
+  milestoneSound: event:/Milestone
 --- !u!61 &7294711499821921078
 BoxCollider2D:
   m_ObjectHideFlags: 0

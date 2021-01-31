@@ -24,6 +24,8 @@ public class Player : MonoBehaviour
     public float slideTime = 1f;
     public List<GameObject> healthContainers;
     public GameObject dashContainer;
+    [FMODUnity.EventRef]
+    public string jumpSound;
 
     private int health = 3;
     private Rigidbody2D rigidbody2d;
@@ -224,6 +226,7 @@ public class Player : MonoBehaviour
                 }
 
                 rigidbody2d.velocity = Vector2.up * jumpVelocity;
+                FMODUnity.RuntimeManager.PlayOneShot(jumpSound);
             }
 
             // move sidewards

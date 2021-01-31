@@ -3,6 +3,9 @@
 [RequireComponent(typeof(BoxCollider2D))]
 public class MenuBlock : MonoBehaviour
 {
+    [FMODUnity.EventRef]
+    public string blockHitSound;
+
     private BoxCollider2D boxCollider2D;
     public delegate void PlayerCollisionAction();
     private PlayerCollisionAction playerCollisionAction;
@@ -21,6 +24,7 @@ public class MenuBlock : MonoBehaviour
             playerCollisionAction != null)
         {
             playerCollisionAction();
+            FMODUnity.RuntimeManager.PlayOneShot(blockHitSound);
         }
     }
 

@@ -7,6 +7,8 @@ public class ChunkBounds : MonoBehaviour
     public bool chunkStart = true;
     public bool chunkEnd = false;
     public bool isMilestone = false;
+    [FMODUnity.EventRef]
+    public string milestoneSound;
 
     private bool chunkStartPrevValue;
     private bool chunkEndPrevValue;
@@ -37,6 +39,7 @@ public class ChunkBounds : MonoBehaviour
            !hasPoppedMilestone)
         {
             Debug.Log("Hooray! YOU ROCK! **crows fly in the distance**");
+            FMODUnity.RuntimeManager.PlayOneShot(milestoneSound);
             hasPoppedMilestone = true; // Stops player from triggering milestone more than once
         }
     }
