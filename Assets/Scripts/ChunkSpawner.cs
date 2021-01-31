@@ -10,7 +10,6 @@ public class ChunkSpawner : MonoBehaviour
     public int milestoneInterval = 1;
 
     private List<GameObject> activeChunks = new List<GameObject>();
-    private GameObject milestoneChunk;
     private int milestoneChunkCounter;
 
     void FixedUpdate() // Atleast the move needs to be in FixedUpdate to work correctly, just keeping it all in here for now
@@ -68,7 +67,14 @@ public class ChunkSpawner : MonoBehaviour
             
             if(milestoneChunkCounter >= milestoneInterval)
             {
-                newChunk.GetComponent<ChunkController>().chunkStart.GetComponent<ChunkBounds>().isMilestone = true;
+                ChunkBounds[] newChunkBounds = newChunk.GetComponentsInChildren<ChunkBounds>();
+                foreach (ChunkBounds bounds in newChunkBounds)
+                {
+                    if (bounds.chunkStart)
+                    {
+                        bounds.isMilestone = true;
+                    }
+                }
                 milestoneChunkCounter = 0;
             } else
             {
