@@ -141,4 +141,9 @@ public class GameManager : MonoBehaviour
 
         Invoke("InitialiseBackBlock", 0.5f);
     }
+
+    public GameState GetState()
+    {
+        return gameState;
+    }
 }

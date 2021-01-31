@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.01.00">
+	<object class="AudioFile" id="{12e5404d-1d22-4bdf-80a3-8198ee905836}">
+		<property name="assetPath">
+			<value>sfx/WallSliding2.mp3</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>1.4889795918367348</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{d1bd9530-e950-45e0-be22-969022c6ca6b}</destination>
+		</relationship>
+	</object>
+</objects>

@@ -13219,7 +13219,12 @@ MonoBehaviour:
   - {fileID: 1308361419}
   - {fileID: 508786048}
   dashContainer: {fileID: 745158793}
+  runSound: event:/Run
   jumpSound: event:/Jump
+  wallJumpSound: event:/Wall Jump
+  slideSound: event:/Slide
+  wallSlideSound: event:/Wall Slide
+  wallClimbSound: event:/Wall Climb
 --- !u!212 &1578492303
 SpriteRenderer:
   m_ObjectHideFlags: 0

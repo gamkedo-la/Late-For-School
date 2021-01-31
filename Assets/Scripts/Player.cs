@@ -25,7 +25,17 @@ public class Player : MonoBehaviour
     public List<GameObject> healthContainers;
     public GameObject dashContainer;
     [FMODUnity.EventRef]
+    public string runSound;
+    [FMODUnity.EventRef]
     public string jumpSound;
+    [FMODUnity.EventRef]
+    public string wallJumpSound;
+    [FMODUnity.EventRef]
+    public string slideSound;
+    [FMODUnity.EventRef]
+    public string wallSlideSound;
+    [FMODUnity.EventRef]
+    public string wallClimbSound;
 
     private int health = 3;
     private Rigidbody2D rigidbody2d;
@@ -50,6 +60,10 @@ public class Player : MonoBehaviour
 
     private bool useMobileInput = false;
 
+    private FMOD.Studio.EventInstance wallSlideSoundInstance;
+    private FMOD.Studio.EventInstance wallClimbSoundInstance;
+    private FMOD.Studio.EventInstance runSoundInstance;
+
 
     void Start()
     {
@@ -69,6 +83,7 @@ public class Player : MonoBehaviour
         // reset level if dead
         if (health <= 0)
         {
+            StopAllLoopingSounds();
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
@@ -155,6 +170,18 @@ public class Player : MonoBehaviour
         if (canGrabWall && isGrabWallPressed) { grabWallToggle = !grabWallToggle; } // Toggle whether we're grabbing the wall or not
 
         bool isGrabbingWall = canGrabWall && grabWallToggle;
+
+        bool isRunning = (GameManager.GetInstance().GetState() == GameManager.GameState.Play && isGrounded && !isSliding) ||
+                         (GameManager.GetInstance().GetState() != GameManager.GameState.Play && isGrounded && inputHorizontalAxis != 0 && !isSliding);
+
+        if (isRunning)
+        {
+            StartRunSound();
+        }
+        else
+        {
+            StopRunSound();
+        }
 
         // reset dash
         if (isGrounded)
@@ -256,10 +283,26 @@ public class Player : MonoBehaviour
             if (isGrabbingWall) // wall climb
             {
                 rigidbody2d.velocity = new Vector2(0, inputVerticalAxis * speed);
+                StopWallSlideSound();
+
+                if (inputVerticalAxis != 0)
+                {
+                    StartWallClimbSound();
+                }
+                else
+                {
+                    StopWallClimbSound();
+                }
             }
             else if (((isOnLeftWall && !isGrounded && inputHorizontalAxis < 0) || (isOnRightWall && !isGrounded && inputHorizontalAxis > 0)) && !justStartedWallJumping) // only wall slide if player is moving towards wall
             {
                 WallSlide();
+                StopWallClimbSound();
+            }
+            else
+            {
+                StopWallSlideSound();
+                StopWallClimbSound();
             }
 
             // wall jump
@@ -279,6 +322,7 @@ public class Player : MonoBehaviour
 
                 rigidbody2d.velocity = new Vector2(velocityX, wallJumpVelocity);
                 wallJumpTimeLeft = wallJumpResetTime;
+                FMODUnity.RuntimeManager.PlayOneShot(wallJumpSound);
             }
         }
 
@@ -343,6 +387,8 @@ public class Player : MonoBehaviour
         Vector3 spriteMaskPos = crouchSpriteMask.transform.localPosition;
         spriteMaskPos.y = verticalOffset;
         crouchSpriteMask.transform.localPosition = spriteMaskPos;
+
+        FMODUnity.RuntimeManager.PlayOneShot(slideSound); // TODO: Make slide loopable and stop sound in StopSlide()
     }
 
     public void StopSlide()
@@ -383,6 +429,68 @@ public class Player : MonoBehaviour
     public void WallSlide()
     {
         rigidbody2d.velocity = new Vector2(0, -slideSpeed);
+        StartWallSlideSound();
+    }
+
+    public void StartRunSound()
+    {
+        if (!runSoundInstance.isValid())
+        {
+            runSoundInstance = FMODUnity.RuntimeManager.CreateInstance(runSound);
+            runSoundInstance.start();
+        }
+    }
+
+    public void StopRunSound()
+    {
+        if (runSoundInstance.isValid())
+        {
+            runSoundInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            runSoundInstance.release();
+        }
+    }
+
+    public void StartWallSlideSound()
+    {
+        if (!wallSlideSoundInstance.isValid())
+        {
+            wallSlideSoundInstance = FMODUnity.RuntimeManager.CreateInstance(wallSlideSound);
+            wallSlideSoundInstance.start();
+        }
+    }
+
+    public void StopWallSlideSound()
+    {
+        if (wallSlideSoundInstance.isValid())
+        {
+            wallSlideSoundInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            wallSlideSoundInstance.release();
+        }
+    }
+
+    public void StartWallClimbSound()
+    {
+        if (!wallClimbSoundInstance.isValid())
+        {
+            wallClimbSoundInstance = FMODUnity.RuntimeManager.CreateInstance(wallClimbSound);
+            wallClimbSoundInstance.start();
+        }
+    }
+
+    public void StopWallClimbSound()
+    {
+        if (wallClimbSoundInstance.isValid())
+        {
+            wallClimbSoundInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            wallClimbSoundInstance.release();
+        }
+    }
+
+    public void StopAllLoopingSounds()
+    {
+        StopRunSound();
+        StopWallSlideSound();
+        StopWallClimbSound();
     }
 
     public void SetHorizontalAxisInput(float value)
