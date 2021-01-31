@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <objects serializationModel="Studio.02.01.00">
-	<object class="AudioFile" id="{eb074516-80c2-4eb3-9684-03d22821fccf}">
+	<object class="AudioFile" id="{f08e5dac-58b1-4eda-b8e7-aa250c0c8fb5}">
 		<property name="assetPath">
-			<value>sfx/dash-collection-sound.aif</value>
+			<value>sfx/Jumping.mp3</value>
 		</property>
 		<property name="frequencyInKHz">
 			<value>44.0999985</value>
 		</property>
 		<property name="channelCount">
-			<value>2</value>
+			<value>1</value>
 		</property>
 		<property name="length">
-			<value>0.20832199546485261</value>
+			<value>0.3395918367346939</value>
 		</property>
 		<relationship name="masterAssetFolder">
 			<destination>{d1bd9530-e950-45e0-be22-969022c6ca6b}</destination>
