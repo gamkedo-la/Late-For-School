@@ -5457,7 +5457,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &565261966
 GameObject:
@@ -5896,7 +5896,7 @@ RectTransform:
   m_GameObject: {fileID: 639775037}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.3, y: 1.3, z: 1.3}
   m_Children:
   - {fileID: 1001881144}
   - {fileID: 21340406}
@@ -5911,8 +5911,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 198.56049, y: 127}
-  m_SizeDelta: {x: 321.59094, y: 321.59094}
+  m_AnchoredPosition: {x: 195.00006, y: 193}
+  m_SizeDelta: {x: 322, y: 322}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &666371441
 GameObject:
@@ -11407,7 +11407,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 270, z: 0}
 --- !u!1 &966423646
 GameObject:
@@ -12613,6 +12613,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mobileController: {fileID: 565261966}
+  mobileJoystick: {fileID: 639775038}
   useMobileController: 0
 --- !u!4 &1300956644
 Transform:
@@ -12626,7 +12627,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1308361419
 GameObject:
@@ -13513,7 +13514,7 @@ Transform:
   - {fileID: 1375977277}
   - {fileID: 778241375}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1743173096
 GameObject:
@@ -13899,7 +13900,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2094809304
 GameObject:
@@ -13933,7 +13934,7 @@ Transform:
   - {fileID: 966423650}
   - {fileID: 988427136}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &694244060732993673
 MeshFilter:

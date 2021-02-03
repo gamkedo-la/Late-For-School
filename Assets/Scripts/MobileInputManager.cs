@@ -1,10 +1,12 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MobileInputManager : MonoBehaviour
 {
     [SerializeField] GameObject mobileController = null;
+    [SerializeField] RectTransform mobileJoystick = null;
     [SerializeField] bool useMobileController = false;
 
     private Player player;
@@ -16,6 +18,24 @@ public class MobileInputManager : MonoBehaviour
     {
         player = FindObjectOfType<Player>();
         SetInputToMobileOrNot();
+    }
+
+    private void Update()
+    {
+        if (!useMobileController)
+        {
+            return;
+        }
+
+        Touch[] touches = Input.touches;
+        foreach (Touch touch in touches)
+        {
+            Vector3 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
+            if(Vector2.Distance(touchPosition, mobileJoystick.position) <= mobileJoystick.localScale[0])
+            {
+                Debug.Log("I'm in the Zone!");
+            }
+        }
     }
 
     private void SetInputToMobileOrNot()
