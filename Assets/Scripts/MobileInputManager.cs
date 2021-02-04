@@ -14,10 +14,16 @@ public class MobileInputManager : MonoBehaviour
     private bool isJumpAndDashPressed = false;
     private bool isGrabWallPressed = false;
 
+    private float joystickSize = 1.0f;
+
     private void Start() 
     {
         player = FindObjectOfType<Player>();
         SetInputToMobileOrNot();
+
+        Vector3[] v = new Vector3[4];
+        mobileJoystick.GetWorldCorners(v);
+        joystickSize = Mathf.Abs(v[0].x - mobileJoystick.position.x);
     }
 
     private void Update()
@@ -31,9 +37,61 @@ public class MobileInputManager : MonoBehaviour
         foreach (Touch touch in touches)
         {
             Vector3 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
-            if(Vector2.Distance(touchPosition, mobileJoystick.position) <= mobileJoystick.localScale[0])
+            Vector2 joystickDirection = touchPosition - mobileJoystick.position;
+
+            // Debug.Log(joystickDirection.magnitude);
+            // Debug.Log(Vector2.Distance(touchPosition, mobileJoystick.position));
+
+            if(joystickDirection.magnitude <= joystickSize)
             {
-                Debug.Log("I'm in the Zone!");
+                float joystickAngle = Vector2.Angle(joystickDirection, Vector2.right);
+
+                if (joystickDirection.y >= 0)
+                {
+                    if (joystickAngle < 22.5f)
+                    {
+                        Debug.Log("Right");
+                    }      
+                    else if (joystickAngle < 45f + 22.5f)
+                    {
+                        Debug.Log("Up Right");
+                    }  
+                    else if (joystickAngle < 2*45f + 22.5f)
+                    {
+                        Debug.Log("Up");
+                    } 
+                    else if (joystickAngle < 3*45f + 22.5f)
+                    {
+                        Debug.Log("Up Left");
+                    }    
+                    else if (joystickAngle < 180f)     
+                    {
+                        Debug.Log("Left");
+                    }     
+                }
+                else 
+                {
+                    if (joystickAngle < 22.5f)
+                    {
+                        Debug.Log("Right");
+                    }      
+                    else if (joystickAngle < 45f + 22.5f)
+                    {
+                        Debug.Log("Down Right");
+                    }  
+                    else if (joystickAngle < 2*45f + 22.5f)
+                    {
+                        Debug.Log("Down");
+                    } 
+                    else if (joystickAngle < 3*45f + 22.5f)
+                    {
+                        Debug.Log("Down Left");
+                    }    
+                    else if (joystickAngle <= 180f)     
+                    {
+                        Debug.Log("Left");
+                    }
+                }
             }
         }
     }
