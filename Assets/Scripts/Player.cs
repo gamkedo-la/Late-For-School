@@ -55,8 +55,9 @@ public class Player : MonoBehaviour
 
     private float inputVerticalAxis = 0f;
     private float inputHorizontalAxis = 0f;
-    private bool isJumpAndDashPressed = false;
-    private bool isGrabWallPressed = false;
+    private bool isJumpAndDashStarted = false;
+    private bool isJumpAndDashMaintained = false;
+    private bool isGrabWallStarted = false;
 
     private bool useMobileInput = false;
 
@@ -89,8 +90,8 @@ public class Player : MonoBehaviour
 
         if (useMobileInput) // Reset wall and grab button to not pressed
         {
-            isGrabWallPressed = false;
-            isJumpAndDashPressed = false;
+            isGrabWallStarted = false;
+            isJumpAndDashStarted = false;
         }
     }
 
@@ -127,8 +128,9 @@ public class Player : MonoBehaviour
         {
             inputHorizontalAxis = Input.GetAxisRaw("Horizontal");
             inputVerticalAxis = Input.GetAxisRaw("Vertical");
-            isGrabWallPressed = Input.GetKeyDown(GrabWallKey);
-            isJumpAndDashPressed = Input.GetKeyDown(JumpAndDashKey);
+            isGrabWallStarted = Input.GetKeyDown(GrabWallKey);
+            isJumpAndDashStarted = Input.GetKeyDown(JumpAndDashKey);
+            isJumpAndDashMaintained = Input.GetKey(JumpAndDashKey);
         }
     }
 
@@ -167,7 +169,7 @@ public class Player : MonoBehaviour
         // check if we can grab the wall
         bool canGrabWall = !isGrounded && isOnWall && !justStartedWallJumping;
         if (!canGrabWall) { grabWallToggle = false; } // Reset toggle if we're no longer in a place to use it
-        if (canGrabWall && isGrabWallPressed) { grabWallToggle = !grabWallToggle; } // Toggle whether we're grabbing the wall or not
+        if (canGrabWall && isGrabWallStarted) { grabWallToggle = !grabWallToggle; } // Toggle whether we're grabbing the wall or not
 
         bool isGrabbingWall = canGrabWall && grabWallToggle;
 
@@ -245,7 +247,7 @@ public class Player : MonoBehaviour
             }
 
             // jump
-            if (isGrounded && isJumpAndDashPressed)
+            if (isGrounded && isJumpAndDashStarted)
             {
                 if (isSliding)
                 {
@@ -274,7 +276,7 @@ public class Player : MonoBehaviour
             {
                 rigidbody2d.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
             }
-            else if (rigidbody2d.velocity.y > 0 && !Input.GetKey(JumpAndDashKey))
+            else if (rigidbody2d.velocity.y > 0 && !isJumpAndDashMaintained)
             {
                 rigidbody2d.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
             }
@@ -306,7 +308,7 @@ public class Player : MonoBehaviour
             }
 
             // wall jump
-            if (isNearWall && !isGrounded && isJumpAndDashPressed && !justStartedWallJumping)
+            if (isNearWall && !isGrounded && isJumpAndDashStarted && !justStartedWallJumping)
             {
                 float velocityX;
                 if (isNearLeftWall)
@@ -327,7 +329,7 @@ public class Player : MonoBehaviour
         }
 
         // dash
-        if (dashAvailable && !isGrounded && !isNearWall && !justStartedWallJumping && isJumpAndDashPressed && (inputHorizontalAxis != 0 || inputVerticalAxis != 0))
+        if (dashAvailable && !isGrounded && !isNearWall && !justStartedWallJumping && isJumpAndDashStarted && (inputHorizontalAxis != 0 || inputVerticalAxis != 0))
         {
             Dash(inputHorizontalAxis, inputVerticalAxis);
             wallJumpTimeLeft = 0; // if we dash mid wall jump, we don't want to still be in the wall jump state
@@ -505,12 +507,16 @@ public class Player : MonoBehaviour
 
     public void SetJumpAndDashInput(bool value)
     {
-        isJumpAndDashPressed = value;
+        if(value && !isJumpAndDashMaintained)
+        {
+            isJumpAndDashStarted = value;
+        }
+        isJumpAndDashMaintained = value;
     }
 
     public void SetGrabWallInput(bool value)
     {
-        isGrabWallPressed = value;
+        isGrabWallStarted = value;
     }
 
     public void SetUseMobileInput(bool value)

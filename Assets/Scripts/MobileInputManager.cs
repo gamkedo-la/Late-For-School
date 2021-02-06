@@ -117,7 +117,7 @@ public class MobileInputManager : MonoBehaviour
                 return;
             }
         }
-        
+
         joystickCenter.transform.position = mobileJoystick.position;
         SetVerticalAxisInput(0.0f);
         SetHorizontalAxisInput(0.0f);
@@ -157,6 +157,7 @@ public class MobileInputManager : MonoBehaviour
 
     public void StopPressingJumpAndDashButton()
     {
+        player.SetJumpAndDashInput(false);
         isJumpAndDashPressed = false;
     }
 
