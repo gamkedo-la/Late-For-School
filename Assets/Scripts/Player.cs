@@ -65,12 +65,15 @@ public class Player : MonoBehaviour
     private FMOD.Studio.EventInstance wallClimbSoundInstance;
     private FMOD.Studio.EventInstance runSoundInstance;
 
+    private Animator anim;
+
 
     void Start()
     {
         rigidbody2d = GetComponent<Rigidbody2D>();
         boxCollider2d = GetComponent<BoxCollider2D>();
         rigidBodyGravityScale = rigidbody2d.gravityScale;
+        anim = GetComponent<Animator>();
     }
 
     void Update()
@@ -179,10 +182,12 @@ public class Player : MonoBehaviour
         if (isRunning)
         {
             StartRunSound();
+            anim.SetBool("isRunning", true);
         }
         else
         {
             StopRunSound();
+            anim.SetBool("isRunning", false);
         }
 
         // reset dash
