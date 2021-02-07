@@ -58,6 +58,7 @@ public class Player : MonoBehaviour
     private bool isJumpAndDashStarted = false;
     private bool isJumpAndDashMaintained = false;
     private bool isGrabWallStarted = false;
+    private bool lookingRight = true;
 
     private bool useMobileInput = false;
 
@@ -179,6 +180,19 @@ public class Player : MonoBehaviour
         bool isRunning = (GameManager.GetInstance().GetState() == GameManager.GameState.Play && isGrounded && !isSliding) ||
                          (GameManager.GetInstance().GetState() != GameManager.GameState.Play && isGrounded && inputHorizontalAxis != 0 && !isSliding);
 
+        // Set isLookingRight
+        if (GameManager.GetInstance().GetState() != GameManager.GameState.Play)
+        {
+            if (inputHorizontalAxis != 0)
+            {
+                lookingRight = inputHorizontalAxis > 0;
+            }
+        }
+        else
+        {
+            lookingRight = true; // TODO: change this for wall grabbing
+        }
+
         if (isRunning)
         {
             StartRunSound();
@@ -188,6 +202,15 @@ public class Player : MonoBehaviour
         {
             StopRunSound();
             anim.SetBool("isRunning", false);
+        }
+
+        if (lookingRight)
+        {
+            transform.rotation = Quaternion.Euler(transform.rotation.x, 0, transform.rotation.z);
+        }
+        else
+        {
+            transform.rotation = Quaternion.Euler(transform.rotation.x, 180, transform.rotation.z);
         }
 
         // reset dash
