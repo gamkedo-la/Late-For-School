@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using System;
 
 public class ChunkSpawner : MonoBehaviour
 {
@@ -8,6 +10,7 @@ public class ChunkSpawner : MonoBehaviour
     public float offScreenX = -10f;
     public List<GameObject> chunks;
     public int milestoneInterval = 1;
+    public Text seedInput;
 
     private List<GameObject> activeChunks = new List<GameObject>();
     private int milestoneChunkCounter;
@@ -50,8 +53,8 @@ public class ChunkSpawner : MonoBehaviour
 
         if (spawnNewChunk)
         {
-            Random.InitState(randomSeed);
-            int chunkIndex = Random.Range(0, chunks.Count);
+            UnityEngine.Random.InitState(randomSeed);
+            int chunkIndex = UnityEngine.Random.Range(0, chunks.Count);
 
             ChunkBounds[] chunkBounds = chunks[chunkIndex].GetComponentsInChildren<ChunkBounds>();
             float chunkOffset = 0f;
@@ -90,6 +93,15 @@ public class ChunkSpawner : MonoBehaviour
             activeChunks.Remove(chunk);
             Destroy(chunk);
         }
+    }
+
+    public void UpdateSeedFromUI() {
+        try {
+            randomSeed = Int32.Parse(seedInput.text);
+        } catch (FormatException) {
+            randomSeed = 42;
+        }
+        Debug.Log("starting with seed from UI:" + randomSeed);
     }
 
     public void DestroyChunks()

@@ -5958,7 +5958,7 @@ GameObject:
   - component: {fileID: 611206564}
   - component: {fileID: 611206563}
   m_Layer: 5
-  m_Name: InputField
+  m_Name: Seed Input
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5971,7 +5971,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 611206561}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -5982,7 +5982,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -720.8, y: -70}
+  m_AnchoredPosition: {x: -720.7969, y: -70.00021}
   m_SizeDelta: {x: 500, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &611206563
@@ -6126,6 +6126,7 @@ MonoBehaviour:
   - {fileID: 8397681959016776686, guid: 534440043b3d7934d8cb1b92c631ce72, type: 3}
   - {fileID: 8397681959016776686, guid: 045b9f8de4271fe49be8da41e3f763de, type: 3}
   milestoneInterval: 1
+  seedInput: {fileID: 1254449476}
 --- !u!4 &618240592
 Transform:
   m_ObjectHideFlags: 0
