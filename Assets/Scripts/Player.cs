@@ -153,7 +153,7 @@ public class Player : MonoBehaviour
         {
             gameObject.transform.parent = isOnLeftWall.transform;
         }
-        else if (isOnRightWall && gameObject.transform.parent  != isOnRightWall.transform)
+        else if (isOnRightWall && gameObject.transform.parent != isOnRightWall.transform)
         {
             gameObject.transform.parent = isOnRightWall.transform;
         }
@@ -180,8 +180,15 @@ public class Player : MonoBehaviour
         bool isRunning = (GameManager.GetInstance().GetState() == GameManager.GameState.Play && isGrounded && !isSliding) ||
                          (GameManager.GetInstance().GetState() != GameManager.GameState.Play && isGrounded && inputHorizontalAxis != 0 && !isSliding);
 
+        // only wall slide if player is moving towards wall
+        bool attemptingWallSlide = ((isOnLeftWall && !isGrounded && inputHorizontalAxis < 0) || (isOnRightWall && !isGrounded && inputHorizontalAxis > 0));
+
         // Set isLookingRight
-        if (GameManager.GetInstance().GetState() != GameManager.GameState.Play)
+        if (attemptingWallSlide || isGrabbingWall || isWallJumping)
+        {
+            lookingRight = isOnRightWall || isWallJumpingRight;
+        }
+        else if (GameManager.GetInstance().GetState() != GameManager.GameState.Play)
         {
             if (inputHorizontalAxis != 0)
             {
@@ -190,7 +197,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            lookingRight = true; // TODO: change this for wall grabbing
+            lookingRight = true;
         }
 
         if (isRunning)
@@ -324,7 +331,7 @@ public class Player : MonoBehaviour
                     StopWallClimbSound();
                 }
             }
-            else if (((isOnLeftWall && !isGrounded && inputHorizontalAxis < 0) || (isOnRightWall && !isGrounded && inputHorizontalAxis > 0)) && !justStartedWallJumping) // only wall slide if player is moving towards wall
+            else if (attemptingWallSlide && !justStartedWallJumping)
             {
                 WallSlide();
                 StopWallClimbSound();
