@@ -82,7 +82,7 @@ public class ChunkSpawner : MonoBehaviour
             }
             
             activeChunks.Add(newChunk);
-            randomSeed++;
+           randomSeed++;
         }
 
         foreach (GameObject chunk in toRemove)
