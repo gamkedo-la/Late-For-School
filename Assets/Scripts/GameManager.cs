@@ -96,6 +96,7 @@ public class GameManager : MonoBehaviour
     {
         gameState = GameState.Play;
         ChunkSpawner.DestroyChunks();
+        ChunkSpawner.UpdateSeedFromUI();
         ChunkSpawner.gameObject.SetActive(true);
         PlayBlock.gameObject.SetActive(false);
         LevelManagerBlock.gameObject.SetActive(false);
