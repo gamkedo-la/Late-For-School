@@ -24,6 +24,13 @@ public class Player : MonoBehaviour
     public float slideTime = 1f;
     public List<GameObject> healthContainers;
     public GameObject dashContainer;
+    public GameObject runParticles; // looping, turned off and on
+    public GameObject jumpFxPrefab;
+    public GameObject landFxPrefab;
+    public GameObject wallgrabFxPrefab;
+    public GameObject walljumpFxPrefab;
+    public GameObject dashFxPrefab;
+
     [FMODUnity.EventRef]
     public string runSound;
     [FMODUnity.EventRef]
@@ -291,6 +298,8 @@ public class Player : MonoBehaviour
 
                 rigidbody2d.velocity = Vector2.up * jumpVelocity;
                 FMODUnity.RuntimeManager.PlayOneShot(jumpSound);
+
+                if (jumpFxPrefab) Instantiate(jumpFxPrefab, transform.position, Quaternion.identity);
             }
 
             // move sidewards
@@ -325,6 +334,8 @@ public class Player : MonoBehaviour
                 if (inputVerticalAxis != 0)
                 {
                     StartWallClimbSound();
+                    if (wallgrabFxPrefab) Instantiate(wallgrabFxPrefab, transform.position, Quaternion.identity);
+
                 }
                 else
                 {
@@ -360,6 +371,8 @@ public class Player : MonoBehaviour
                 rigidbody2d.velocity = new Vector2(velocityX, wallJumpVelocity);
                 wallJumpTimeLeft = wallJumpResetTime;
                 FMODUnity.RuntimeManager.PlayOneShot(wallJumpSound);
+                if (walljumpFxPrefab) Instantiate(walljumpFxPrefab, transform.position, Quaternion.identity);
+
             }
         }
 
@@ -367,6 +380,7 @@ public class Player : MonoBehaviour
         if (dashAvailable && !isGrounded && !isNearWall && !justStartedWallJumping && isJumpAndDashStarted && (inputHorizontalAxis != 0 || inputVerticalAxis != 0))
         {
             Dash(inputHorizontalAxis, inputVerticalAxis);
+            if (dashFxPrefab) Instantiate(dashFxPrefab, transform.position, Quaternion.identity);
             wallJumpTimeLeft = 0; // if we dash mid wall jump, we don't want to still be in the wall jump state
         }
     }
