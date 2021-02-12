@@ -10,6 +10,9 @@ public class ChunkBounds : MonoBehaviour
     [FMODUnity.EventRef]
     public string milestoneSound;
 
+    public GameObject milestoneSkyEffect;
+    public GameObject milestonePlayerEffect;
+
     private bool chunkStartPrevValue;
     private bool chunkEndPrevValue;
     private bool hasPoppedMilestone = false;
@@ -39,6 +42,8 @@ public class ChunkBounds : MonoBehaviour
            !hasPoppedMilestone)
         {
             Debug.Log("Hooray! YOU ROCK! **crows fly in the distance**");
+            if (milestoneSkyEffect) Instantiate(milestoneSkyEffect,other.gameObject.transform.position,Quaternion.identity);
+            if (milestonePlayerEffect) Instantiate(milestonePlayerEffect,other.gameObject.transform.position,Quaternion.identity);
             FMODUnity.RuntimeManager.PlayOneShot(milestoneSound);
             hasPoppedMilestone = true; // Stops player from triggering milestone more than once
         }

@@ -646,8 +646,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chunkStart: 0
   chunkEnd: 1
-  isMilestone: 0
+  isMilestone: 1
   milestoneSound: event:/Milestone
+  milestoneSkyEffect: {fileID: 956545745070192379, guid: 07cba600d5b5ce843b89af67f0b65ecf,
+    type: 3}
+  milestonePlayerEffect: {fileID: 8796150976950980979, guid: 274876703d5a28a4e8e9cda1551d4958,
+    type: 3}
 --- !u!61 &3486183146568700536
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -803,6 +807,8 @@ MonoBehaviour:
   chunkEnd: 0
   isMilestone: 0
   milestoneSound: event:/Milestone
+  milestoneSkyEffect: {fileID: 0}
+  milestonePlayerEffect: {fileID: 0}
 --- !u!61 &3705229069498407833
 BoxCollider2D:
   m_ObjectHideFlags: 0
