@@ -35,92 +35,166 @@ public class MobileInputManager : MonoBehaviour
             return;
         }
 
+        ProcessMovementInput();
+    }
+
+    private void ProcessMovementInput()
+    {
         Touch[] touches = Input.touches;
-        foreach (Touch touch in touches)
+        
+        foreach (Touch touch in touches) 
         {
+            // We will only consider the first touch detected in the joystick zone
+
             Vector3 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
-            Vector2 joystickDirection = touchPosition - mobileJoystick.position;
+            Vector2 joystickToTouchDirection = touchPosition - mobileJoystick.position;
 
-            if(joystickDirection.magnitude < joystickSize &&
-                joystickDirection.magnitude > 0.1 * joystickSize)
+            if (joystickToTouchDirection.magnitude < joystickSize &&
+                joystickToTouchDirection.magnitude > 0.1 * joystickSize)
             {
-                joystickCenter.transform.position = touchPosition;
-                float joystickAngle = Vector2.Angle(joystickDirection, Vector2.right);
+                // Touch is in the joystick zone, and player is actually pushing the joystick a bit
+                joystickCenter.transform.position = touchPosition; // Move joystick center sprite
 
-                if (joystickDirection.y >= 0)
+                if (joystickToTouchDirection.magnitude < 0.5 * joystickSize)
                 {
-                    if (joystickAngle < 22.5f)
-                    {
-                        Debug.Log("Right");
-                        SetVerticalAxisInput(0.0f);
-                        SetHorizontalAxisInput(1.0f);
-                    }      
-                    else if (joystickAngle < 45f + 22.5f)
-                    {
-                        Debug.Log("Up Right");
-                        SetVerticalAxisInput(1.0f);
-                        SetHorizontalAxisInput(1.0f);
-                    }  
-                    else if (joystickAngle < 2*45f + 22.5f)
-                    {
-                        Debug.Log("Up");
-                        SetVerticalAxisInput(1.0f);
-                        SetHorizontalAxisInput(0.0f);
-                    } 
-                    else if (joystickAngle < 3*45f + 22.5f)
-                    {
-                        Debug.Log("Up Left");
-                        SetVerticalAxisInput(1.0f);
-                        SetHorizontalAxisInput(-1.0f);
-                    }    
-                    else if (joystickAngle < 180f)     
-                    {
-                        Debug.Log("Left");
-                        SetVerticalAxisInput(0.0f);
-                        SetHorizontalAxisInput(-1.0f);
-                    }     
+                    // If the player is "pushing softly" on the joystick, we only detect the main 4 directions (feels less annoying)
+                    Detect4Directions(joystickToTouchDirection);
                 }
-                else 
+                else
                 {
-                    if (joystickAngle < 22.5f)
-                    {
-                        Debug.Log("Right");
-                        SetVerticalAxisInput(0.0f);
-                        SetHorizontalAxisInput(1.0f);
-                    }      
-                    else if (joystickAngle < 45f + 22.5f)
-                    {
-                        Debug.Log("Down Right");
-                        SetVerticalAxisInput(-1.0f);
-                        SetHorizontalAxisInput(1.0f);
-                    }  
-                    else if (joystickAngle < 2*45f + 22.5f)
-                    {
-                        Debug.Log("Down");
-                        SetVerticalAxisInput(-1.0f);
-                        SetHorizontalAxisInput(0.0f);
-                    } 
-                    else if (joystickAngle < 3*45f + 22.5f)
-                    {
-                        Debug.Log("Down Left");
-                        SetVerticalAxisInput(-1.0f);
-                        SetHorizontalAxisInput(-1.0f);
-                    }    
-                    else if (joystickAngle <= 180f)     
-                    {
-                        Debug.Log("Left");
-                        SetVerticalAxisInput(0.0f);
-                        SetHorizontalAxisInput(-1.0f);
-                    }
+                    // If the player is "pushing strongly" on the joystick, we also detect diagonal directions
+                    Detect8Directions(joystickToTouchDirection);
                 }
 
                 return;
             }
         }
 
+        // If no touch in the joystick area, then set the movement to 0
         joystickCenter.transform.position = mobileJoystick.position;
         SetVerticalAxisInput(0.0f);
         SetHorizontalAxisInput(0.0f);
+    }
+
+    private void Detect8Directions(Vector2 joystickToTouchDirection)
+    {
+        // Detect the direction depending on the angle
+        float joystickAngle = Vector2.Angle(joystickToTouchDirection, Vector2.right);
+
+        if (joystickToTouchDirection.y >= 0)
+        {
+            if (joystickAngle < 22.5f)
+            {
+                Debug.Log("Right");
+                SetVerticalAxisInput(0.0f);
+                SetHorizontalAxisInput(1.0f);
+            }
+            else if (joystickAngle < 45f + 22.5)
+            {
+                Debug.Log("Up Right");
+                SetVerticalAxisInput(1.0f);
+                SetHorizontalAxisInput(1.0f);
+            }
+            else if (joystickAngle < 2 * 45f + 22.5f)
+            {
+                Debug.Log("Up");
+                SetVerticalAxisInput(1.0f);
+                SetHorizontalAxisInput(0.0f);
+            }
+            else if (joystickAngle < 3 * 45f + 22.5f)
+            {
+                Debug.Log("Up Left");
+                SetVerticalAxisInput(1.0f);
+                SetHorizontalAxisInput(-1.0f);
+            }
+            else if (joystickAngle < 180f)
+            {
+                Debug.Log("Left");
+                SetVerticalAxisInput(0.0f);
+                SetHorizontalAxisInput(-1.0f);
+            }
+        }
+        else
+        {
+            if (joystickAngle < 22.5f)
+            {
+                Debug.Log("Right");
+                SetVerticalAxisInput(0.0f);
+                SetHorizontalAxisInput(1.0f);
+            }
+            else if (joystickAngle < 45f + 22.5)
+            {
+                Debug.Log("Down Right");
+                SetVerticalAxisInput(-1.0f);
+                SetHorizontalAxisInput(1.0f);
+            }
+            else if (joystickAngle < 2 * 45f + 22.5f)
+            {
+                Debug.Log("Down");
+                SetVerticalAxisInput(-1.0f);
+                SetHorizontalAxisInput(0.0f);
+            }
+            else if (joystickAngle < 3 * 45f + 22.5f)
+            {
+                Debug.Log("Down Left");
+                SetVerticalAxisInput(-1.0f);
+                SetHorizontalAxisInput(-1.0f);
+            }
+            else if (joystickAngle < 180f)
+            {
+                Debug.Log("Left");
+                SetVerticalAxisInput(0.0f);
+                SetHorizontalAxisInput(-1.0f);
+            }
+        }
+    }
+
+    private void Detect4Directions(Vector2 joystickToTouchDirection)
+    {
+        // Detect the direction depending on the angle
+        float joystickAngle = Vector2.Angle(joystickToTouchDirection, Vector2.right);
+
+        if (joystickToTouchDirection.y >= 0)
+        {
+            if (joystickAngle < 45.0f){
+                Debug.Log("Right");
+                SetVerticalAxisInput(0.0f);
+                SetHorizontalAxisInput(1.0f);
+            }
+            else if (joystickAngle < 135.0f)
+            {
+                Debug.Log("Up");
+                SetVerticalAxisInput(1.0f);
+                SetHorizontalAxisInput(0.0f);
+            }
+            else if (joystickAngle < 180.0f)
+            {
+                Debug.Log("Left");
+                SetVerticalAxisInput(0.0f);
+                SetHorizontalAxisInput(-1.0f);
+            }
+        }
+        else
+        {
+            if (joystickAngle < 45.0f)
+            {
+                Debug.Log("Right");
+                SetVerticalAxisInput(0.0f);
+                SetHorizontalAxisInput(1.0f);
+            }
+            else if (joystickAngle < 135.0f)
+            {
+                Debug.Log("Down");
+                SetVerticalAxisInput(-1.0f);
+                SetHorizontalAxisInput(0.0f);
+            }
+            else if(joystickAngle <= 180.0f)
+            {
+                Debug.Log("Left");
+                SetVerticalAxisInput(0.0f);
+                SetHorizontalAxisInput(-1.0f);
+            }
+        }
     }
 
     private void SetInputToMobileOrNot()
@@ -146,6 +220,7 @@ public class MobileInputManager : MonoBehaviour
     {
         player.SetHorizontalAxisInput(value);
     }
+    
     public void PressJumpAndDashButton()
     {
         if (!isJumpAndDashPressed)
