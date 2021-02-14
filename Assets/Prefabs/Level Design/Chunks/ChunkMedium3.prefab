@@ -324,7 +324,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8397681959016776685}
   m_Layer: 10
-  m_Name: ChunkExample1
+  m_Name: ChunkMedium3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -386,7 +386,7 @@ PrefabInstance:
     - target: {fileID: 9207197304605923146, guid: 7a8022086d9998a459d7952667f98c1d,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 9207197304605923146, guid: 7a8022086d9998a459d7952667f98c1d,
         type: 3}
@@ -536,7 +536,7 @@ PrefabInstance:
     - target: {fileID: 9207197304605923146, guid: 7a8022086d9998a459d7952667f98c1d,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 9207197304605923146, guid: 7a8022086d9998a459d7952667f98c1d,
         type: 3}
@@ -836,7 +836,7 @@ PrefabInstance:
     - target: {fileID: 9207197304605923146, guid: 7a8022086d9998a459d7952667f98c1d,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 9207197304605923146, guid: 7a8022086d9998a459d7952667f98c1d,
         type: 3}
@@ -911,7 +911,7 @@ PrefabInstance:
     - target: {fileID: 9207197304605923146, guid: 7a8022086d9998a459d7952667f98c1d,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 9207197304605923146, guid: 7a8022086d9998a459d7952667f98c1d,
         type: 3}
@@ -986,7 +986,7 @@ PrefabInstance:
     - target: {fileID: 9207197304605923146, guid: 7a8022086d9998a459d7952667f98c1d,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 9207197304605923146, guid: 7a8022086d9998a459d7952667f98c1d,
         type: 3}

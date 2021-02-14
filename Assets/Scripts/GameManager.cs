@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public ChunkSpawner ChunkSpawner;
     public ParticleSystem LeavesSlow;
     public ParticleSystem LeavesFast;
+    public GameObject logo;
 
     private ScoreManager scoreManager;
 
@@ -84,6 +85,7 @@ public class GameManager : MonoBehaviour
         BackBlock.gameObject.SetActive(false);
         LeavesSlow.gameObject.SetActive(true);
         LeavesFast.gameObject.SetActive(false);
+        logo.SetActive(true);
 
         BackBlock.SetPlayerCollisionAction(null);
 
@@ -106,6 +108,7 @@ public class GameManager : MonoBehaviour
         BackBlock.gameObject.SetActive(false);
         LeavesSlow.gameObject.SetActive(false);
         LeavesFast.gameObject.SetActive(true);
+        logo.SetActive(false);
 
         PlayBlock.SetPlayerCollisionAction(null);
         LevelManagerBlock.SetPlayerCollisionAction(null);
