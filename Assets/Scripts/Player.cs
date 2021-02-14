@@ -154,9 +154,10 @@ public class Player : MonoBehaviour
     // TODO: refactor into smaller & neater functions
     private void HandlePlayerControl()
     {
-        // Slow down movement & prevent player jump if stuck
+        // Slow down movement & prevent player jump & slide if stuck
         if (isStuck && GameManager.GetInstance().GetState() == GameManager.GameState.Play)
         {
+            inputVerticalAxis = 0;
             isJumpAndDashStarted = false;
             isJumpAndDashMaintained = false;
 
@@ -662,8 +663,6 @@ public class Player : MonoBehaviour
 
             elapsedTime += Time.deltaTime + intervalTime;
             yield return new WaitForSeconds(intervalTime);
-
-            Debug.Log($"{elapsedTime}, {time}");
         }
         renderer.enabled = true;
     }
