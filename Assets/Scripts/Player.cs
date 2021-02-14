@@ -22,6 +22,8 @@ public class Player : MonoBehaviour
     public float wallJumpStopMultiplier = 2f; // higher amount = player is able to move back towards a wall they just jumped away from more easily
     public float nearWallDistance = 0.5f; // Allows wall jumping even if not exactly touching the wall
     public float slideTime = 1f;
+    public float timeInvincibleAfterHurt = 2.5f;
+    public float stuckSlowdownFactor = 2.0f;
     public List<GameObject> healthContainers;
     public GameObject dashContainer;
     public GameObject runParticles; // looping, turned off and on
@@ -56,6 +58,8 @@ public class Player : MonoBehaviour
     private bool isSliding = false;
     private float slideTimeLeft = 0;
     private bool grabWallToggle = false;
+    private bool isStuck = false;
+    private bool isInvincible = false;
 
     private const KeyCode GrabWallKey = KeyCode.LeftShift;
     private const KeyCode JumpAndDashKey = KeyCode.Space;
@@ -149,6 +153,18 @@ public class Player : MonoBehaviour
     // TODO: refactor into smaller & neater functions
     private void HandlePlayerControl()
     {
+        // Slow down movement & prevent player jump if stuck
+        if (isStuck && GameManager.GetInstance().GetState() == GameManager.GameState.Play)
+        {
+            isJumpAndDashStarted = false;
+            isJumpAndDashMaintained = false;
+
+            // Move player left as staying still is actually moving forward
+            Vector2 newPos = transform.position;
+            newPos.x -= ChunkSpawner.GetInstance().speed / stuckSlowdownFactor * Time.deltaTime;
+            transform.position = newPos;
+        }
+
         bool isGrounded = IsGrounded();
 
         Collider2D isOnLeftWall = IsOnLeftWall();
@@ -593,5 +609,33 @@ public class Player : MonoBehaviour
     public void AddDash()
     {
         dashAvailable = true;
+    }
+
+    public void SlowPlayerMovement(float timeSecs)
+    {
+        if (timeSecs > 0)
+        {
+            isStuck = true;
+            Invoke("ResumePlayerMovement", timeSecs);
+        }
+    }
+
+    private void ResumePlayerMovement()
+    {
+        isStuck = false;
+    }
+
+    public void SetInvincible(float timeSecs)
+    {
+        if (!isInvincible)
+        {
+            isInvincible = true;
+            Invoke("EndInvincibility", timeSecs);
+        }
+    }
+
+    private void EndInvincibility()
+    {
+        isInvincible = false;
     }
 }

@@ -15,6 +15,17 @@ public class ChunkSpawner : MonoBehaviour
     private List<GameObject> activeChunks = new List<GameObject>();
     private int milestoneChunkCounter;
 
+    private static ChunkSpawner instance;
+    public static ChunkSpawner GetInstance()
+    {
+        return instance;
+    }
+
+    private void Awake()
+    {
+        instance = this;
+    }
+
     void FixedUpdate() // Atleast the move needs to be in FixedUpdate to work correctly, just keeping it all in here for now
     {
         List<GameObject> toRemove = new List<GameObject>();
