@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -194,7 +195,7 @@ public class Player : MonoBehaviour
         bool justStartedWallJumping = wallJumpTimeLeft > wallJumpResetTime - 0.1;
 
         // check if we can grab the wall
-        bool canGrabWall = !isGrounded && isOnWall && !justStartedWallJumping;
+        bool canGrabWall = !isGrounded && isNearWall && !justStartedWallJumping;
         if (!canGrabWall) { grabWallToggle = false; } // Reset toggle if we're no longer in a place to use it
         if (canGrabWall && isGrabWallStarted) { grabWallToggle = !grabWallToggle; } // Toggle whether we're grabbing the wall or not
 
@@ -209,7 +210,7 @@ public class Player : MonoBehaviour
         // Set isLookingRight
         if (attemptingWallSlide || isGrabbingWall || isWallJumping)
         {
-            lookingRight = isOnRightWall || isWallJumpingRight;
+            lookingRight = isNearRightWall || isWallJumpingRight;
         }
         else if (GameManager.GetInstance().GetState() != GameManager.GameState.Play)
         {
@@ -597,13 +598,19 @@ public class Player : MonoBehaviour
 
     public void RemoveHealth(int healthToRemove)
     {
-        health -= healthToRemove;
-        if (health < 0) { health = 0; }
+        if (!isInvincible)
+        {
+            health -= healthToRemove;
+            if (health < 0) { health = 0; }
+        }
     }
 
     public void KillPlayer()
     {
-        health = 0;
+        if (!isInvincible)
+        {
+            health = 0;
+        }
     }
 
     public void AddDash()
@@ -613,7 +620,7 @@ public class Player : MonoBehaviour
 
     public void SlowPlayerMovement(float timeSecs)
     {
-        if (timeSecs > 0)
+        if (timeSecs > 0 && !isStuck)
         {
             isStuck = true;
             Invoke("ResumePlayerMovement", timeSecs);
@@ -631,11 +638,33 @@ public class Player : MonoBehaviour
         {
             isInvincible = true;
             Invoke("EndInvincibility", timeSecs);
+            StartCoroutine(Flash(timeSecs, 0.05f));
         }
     }
 
     private void EndInvincibility()
     {
         isInvincible = false;
+    }
+
+    public bool IsInvincible()
+    {
+        return isInvincible;
+    }
+
+    IEnumerator Flash(float time, float intervalTime)
+    {
+        float elapsedTime = 0f;
+        Renderer renderer = GetComponent<Renderer>();
+        while (elapsedTime < time)
+        {
+            renderer.enabled = !renderer.enabled;
+
+            elapsedTime += Time.deltaTime + intervalTime;
+            yield return new WaitForSeconds(intervalTime);
+
+            Debug.Log($"{elapsedTime}, {time}");
+        }
+        renderer.enabled = true;
     }
 }
