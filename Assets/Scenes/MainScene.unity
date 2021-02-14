@@ -41999,7 +41999,7 @@ MonoBehaviour:
   wallJumpStopMultiplier: 2
   nearWallDistance: 0.5
   slideTime: 1
-  timeInvincibleAfterHurt: 2.5
+  timeInvincibleAfterHurt: 1.5
   stuckSlowdownFactor: 2
   healthContainers:
   - {fileID: 1061289607}
