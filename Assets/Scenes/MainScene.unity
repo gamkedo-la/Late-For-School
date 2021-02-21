@@ -42072,7 +42072,7 @@ MonoBehaviour:
   dashVelocity: 30
   forceFallVelocity: 30
   speed: 10
-  slideSpeed: 1
+  slideSpeed: 7.5
   wallJumpVelocity: 10
   wallJumpResetTime: 1
   wallJumpStopMultiplier: 2
@@ -42182,7 +42182,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.05}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -42193,7 +42193,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.6, y: 1}
+  m_Size: {x: 0.56, y: 0.96}
   m_EdgeRadius: 0
 --- !u!95 &1578492306
 Animator:
@@ -42981,8 +42981,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2046534322}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.25, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 100, z: 1}
+  m_LocalPosition: {x: -60, y: 0, z: 0}
+  m_LocalScale: {x: 100, y: 100, z: 1}
   m_Children: []
   m_Father: {fileID: 273300990}
   m_RootOrder: 0

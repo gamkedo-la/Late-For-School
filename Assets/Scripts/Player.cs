@@ -58,7 +58,7 @@ public class Player : MonoBehaviour
     private float wallJumpTimeLeft = 0;
     private bool isSliding = false;
     private float slideTimeLeft = 0;
-    private bool grabWallToggle = false;
+    private bool isGrabbingWall = false;
     private bool isStuck = false;
     private bool isInvincible = false;
 
@@ -67,10 +67,17 @@ public class Player : MonoBehaviour
 
     private float inputVerticalAxis = 0f;
     private float inputHorizontalAxis = 0f;
-    private bool isJumpAndDashStarted = false;
-    private bool isJumpAndDashMaintained = false;
-    private bool isGrabWallStarted = false;
-    private bool lookingRight = true;
+    private bool jumpAndDashKeyDown = false;
+    private bool jumpAndDashKey = false;
+    private bool grabKeyDown = false;
+
+    public enum HorizontalDirection
+    {
+        Left,
+        Right
+    }
+    private HorizontalDirection lookDirection = HorizontalDirection.Right;
+    private HorizontalDirection slideDirection;
 
     private bool useMobileInput = false;
 
@@ -89,10 +96,19 @@ public class Player : MonoBehaviour
         anim = GetComponent<Animator>();
     }
 
-    void Update()
+    private void Update()
     {
         GetPlayerInput();
-        HandlePlayerControl();
+
+        HandleGravity();
+        HandleBeingStuck();
+        HandleHorizontalMovement();
+        HandleJump();
+        HandleWallClimb();
+        HandleWallJump();
+        HandleSlide();
+        HandleDash();
+        HandleLookDirection();
 
         DisplayHealth();
         DisplayDashAvailability();
@@ -106,9 +122,14 @@ public class Player : MonoBehaviour
 
         if (useMobileInput) // Reset wall and grab button to not pressed
         {
-            isGrabWallStarted = false;
-            isJumpAndDashStarted = false;
+            grabKeyDown = false;
+            jumpAndDashKeyDown = false;
         }
+    }
+
+    void FixedUpdate()
+    {
+        HandleWallGrab();
     }
 
     private void DisplayHealth()
@@ -144,87 +165,60 @@ public class Player : MonoBehaviour
         {
             inputHorizontalAxis = Input.GetAxisRaw("Horizontal");
             inputVerticalAxis = Input.GetAxisRaw("Vertical");
-            isGrabWallStarted = Input.GetKeyDown(GrabWallKey);
-            isJumpAndDashStarted = Input.GetKeyDown(JumpAndDashKey);
-            isJumpAndDashMaintained = Input.GetKey(JumpAndDashKey);
+            grabKeyDown = Input.GetKeyDown(GrabWallKey);
+            jumpAndDashKeyDown = Input.GetKeyDown(JumpAndDashKey);
+            jumpAndDashKey = Input.GetKey(JumpAndDashKey);
         }
     }
 
-    // Handle all player control, forces, and sprite changes
-    // TODO: refactor into smaller & neater functions
-    private void HandlePlayerControl()
+    private void HandleJump()
     {
-        // Slow down movement & prevent player jump & slide if stuck
-        if (isStuck && GameManager.GetInstance().GetState() == GameManager.GameState.Play)
+        if (!isDashing)
         {
-            inputVerticalAxis = 0;
-            isJumpAndDashStarted = false;
-            isJumpAndDashMaintained = false;
-
-            // Move player left as staying still is actually moving forward
-            Vector2 newPos = transform.position;
-            newPos.x -= ChunkSpawner.GetInstance().speed / stuckSlowdownFactor * Time.deltaTime;
-            transform.position = newPos;
-        }
-
-        bool isGrounded = IsGrounded();
-
-        Collider2D isOnLeftWall = IsOnLeftWall();
-        Collider2D isOnRightWall = IsOnRightWall();
-        bool isOnWall = isOnLeftWall || isOnRightWall;
-
-        // attach player to the wall - this is necessary for wall sliding, grabbing, and climbing to work correctly on moving walls
-        if (isOnLeftWall && gameObject.transform.parent != isOnLeftWall.transform)
-        {
-            gameObject.transform.parent = isOnLeftWall.transform;
-        }
-        else if (isOnRightWall && gameObject.transform.parent != isOnRightWall.transform)
-        {
-            gameObject.transform.parent = isOnRightWall.transform;
-        }
-        else if (!isOnLeftWall && !isOnRightWall && gameObject.transform.parent != null)
-        {
-            gameObject.transform.parent = null;
-        }
-
-        bool isNearLeftWall = IsNearLeftWall();
-        bool isNearRightWall = IsNearRightWall();
-        bool isNearWall = isNearLeftWall || isNearRightWall;
-
-        bool isWallJumping = isWallJumpingLeft || isWallJumpingRight;
-
-        bool justStartedWallJumping = wallJumpTimeLeft > wallJumpResetTime - 0.1;
-
-        // check if we can grab the wall
-        bool canGrabWall = !isGrounded && isNearWall && !justStartedWallJumping;
-        if (!canGrabWall) { grabWallToggle = false; } // Reset toggle if we're no longer in a place to use it
-        if (canGrabWall && isGrabWallStarted) { grabWallToggle = !grabWallToggle; } // Toggle whether we're grabbing the wall or not
-
-        bool isGrabbingWall = canGrabWall && grabWallToggle;
-
-        bool isRunning = (GameManager.GetInstance().GetState() == GameManager.GameState.Play && isGrounded && !isSliding) ||
-                         (GameManager.GetInstance().GetState() != GameManager.GameState.Play && isGrounded && inputHorizontalAxis != 0 && !isSliding);
-
-        // only wall slide if player is moving towards wall
-        bool attemptingWallSlide = ((isOnLeftWall && !isGrounded && inputHorizontalAxis < 0) || (isOnRightWall && !isGrounded && inputHorizontalAxis > 0));
-
-        // Set isLookingRight
-        if (attemptingWallSlide || isGrabbingWall || isWallJumping)
-        {
-            lookingRight = isNearRightWall || isWallJumpingRight;
-        }
-        else if (GameManager.GetInstance().GetState() != GameManager.GameState.Play)
-        {
-            if (inputHorizontalAxis != 0)
+            // jump
+            if (IsGrounded() && jumpAndDashKeyDown)
             {
-                lookingRight = inputHorizontalAxis > 0;
+                if (isSliding)
+                {
+                    StopSlide();
+                }
+
+                rigidbody2d.velocity = Vector2.up * jumpVelocity;
+                FMODUnity.RuntimeManager.PlayOneShot(jumpSound);
+
+                if (jumpFxPrefab) Instantiate(jumpFxPrefab, transform.position, Quaternion.identity);
             }
         }
-        else
+    }
+
+    private void HandleHorizontalMovement()
+    {
+        bool justStartedWallJumping = wallJumpTimeLeft > wallJumpResetTime - 0.1;
+        // move sidewards
+        if (!isGrabbingWall && !justStartedWallJumping)
         {
-            lookingRight = true;
+            // sliding while background not moving - slow down amount that horizontal movement has one speed
+            if (GameManager.GetInstance().GetState() != GameManager.GameState.Play && isSliding)
+            {
+                rigidbody2d.velocity = new Vector2(inputHorizontalAxis * speed / 2, rigidbody2d.velocity.y);
+            }
+            // normal movement
+            else if (!isWallJumpingLeft && !isWallJumpingRight)
+            {
+                rigidbody2d.velocity = new Vector2(inputHorizontalAxis * speed, rigidbody2d.velocity.y);
+            }
+            // prevent moving back to the wall if jumping away from it
+            else
+            {
+                rigidbody2d.velocity = Vector2.Lerp(rigidbody2d.velocity, new Vector2(inputHorizontalAxis * speed, rigidbody2d.velocity.y), wallJumpStopMultiplier * Time.deltaTime);
+            }
         }
 
+
+        bool isOnWall = IsOnLeftWall() || IsOnRightWall();
+        // Running sound
+        bool isRunning = (GameManager.GetInstance().GetState() == GameManager.GameState.Play && IsGrounded() && !isSliding && !isOnWall) ||
+                 (GameManager.GetInstance().GetState() != GameManager.GameState.Play && IsGrounded() && inputHorizontalAxis != 0 && !isSliding && !isOnWall);
         if (isRunning)
         {
             StartRunSound();
@@ -235,35 +229,64 @@ public class Player : MonoBehaviour
             StopRunSound();
             anim.SetBool("isRunning", false);
         }
+    }
 
-        if (lookingRight)
-        {
-            transform.rotation = Quaternion.Euler(transform.rotation.x, 0, transform.rotation.z);
-        }
-        else
-        {
-            transform.rotation = Quaternion.Euler(transform.rotation.x, 180, transform.rotation.z);
-        }
+    private void HandleDash()
+    {
 
         // reset dash
-        if (isGrounded)
+        if (IsGrounded())
         {
             dashAvailable = true;
         }
 
-        if (wallJumpTimeLeft > 0)
+        // reset isDashing, and drag (after dash)
+        if (IsOnLeftWall() || IsOnRightWall() || rigidbody2d.drag <= 0)
         {
-            wallJumpTimeLeft -= Time.deltaTime;
+            isDashing = false;
+            rigidbody2d.drag = 0;
+        }
+        else if (rigidbody2d.drag > 0)
+        {
+            rigidbody2d.drag -= 40f * Time.deltaTime; // TODO: make this value configurable in inspector
         }
 
-        // reset wall jump
-        if (isGrounded || isGrabbingWall || wallJumpTimeLeft <= 0)
+        // dash
+        bool justStartedWallJumping = wallJumpTimeLeft > wallJumpResetTime - 0.1;
+        bool isNearWall = IsNearLeftWall() || IsNearRightWall();
+        if (dashAvailable && !IsGrounded() && !isNearWall && !justStartedWallJumping && jumpAndDashKeyDown && (inputHorizontalAxis != 0 || inputVerticalAxis != 0))
         {
-            isWallJumpingLeft = false;
-            isWallJumpingRight = false;
-            isWallJumping = false;
-            wallJumpTimeLeft = 0;
+            Dash(inputHorizontalAxis, inputVerticalAxis);
+            if (dashFxPrefab) Instantiate(dashFxPrefab, transform.position, Quaternion.identity);
+            wallJumpTimeLeft = 0; // if we dash mid wall jump, we don't want to still be in the wall jump state
         }
+    }
+
+    private void HandleBeingStuck()
+    {
+        // Slow down movement & prevent player jump & slide if stuck
+        if (isStuck && GameManager.GetInstance().GetState() == GameManager.GameState.Play)
+        {
+            inputVerticalAxis = 0;
+            jumpAndDashKeyDown = false;
+            jumpAndDashKey = false;
+
+            // Move player left as staying still is actually moving forward
+            Vector2 newPos = transform.position;
+            newPos.x -= ChunkSpawner.GetInstance().speed / stuckSlowdownFactor * Time.deltaTime;
+            transform.position = newPos;
+        }
+    }
+
+    private void HandleWallGrab()
+    {
+        Collider2D isOnLeftWall = IsOnLeftWall();
+        Collider2D isOnRightWall = IsOnRightWall();
+
+        bool attachToWall = ((isOnLeftWall && inputHorizontalAxis < 0) || (isOnRightWall && inputHorizontalAxis > 0));
+        bool detatchFromWall = (!isOnLeftWall && !isOnRightWall) || ((isOnLeftWall && inputHorizontalAxis > 0) || (isOnRightWall && inputHorizontalAxis < 0));
+        if (attachToWall) { isGrabbingWall = true; }
+        if (detatchFromWall) { isGrabbingWall = false; }
 
         // set gravity scale to 0 if we're grabbing wall to stay stuck to it
         if (isGrabbingWall)
@@ -279,127 +302,178 @@ public class Player : MonoBehaviour
             rigidbody2d.gravityScale = rigidBodyGravityScale;
         }
 
-        // reset isDashing, and drag (after dash)
-        if (isOnWall || rigidbody2d.drag <= 0)
+        // set wall to parent
+        if (isOnLeftWall && gameObject.transform.parent != isOnLeftWall.transform)
         {
-            isDashing = false;
-            rigidbody2d.drag = 0;
+            gameObject.transform.parent = isOnLeftWall.transform;
         }
-        else if (rigidbody2d.drag > 0)
+        else if (isOnRightWall && gameObject.transform.parent != isOnRightWall.transform)
         {
-            rigidbody2d.drag -= 40f * Time.deltaTime; // TODO: make this value configurable in inspector
+            gameObject.transform.parent = isOnRightWall.transform;
+        }
+        else if (!isOnLeftWall && !isOnRightWall && gameObject.transform.parent != null)
+        {
+            gameObject.transform.parent = null;
+        }
+    }
+
+    private void HandleWallJump()
+    {
+        bool justStartedWallJumping = wallJumpTimeLeft > wallJumpResetTime - 0.1;
+        bool isNearWall = IsNearLeftWall() || IsNearRightWall();
+
+        if (wallJumpTimeLeft > 0)
+        {
+            wallJumpTimeLeft -= Time.deltaTime;
         }
 
+        // reset wall jump
+        if (IsGrounded() || isGrabbingWall || wallJumpTimeLeft <= 0)
+        {
+            isWallJumpingLeft = false;
+            isWallJumpingRight = false;
+            //isWallJumping = false;
+            wallJumpTimeLeft = 0;
+        }
+
+        // wall jump
+        if (isNearWall && !IsGrounded() && jumpAndDashKeyDown && !justStartedWallJumping)
+        {
+            isGrabbingWall = false; // let go of wall
+            float velocityX;
+            if (IsNearLeftWall())
+            {
+                velocityX = wallJumpVelocity;
+                isWallJumpingRight = true;
+            }
+            else
+            {
+                velocityX = -wallJumpVelocity;
+                isWallJumpingLeft = true;
+            }
+
+            rigidbody2d.velocity = new Vector2(velocityX, wallJumpVelocity);
+            wallJumpTimeLeft = wallJumpResetTime;
+            FMODUnity.RuntimeManager.PlayOneShot(wallJumpSound);
+            if (walljumpFxPrefab) Instantiate(walljumpFxPrefab, transform.position, Quaternion.identity);
+        }
+    }
+
+    private void HandleLookDirection()
+    {
+        // Set isLookingRight
+        if (isGrabbingWall)
+        {
+            if (IsOnLeftWall())
+            {
+                lookDirection = HorizontalDirection.Left;
+            }
+            else if (IsOnRightWall())
+            {
+                lookDirection = HorizontalDirection.Right;
+            }
+        }
+        else if (isWallJumpingLeft)
+        {
+            lookDirection = HorizontalDirection.Left;
+        }
+        else if (isWallJumpingRight)
+        {
+            lookDirection = HorizontalDirection.Right;
+        }
+        else if (GameManager.GetInstance().GetState() != GameManager.GameState.Play)
+        {
+            if (!isSliding) // Don't allow changing direction mid slide
+            {
+                if (inputHorizontalAxis > 0)
+                {
+                    lookDirection = HorizontalDirection.Right;
+                }
+                else if (inputHorizontalAxis < 0)
+                {
+                    lookDirection = HorizontalDirection.Left;
+                }
+            }
+        }
+        else
+        {
+            lookDirection = HorizontalDirection.Right;
+        }
+
+        // Change transform to look left or right
+        if (lookDirection == HorizontalDirection.Right)
+        {
+            transform.rotation = Quaternion.Euler(transform.rotation.x, 0, transform.rotation.z);
+        }
+        else
+        {
+            transform.rotation = Quaternion.Euler(transform.rotation.x, 180, transform.rotation.z);
+        }
+    }
+
+    private void HandleWallClimb()
+    {
+        // wall climb
+        if (isGrabbingWall)
+        {
+            rigidbody2d.velocity = new Vector2(0, inputVerticalAxis * speed);
+
+            if (inputVerticalAxis != 0)
+            {
+                StartWallClimbSound();
+                if (wallgrabFxPrefab) Instantiate(wallgrabFxPrefab, transform.position, Quaternion.identity);
+
+            }
+            else
+            {
+                StopWallClimbSound();
+            }
+        }
+        else
+        {
+            StopWallClimbSound();
+        }
+    }
+
+    private void HandleGravity()
+    {
         if (!isDashing)
         {
-            // slide
-            if (inputVerticalAxis == -1 && isGrounded && !isSliding)
-            {
-                StartSlide();
-            }
-            if (isSliding && slideTimeLeft > 0)
-            {
-                slideTimeLeft -= Time.deltaTime;
-            }
-            else if (isSliding && slideTimeLeft <= 0)
-            {
-                StopSlide();
-            }
-
-            // jump
-            if (isGrounded && isJumpAndDashStarted)
-            {
-                if (isSliding)
-                {
-                    StopSlide();
-                }
-
-                rigidbody2d.velocity = Vector2.up * jumpVelocity;
-                FMODUnity.RuntimeManager.PlayOneShot(jumpSound);
-
-                if (jumpFxPrefab) Instantiate(jumpFxPrefab, transform.position, Quaternion.identity);
-            }
-
-            // move sidewards
-            if (!isGrabbingWall && !justStartedWallJumping)
-            {
-                if (!isWallJumping)
-                {
-                    rigidbody2d.velocity = new Vector2(inputHorizontalAxis * speed, rigidbody2d.velocity.y);
-                }
-                else
-                {
-                    rigidbody2d.velocity = Vector2.Lerp(rigidbody2d.velocity, new Vector2(inputHorizontalAxis * speed, rigidbody2d.velocity.y), wallJumpStopMultiplier * Time.deltaTime);
-                }
-            }
-
             // falling - takes into account whether we're mid jump
             if (rigidbody2d.velocity.y < 0)
             {
                 rigidbody2d.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
             }
-            else if (rigidbody2d.velocity.y > 0 && !isJumpAndDashMaintained)
+            else if (rigidbody2d.velocity.y > 0 && !jumpAndDashKey)
             {
                 rigidbody2d.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
             }
-
-            // wall climb and wall slide
-            if (isGrabbingWall) // wall climb
-            {
-                rigidbody2d.velocity = new Vector2(0, inputVerticalAxis * speed);
-                StopWallSlideSound();
-
-                if (inputVerticalAxis != 0)
-                {
-                    StartWallClimbSound();
-                    if (wallgrabFxPrefab) Instantiate(wallgrabFxPrefab, transform.position, Quaternion.identity);
-
-                }
-                else
-                {
-                    StopWallClimbSound();
-                }
-            }
-            else if (attemptingWallSlide && !justStartedWallJumping)
-            {
-                WallSlide();
-                StopWallClimbSound();
-            }
-            else
-            {
-                StopWallSlideSound();
-                StopWallClimbSound();
-            }
-
-            // wall jump
-            if (isNearWall && !isGrounded && isJumpAndDashStarted && !justStartedWallJumping)
-            {
-                float velocityX;
-                if (isNearLeftWall)
-                {
-                    velocityX = wallJumpVelocity;
-                    isWallJumpingRight = true;
-                }
-                else
-                {
-                    velocityX = -wallJumpVelocity;
-                    isWallJumpingLeft = true;
-                }
-
-                rigidbody2d.velocity = new Vector2(velocityX, wallJumpVelocity);
-                wallJumpTimeLeft = wallJumpResetTime;
-                FMODUnity.RuntimeManager.PlayOneShot(wallJumpSound);
-                if (walljumpFxPrefab) Instantiate(walljumpFxPrefab, transform.position, Quaternion.identity);
-
-            }
         }
+    }
 
-        // dash
-        if (dashAvailable && !isGrounded && !isNearWall && !justStartedWallJumping && isJumpAndDashStarted && (inputHorizontalAxis != 0 || inputVerticalAxis != 0))
+    private void HandleSlide()
+    {
+        if (inputVerticalAxis == -1 && IsGrounded() && !isSliding)
         {
-            Dash(inputHorizontalAxis, inputVerticalAxis);
-            if (dashFxPrefab) Instantiate(dashFxPrefab, transform.position, Quaternion.identity);
-            wallJumpTimeLeft = 0; // if we dash mid wall jump, we don't want to still be in the wall jump state
+            StartSlide();
+        }
+        if (isSliding && slideTimeLeft > 0)
+        {
+            // If we're not playing the game, then the game is not moving - get player slide to move
+            if (GameManager.GetInstance().GetState() != GameManager.GameState.Play)
+            {
+                float speed;
+                if (slideDirection == HorizontalDirection.Left) { speed = -slideSpeed; }
+                else { speed = slideSpeed; }
+                Vector2 velocity = rigidbody2d.velocity;
+                velocity.x += speed;
+                rigidbody2d.velocity = velocity;
+            }
+            slideTimeLeft -= Time.deltaTime;
+        }
+        else if (isSliding && slideTimeLeft <= 0 && !ObstructionAbove(0.5f))
+        {
+            StopSlide();
         }
     }
 
@@ -437,10 +511,19 @@ public class Player : MonoBehaviour
         return Physics2D.OverlapCircle(new Vector2(boxCollider2d.bounds.center.x + boxCollider2d.bounds.size.x / 2, boxCollider2d.bounds.center.y), nearWallDistance, wallsLayerMask);
     }
 
+    private bool ObstructionAbove(float amountAbove)
+    {
+        Bounds bounds = boxCollider2d.bounds;
+        Vector2 topLeft = new Vector2(bounds.center.x - bounds.extents.x, bounds.center.y + bounds.extents.y + amountAbove);
+        Vector2 bottomRight = new Vector2(bounds.center.x + bounds.extents.x, bounds.center.y + bounds.extents.y);
+        return Physics2D.OverlapArea(topLeft, bottomRight, platformsLayerMask);
+    }
+
     public void StartSlide()
     {
         isSliding = true;
         slideTimeLeft = slideTime;
+        slideDirection = lookDirection;
 
         // Set sprite to half size
         float crouchSize = 0.5f;
@@ -482,6 +565,7 @@ public class Player : MonoBehaviour
 
     public void Dash(float x, float y)
     {
+        Debug.Log($"{x}, {y}");
         rigidbody2d.velocity = Vector2.zero;
         rigidbody2d.velocity += new Vector2(x, y).normalized * dashVelocity;
         dashAvailable = false;
@@ -574,16 +658,16 @@ public class Player : MonoBehaviour
 
     public void SetJumpAndDashInput(bool value)
     {
-        if(value && !isJumpAndDashMaintained)
+        if(value && !jumpAndDashKey)
         {
-            isJumpAndDashStarted = value;
+            jumpAndDashKeyDown = value;
         }
-        isJumpAndDashMaintained = value;
+        jumpAndDashKey = value;
     }
 
     public void SetGrabWallInput(bool value)
     {
-        isGrabWallStarted = value;
+        grabKeyDown = value;
     }
 
     public void SetUseMobileInput(bool value)
