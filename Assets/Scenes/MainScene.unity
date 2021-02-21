@@ -42080,6 +42080,7 @@ MonoBehaviour:
   slideTime: 1
   timeInvincibleAfterHurt: 1.5
   stuckSlowdownFactor: 2
+  upToJump: 0
   healthContainers:
   - {fileID: 1061289607}
   - {fileID: 1308361419}

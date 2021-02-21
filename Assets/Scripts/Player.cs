@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
     public float slideTime = 1f;
     public float timeInvincibleAfterHurt = 2.5f;
     public float stuckSlowdownFactor = 2.0f;
-    public bool upToJump = true; // this allows the up key to allow jumping as well as jump key
+    public bool upToJump = false; // this allows the up key to allow jumping as well as jump key CURRENTLY BROKEN AS HOLDING IT CHANGES HOW WE AFFECT GRAVITY SO CHANGES GAME
     public List<GameObject> healthContainers;
     public GameObject dashContainer;
     public GameObject runParticles; // looping, turned off and on
@@ -473,8 +473,13 @@ public class Player : MonoBehaviour
 
     private void HandleSlide()
     {
-        bool isOnWall = IsOnLeftWall() || IsOnRightWall();
-        if (inputVerticalAxisDown < 0 && IsGrounded() && !isSliding && !isOnWall)
+        bool canSlide = CanSlideRight(boxCollider2d.bounds.size.y / 2); // TODO: replace this parameter with the slide collider height when it is known
+        if (GameManager.GetInstance().GetState() != GameManager.GameState.Play)
+        {
+            canSlide = canSlide && CanSlideLeft(boxCollider2d.bounds.size.y / 2);
+        }
+
+        if (inputVerticalAxisDown < 0 && IsGrounded() && !isSliding && canSlide)
         {
             StartSlide();
         }
@@ -499,7 +504,7 @@ public class Player : MonoBehaviour
 
 
         // Stop sliding if we hit a wall or for some reason we're no longer on the ground
-        if (isSliding && isOnWall)
+        if (isSliding && !canSlide)
         {
             StopSlide();
         }
@@ -549,6 +554,22 @@ public class Player : MonoBehaviour
         Vector2 topLeft = new Vector2(bounds.center.x - bounds.extents.x, bounds.center.y + bounds.extents.y + amountAbove);
         Vector2 bottomRight = new Vector2(bounds.center.x + bounds.extents.x, bounds.center.y + bounds.extents.y);
         return Physics2D.OverlapArea(topLeft, bottomRight, platformsLayerMask);
+    }
+
+    private bool CanSlideRight(float slideColliderHeight)
+    {
+        Bounds bounds = boxCollider2d.bounds;
+        Vector2 topLeft = new Vector2(bounds.center.x + bounds.extents.x, bounds.center.y - bounds.extents.y + slideColliderHeight);
+        Vector2 bottomRight = new Vector2(bounds.center.x + bounds.extents.x + 0.01f, bounds.center.y - bounds.extents.y + 0.01f);
+        return !Physics2D.OverlapArea(topLeft, bottomRight, platformsLayerMask);
+    }
+
+    private bool CanSlideLeft(float slideColliderHeight)
+    {
+        Bounds bounds = boxCollider2d.bounds;
+        Vector2 topLeft = new Vector2(bounds.center.x - bounds.extents.x - 0.01f, bounds.center.y - bounds.extents.y + slideColliderHeight);
+        Vector2 bottomRight = new Vector2(bounds.center.x - bounds.extents.x, bounds.center.y - bounds.extents.y + 0.01f);
+        return !Physics2D.OverlapArea(topLeft, bottomRight, platformsLayerMask);
     }
 
     public void StartSlide()
