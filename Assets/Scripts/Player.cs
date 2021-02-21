@@ -204,7 +204,6 @@ public class Player : MonoBehaviour
         }
 
         if (!IsNearRightWall()) { jumpedWhileAgainstRightWall = false; }
-        Debug.Log(jumpedWhileAgainstRightWall);
     }
 
     private void HandleHorizontalMovement()
