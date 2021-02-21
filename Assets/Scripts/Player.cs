@@ -718,10 +718,7 @@ public class Player : MonoBehaviour
 
     public void KillPlayer()
     {
-        if (!isInvincible)
-        {
-            health = 0;
-        }
+        health = 0;
     }
 
     public void AddDash()
