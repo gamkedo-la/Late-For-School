@@ -8,7 +8,6 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour
 {
     public LayerMask platformsLayerMask; // what counts as a platform (will trigger isGrounded)
-    public LayerMask wallsLayerMask; // what counts as a wall (will trigger isOnWall)
     public SpriteMask crouchSpriteMask;
     public int maxHealth = 3;
     public float jumpVelocity = 10f;
@@ -22,6 +21,8 @@ public class Player : MonoBehaviour
     public float wallJumpResetTime = 1f; // Prevents player from getting back to the wall
     public float wallJumpStopMultiplier = 2f; // higher amount = player is able to move back towards a wall they just jumped away from more easily
     public float nearWallDistance = 0.5f; // Allows wall jumping even if not exactly touching the wall
+    public float onWallDistance = 0.1f;
+    public float groundedDistance = 0.25f;
     public float slideTime = 1f;
     public float timeInvincibleAfterHurt = 2.5f;
     public float stuckSlowdownFactor = 2.0f;
@@ -311,6 +312,7 @@ public class Player : MonoBehaviour
                 rigidBodyGravityScale = rigidbody2d.gravityScale;
                 rigidbody2d.gravityScale = 0;
                 
+                // For some reason this is needed to get the player to stick to the walls consistently from a dash or wall jump
                 if (isOnLeftWall) { rigidbody2d.velocity = new Vector2(-100, 0); }
                 else if (isOnRightWall) { rigidbody2d.velocity = new Vector2(100, 0); }
             }
@@ -516,36 +518,37 @@ public class Player : MonoBehaviour
 
     private bool IsGrounded()
     {
-        Bounds bounds = boxCollider2d.bounds;
-        Vector2 topLeft = new Vector2(bounds.center.x - bounds.extents.x + 0.05f, bounds.center.y - bounds.extents.y);
-        Vector2 bottomRight = new Vector2(bounds.center.x + bounds.extents.x - 0.05f, bounds.center.y - bounds.extents.y - 0.01f);
-        return Physics2D.OverlapArea(topLeft, bottomRight, platformsLayerMask);
+        Vector2 position = new Vector2(boxCollider2d.bounds.center.x, boxCollider2d.bounds.center.y - boxCollider2d.bounds.size.y / 2);
+        float radius = groundedDistance;
+        return Physics2D.OverlapCircle(position, radius, platformsLayerMask);
     }
 
     private Collider2D IsOnLeftWall()
     {
-        Bounds bounds = boxCollider2d.bounds;
-        Vector2 topLeft = new Vector2(bounds.center.x - bounds.extents.x - 0.01f, bounds.center.y + bounds.extents.y - 0.01f);
-        Vector2 bottomRight = new Vector2(bounds.center.x - bounds.extents.x, bounds.center.y - bounds.extents.y + 0.01f);
-        return Physics2D.OverlapArea(topLeft, bottomRight, platformsLayerMask);
+        Vector2 position = new Vector2(boxCollider2d.bounds.center.x - boxCollider2d.bounds.size.x / 2, boxCollider2d.bounds.center.y);
+        float radius = 0.01f;
+        return Physics2D.OverlapCircle(position, radius, platformsLayerMask);
     }
 
     private Collider2D IsOnRightWall()
     {
-        Bounds bounds = boxCollider2d.bounds;
-        Vector2 topLeft = new Vector2(bounds.center.x + bounds.extents.x, bounds.center.y + bounds.extents.y - 0.01f);
-        Vector2 bottomRight = new Vector2(bounds.center.x + bounds.extents.x + 0.01f, bounds.center.y - bounds.extents.y + 0.01f);
-        return Physics2D.OverlapArea(topLeft, bottomRight, platformsLayerMask);
+        Vector2 position = new Vector2(boxCollider2d.bounds.center.x + boxCollider2d.bounds.size.x / 2, boxCollider2d.bounds.center.y);
+        float radius = 0.01f;
+        return Physics2D.OverlapCircle(position, radius, platformsLayerMask);
     }
 
     private bool IsNearLeftWall()
     {
-        return Physics2D.OverlapCircle(new Vector2(boxCollider2d.bounds.center.x - boxCollider2d.bounds.size.x / 2, boxCollider2d.bounds.center.y), nearWallDistance, wallsLayerMask);
+        Vector2 position = new Vector2(boxCollider2d.bounds.center.x - boxCollider2d.bounds.size.x / 2, boxCollider2d.bounds.center.y);
+        float radius = nearWallDistance * 2;
+        return Physics2D.OverlapCircle(position, radius, platformsLayerMask);
     }
 
     private bool IsNearRightWall()
     {
-        return Physics2D.OverlapCircle(new Vector2(boxCollider2d.bounds.center.x + boxCollider2d.bounds.size.x / 2, boxCollider2d.bounds.center.y), nearWallDistance, wallsLayerMask);
+        Vector2 position = new Vector2(boxCollider2d.bounds.center.x + boxCollider2d.bounds.size.x / 2, boxCollider2d.bounds.center.y);
+        float radius = nearWallDistance * 2;
+        return Physics2D.OverlapCircle(position, radius, platformsLayerMask);
     }
 
     private bool ObstructionAbove(float amountAbove)
