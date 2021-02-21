@@ -550,7 +550,7 @@ public class Player : MonoBehaviour
     private Collider2D IsOnLeftWall()
     {
         Vector2 position = new Vector2(boxCollider2d.bounds.center.x - boxCollider2d.bounds.size.x / 2, boxCollider2d.bounds.center.y);
-        float radius = 0.01f;
+        float radius = 0.03f;
         return Physics2D.OverlapCircle(position, radius, platformsLayerMask);
     }
 
@@ -565,7 +565,7 @@ public class Player : MonoBehaviour
     private Collider2D IsOnRightWall()
     {
         Vector2 position = new Vector2(boxCollider2d.bounds.center.x + boxCollider2d.bounds.size.x / 2, boxCollider2d.bounds.center.y);
-        float radius = 0.01f;
+        float radius = 0.03f;
         return Physics2D.OverlapCircle(position, radius, platformsLayerMask);
     }
 
@@ -619,7 +619,7 @@ public class Player : MonoBehaviour
     {
         Vector2 position = new Vector2(boxCollider2d.bounds.center.x + boxCollider2d.bounds.extents.x,
                                        boxCollider2d.bounds.center.y - boxCollider2d.bounds.extents.y);
-        float radius = 0.01f;
+        float radius = 0.03f;
         return IsGrounded() && !Physics2D.OverlapCircle(position, radius, platformsLayerMask);
     }
 
