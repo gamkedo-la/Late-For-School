@@ -116,6 +116,7 @@ public class Player : MonoBehaviour
         HandleSlide();
         HandleDash();
         HandleLookDirection();
+        HandlePushPlayerOverWall();
 
         DisplayHealth();
         DisplayDashAvailability();
@@ -381,6 +382,20 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void HandlePushPlayerOverWall()
+    {
+        float pushUpAmount = 10f;
+
+        if (!IsOnRightWall() && FeetAreOnRightWall() && inputHorizontalAxis > 0 && inputVerticalAxis > 0)
+        {
+            rigidbody2d.velocity = Vector2.up * pushUpAmount;
+        }
+        if (!IsOnLeftWall() && FeetAreOnLeftWall() && inputHorizontalAxis < 0 && inputVerticalAxis > 0)
+        {
+            rigidbody2d.velocity = Vector2.up * pushUpAmount;
+        }
+    }
+
     private void HandleLookDirection()
     {
         // Set isLookingRight
@@ -530,9 +545,25 @@ public class Player : MonoBehaviour
         return Physics2D.OverlapCircle(position, radius, platformsLayerMask);
     }
 
+    private Collider2D FeetAreOnLeftWall()
+    {
+        Vector2 position = new Vector2(boxCollider2d.bounds.center.x - boxCollider2d.bounds.size.x / 2, 
+                                       boxCollider2d.bounds.center.y - boxCollider2d.bounds.extents.y * 0.8f);
+        float radius = 0.01f;
+        return Physics2D.OverlapCircle(position, radius, platformsLayerMask);
+    }
+
     private Collider2D IsOnRightWall()
     {
         Vector2 position = new Vector2(boxCollider2d.bounds.center.x + boxCollider2d.bounds.size.x / 2, boxCollider2d.bounds.center.y);
+        float radius = 0.01f;
+        return Physics2D.OverlapCircle(position, radius, platformsLayerMask);
+    }
+
+    private Collider2D FeetAreOnRightWall()
+    {
+        Vector2 position = new Vector2(boxCollider2d.bounds.center.x + boxCollider2d.bounds.size.x / 2,
+                                       boxCollider2d.bounds.center.y - boxCollider2d.bounds.extents.y * 0.8f);
         float radius = 0.01f;
         return Physics2D.OverlapCircle(position, radius, platformsLayerMask);
     }
