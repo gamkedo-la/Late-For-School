@@ -25,6 +25,7 @@ public class Player : MonoBehaviour
     public float slideTime = 1f;
     public float timeInvincibleAfterHurt = 2.5f;
     public float stuckSlowdownFactor = 2.0f;
+    public bool upToJump = true; // this allows the up key to allow jumping as well as jump key
     public List<GameObject> healthContainers;
     public GameObject dashContainer;
     public GameObject runParticles; // looping, turned off and on
@@ -68,6 +69,10 @@ public class Player : MonoBehaviour
 
     private float inputVerticalAxis = 0f;
     private float inputHorizontalAxis = 0f;
+    private float inputHorizontalAxisDown = 0f;
+    private float inputVerticalAxisDown = 0f;
+    private bool inputHorizontalAxisInUse = false;
+    private bool inputVerticalAxisInUse = false;
     private bool jumpAndDashKeyDown = false;
     private bool jumpAndDashKey = false;
     private bool grabKeyDown = false;
@@ -164,8 +169,8 @@ public class Player : MonoBehaviour
     {
         if (!useMobileInput)
         {
-            inputHorizontalAxis = Input.GetAxisRaw("Horizontal");
-            inputVerticalAxis = Input.GetAxisRaw("Vertical");
+            SetHorizontalAxisInput(Input.GetAxisRaw("Horizontal"));
+            SetVerticalAxisInput(Input.GetAxisRaw("Vertical"));
             grabKeyDown = Input.GetKeyDown(GrabWallKey);
             jumpAndDashKeyDown = Input.GetKeyDown(JumpAndDashKey);
             jumpAndDashKey = Input.GetKey(JumpAndDashKey);
@@ -177,7 +182,7 @@ public class Player : MonoBehaviour
         if (!isDashing)
         {
             // jump
-            if (IsGrounded() && jumpAndDashKeyDown)
+            if (IsGrounded() && (jumpAndDashKeyDown || (upToJump && inputVerticalAxisDown > 0)))
             {
                 if (isSliding)
                 {
@@ -459,7 +464,7 @@ public class Player : MonoBehaviour
             {
                 rigidbody2d.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
             }
-            else if (rigidbody2d.velocity.y > 0 && !jumpAndDashKey)
+            else if (rigidbody2d.velocity.y > 0 && !jumpAndDashKey && !(upToJump && inputVerticalAxis > 0))
             {
                 rigidbody2d.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
             }
@@ -469,7 +474,7 @@ public class Player : MonoBehaviour
     private void HandleSlide()
     {
         bool isOnWall = IsOnLeftWall() || IsOnRightWall();
-        if (inputVerticalAxis == -1 && IsGrounded() && !isSliding && !isOnWall)
+        if (inputVerticalAxisDown < 0 && IsGrounded() && !isSliding && !isOnWall)
         {
             StartSlide();
         }
@@ -675,11 +680,35 @@ public class Player : MonoBehaviour
     public void SetHorizontalAxisInput(float value)
     {
         inputHorizontalAxis = value;
+
+        // This allows us to use inputHorizontalAxisDown similarly to key down
+        inputHorizontalAxisDown = inputHorizontalAxis;
+        if (inputHorizontalAxis != 0)
+        {
+            if (inputHorizontalAxisInUse) { inputHorizontalAxisDown = 0f; }
+            inputHorizontalAxisInUse = true;
+        }
+        else
+        {
+            inputHorizontalAxisInUse = false;
+        }
     }
 
     public void SetVerticalAxisInput(float value)
     {
         inputVerticalAxis = value;
+
+        // This allows us to use inputVerticalAxisDown similarly to key down
+        inputVerticalAxisDown = inputVerticalAxis;
+        if (inputVerticalAxis != 0)
+        {
+            if (inputVerticalAxisInUse) { inputVerticalAxisDown = 0f; }
+            inputVerticalAxisInUse = true;
+        }
+        else
+        {
+            inputVerticalAxisInUse = false;
+        }
     }
 
     public void SetJumpAndDashInput(bool value)
