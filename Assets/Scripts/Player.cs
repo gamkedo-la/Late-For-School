@@ -206,8 +206,8 @@ public class Player : MonoBehaviour
             // move sidewards
             if (!isGrabbingWall && !justStartedWallJumping)
             {
-                // sliding while background not moving - slow down amount that horizontal movement has one speed
-                if (GameManager.GetInstance().GetState() != GameManager.GameState.Play && isSliding)
+                // sliding
+                if (isSliding)
                 {
                     rigidbody2d.velocity = new Vector2(inputHorizontalAxis * speed / 2, rigidbody2d.velocity.y);
                 }
@@ -226,8 +226,7 @@ public class Player : MonoBehaviour
 
             bool isOnWall = IsOnLeftWall() || IsOnRightWall();
             // Running sound
-            bool isRunning = (GameManager.GetInstance().GetState() == GameManager.GameState.Play && IsGrounded() && !isSliding && !isOnWall) ||
-                     (GameManager.GetInstance().GetState() != GameManager.GameState.Play && IsGrounded() && inputHorizontalAxis != 0 && !isSliding && !isOnWall);
+            bool isRunning = IsGrounded() && inputHorizontalAxis != 0 && !isSliding && !isOnWall;
             if (isRunning)
             {
                 StartRunSound();
@@ -275,16 +274,12 @@ public class Player : MonoBehaviour
     private void HandleBeingStuck()
     {
         // Slow down movement & prevent player jump & slide if stuck
-        if (isStuck && GameManager.GetInstance().GetState() == GameManager.GameState.Play)
+        if (isStuck)
         {
             inputVerticalAxis = 0;
+            inputVerticalAxisDown = 0;
             jumpAndDashKeyDown = false;
             jumpAndDashKey = false;
-
-            // Move player left as staying still is actually moving forward
-            Vector2 newPos = transform.position;
-            newPos.x -= ChunkSpawner.GetInstance().speed / stuckSlowdownFactor * Time.deltaTime;
-            transform.position = newPos;
         }
     }
 
@@ -403,7 +398,7 @@ public class Player : MonoBehaviour
         {
             lookDirection = HorizontalDirection.Right;
         }
-        else if (GameManager.GetInstance().GetState() != GameManager.GameState.Play)
+        else
         {
             if (!isSliding) // Don't allow changing direction mid slide
             {
@@ -416,10 +411,6 @@ public class Player : MonoBehaviour
                     lookDirection = HorizontalDirection.Left;
                 }
             }
-        }
-        else
-        {
-            lookDirection = HorizontalDirection.Right;
         }
 
         // Change transform to look left or right
@@ -475,11 +466,8 @@ public class Player : MonoBehaviour
 
     private void HandleSlide()
     {
-        bool canSlide = CanSlideRight(boxCollider2d.bounds.size.y / 2); // TODO: replace this parameter with the slide collider height when it is known
-        if (GameManager.GetInstance().GetState() != GameManager.GameState.Play)
-        {
-            canSlide = canSlide && CanSlideLeft(boxCollider2d.bounds.size.y / 2);
-        }
+        // TODO: replace these parameters with the slide collider height when it is known
+        bool canSlide = CanSlideRight(boxCollider2d.bounds.size.y / 2) && CanSlideLeft(boxCollider2d.bounds.size.y / 2); 
 
         if (inputVerticalAxisDown < 0 && IsGrounded() && !isSliding && canSlide)
         {
@@ -487,16 +475,14 @@ public class Player : MonoBehaviour
         }
         if (isSliding && slideTimeLeft > 0)
         {
-            // If we're not playing the game, then the game is not moving - get player slide to move
-            if (GameManager.GetInstance().GetState() != GameManager.GameState.Play)
-            {
-                float speed;
-                if (slideDirection == HorizontalDirection.Left) { speed = -slideSpeed; }
-                else { speed = slideSpeed; }
-                Vector2 velocity = rigidbody2d.velocity;
-                velocity.x += speed;
-                rigidbody2d.velocity = velocity;
-            }
+            // sliding movement
+            float speed;
+            if (slideDirection == HorizontalDirection.Left) { speed = -slideSpeed; }
+            else { speed = slideSpeed; }
+            Vector2 velocity = rigidbody2d.velocity;
+            velocity.x += speed;
+            rigidbody2d.velocity = velocity;
+
             slideTimeLeft -= Time.deltaTime;
         }
         else if (isSliding && slideTimeLeft <= 0 && !ObstructionAbove(0.5f))

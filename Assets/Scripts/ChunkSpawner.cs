@@ -6,7 +6,6 @@ using System;
 public class ChunkSpawner : MonoBehaviour
 {
     public int randomSeed;
-    public float speed = 2.5f;
     public float offScreenX = -10f;
     public List<GameObject> chunks;
     public int milestoneInterval = 1;
@@ -33,11 +32,6 @@ public class ChunkSpawner : MonoBehaviour
         bool spawnNewChunk = true;
         foreach (GameObject chunk in activeChunks)
         {
-            // Move chunks
-            Vector2 newPos = chunk.transform.position;
-            newPos.x -= speed * Time.deltaTime;
-            chunk.transform.position = newPos;
-
             // Prevent spawning new chunk if there is one in the way
             ChunkBounds[] chunkBounds = chunk.GetComponentsInChildren<ChunkBounds>();
             float chunkEndX = 0;
@@ -77,7 +71,7 @@ public class ChunkSpawner : MonoBehaviour
                 }
             }
             Vector2 spawnPos = new Vector2(transform.position.x + chunkOffset, transform.position.y);
-            GameObject newChunk = Instantiate(chunks[chunkIndex], spawnPos, Quaternion.identity, transform);
+            GameObject newChunk = Instantiate(chunks[chunkIndex], spawnPos, Quaternion.identity);
             
             if(milestoneChunkCounter >= milestoneInterval)
             {
