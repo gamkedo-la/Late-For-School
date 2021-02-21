@@ -193,41 +193,44 @@ public class Player : MonoBehaviour
 
     private void HandleHorizontalMovement()
     {
-        bool justStartedWallJumping = wallJumpTimeLeft > wallJumpResetTime - 0.1;
-        // move sidewards
-        if (!isGrabbingWall && !justStartedWallJumping)
+        if (!isDashing)
         {
-            // sliding while background not moving - slow down amount that horizontal movement has one speed
-            if (GameManager.GetInstance().GetState() != GameManager.GameState.Play && isSliding)
+            bool justStartedWallJumping = wallJumpTimeLeft > wallJumpResetTime - 0.1;
+            // move sidewards
+            if (!isGrabbingWall && !justStartedWallJumping)
             {
-                rigidbody2d.velocity = new Vector2(inputHorizontalAxis * speed / 2, rigidbody2d.velocity.y);
+                // sliding while background not moving - slow down amount that horizontal movement has one speed
+                if (GameManager.GetInstance().GetState() != GameManager.GameState.Play && isSliding)
+                {
+                    rigidbody2d.velocity = new Vector2(inputHorizontalAxis * speed / 2, rigidbody2d.velocity.y);
+                }
+                // normal movement
+                else if (!isWallJumpingLeft && !isWallJumpingRight)
+                {
+                    rigidbody2d.velocity = new Vector2(inputHorizontalAxis * speed, rigidbody2d.velocity.y);
+                }
+                // prevent moving back to the wall if jumping away from it
+                else
+                {
+                    rigidbody2d.velocity = Vector2.Lerp(rigidbody2d.velocity, new Vector2(inputHorizontalAxis * speed, rigidbody2d.velocity.y), wallJumpStopMultiplier * Time.deltaTime);
+                }
             }
-            // normal movement
-            else if (!isWallJumpingLeft && !isWallJumpingRight)
+
+
+            bool isOnWall = IsOnLeftWall() || IsOnRightWall();
+            // Running sound
+            bool isRunning = (GameManager.GetInstance().GetState() == GameManager.GameState.Play && IsGrounded() && !isSliding && !isOnWall) ||
+                     (GameManager.GetInstance().GetState() != GameManager.GameState.Play && IsGrounded() && inputHorizontalAxis != 0 && !isSliding && !isOnWall);
+            if (isRunning)
             {
-                rigidbody2d.velocity = new Vector2(inputHorizontalAxis * speed, rigidbody2d.velocity.y);
+                StartRunSound();
+                anim.SetBool("isRunning", true);
             }
-            // prevent moving back to the wall if jumping away from it
             else
             {
-                rigidbody2d.velocity = Vector2.Lerp(rigidbody2d.velocity, new Vector2(inputHorizontalAxis * speed, rigidbody2d.velocity.y), wallJumpStopMultiplier * Time.deltaTime);
+                StopRunSound();
+                anim.SetBool("isRunning", false);
             }
-        }
-
-
-        bool isOnWall = IsOnLeftWall() || IsOnRightWall();
-        // Running sound
-        bool isRunning = (GameManager.GetInstance().GetState() == GameManager.GameState.Play && IsGrounded() && !isSliding && !isOnWall) ||
-                 (GameManager.GetInstance().GetState() != GameManager.GameState.Play && IsGrounded() && inputHorizontalAxis != 0 && !isSliding && !isOnWall);
-        if (isRunning)
-        {
-            StartRunSound();
-            anim.SetBool("isRunning", true);
-        }
-        else
-        {
-            StopRunSound();
-            anim.SetBool("isRunning", false);
         }
     }
 
