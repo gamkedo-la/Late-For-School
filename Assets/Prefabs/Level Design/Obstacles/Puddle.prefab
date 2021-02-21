@@ -121,6 +121,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59ea4985e48b8e841888c78d994d19cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 1
+  damage: 0
   movementSlowdownTime: 1
   playerHitSound: event:/Life Lost

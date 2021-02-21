@@ -42233,7 +42233,8 @@ MonoBehaviour:
   groundedDistance: 0.25
   slideTime: 1
   timeInvincibleAfterHurt: 1.5
-  stuckSlowdownFactor: 2
+  stuckSlowdownFactor: 5
+  stuckMovemendSpeedDecreaseFactor: 12
   upToJump: 0
   healthContainers:
   - {fileID: 1061289607}
@@ -42252,6 +42253,7 @@ MonoBehaviour:
   slideSound: event:/Slide
   wallSlideSound: event:/Wall Slide
   wallClimbSound: event:/Wall Climb
+  lifeLostSound: 
 --- !u!212 &1578492303
 SpriteRenderer:
   m_ObjectHideFlags: 0

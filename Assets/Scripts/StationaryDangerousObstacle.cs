@@ -4,8 +4,6 @@ public class StationaryDangerousObstacle : MonoBehaviour
 {
     public int damage = 1;
     public float movementSlowdownTime = 1.0f; // seconds
-    [FMODUnity.EventRef]
-    public string playerHitSound;
 
     private void OnTriggerStay2D(Collider2D collision)
     {
@@ -16,8 +14,6 @@ public class StationaryDangerousObstacle : MonoBehaviour
             {
                 player.RemoveHealth(damage);
                 player.SlowPlayerMovement(movementSlowdownTime);
-                player.SetInvincible(player.timeInvincibleAfterHurt);
-                FMODUnity.RuntimeManager.PlayOneShot(playerHitSound);
             }
         }
     }

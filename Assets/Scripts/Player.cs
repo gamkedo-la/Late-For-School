@@ -26,6 +26,7 @@ public class Player : MonoBehaviour
     public float slideTime = 1f;
     public float timeInvincibleAfterHurt = 2.5f;
     public float stuckSlowdownFactor = 2.0f;
+    public float stuckMovemendSpeedDecreaseFactor = 5f;
     public bool upToJump = false; // this allows the up key to allow jumping as well as jump key CURRENTLY BROKEN AS HOLDING IT CHANGES HOW WE AFFECT GRAVITY SO CHANGES GAME
     public List<GameObject> healthContainers;
     public GameObject dashContainer;
@@ -48,6 +49,8 @@ public class Player : MonoBehaviour
     public string wallSlideSound;
     [FMODUnity.EventRef]
     public string wallClimbSound;
+    [FMODUnity.EventRef]
+    public string lifeLostSound;
 
     private int health = 3;
     private Rigidbody2D rigidbody2d;
@@ -108,7 +111,6 @@ public class Player : MonoBehaviour
         GetPlayerInput();
 
         HandleGravity();
-        HandleBeingStuck();
         HandleHorizontalMovement();
         HandleJump();
         HandleWallClimb();
@@ -212,6 +214,17 @@ public class Player : MonoBehaviour
                 {
                     rigidbody2d.velocity = new Vector2(inputHorizontalAxis * speed / 2, rigidbody2d.velocity.y);
                 }
+                else if (GameManager.GetInstance().GetState() == GameManager.GameState.Play && isStuck)
+                {
+                    inputVerticalAxis = 0;
+                    inputVerticalAxisDown = 0;
+                    jumpAndDashKeyDown = false;
+                    jumpAndDashKey = false;
+
+                    float velX = -1 * stuckSlowdownFactor;
+                    velX += (inputHorizontalAxis * speed) / stuckSlowdownFactor;
+                    rigidbody2d.velocity = new Vector2(velX, rigidbody2d.velocity.y);
+                }
                 // normal movement
                 else if (!isWallJumpingLeft && !isWallJumpingRight)
                 {
@@ -270,22 +283,6 @@ public class Player : MonoBehaviour
             Dash(inputHorizontalAxis, inputVerticalAxis);
             if (dashFxPrefab) Instantiate(dashFxPrefab, transform.position, Quaternion.identity);
             wallJumpTimeLeft = 0; // if we dash mid wall jump, we don't want to still be in the wall jump state
-        }
-    }
-
-    private void HandleBeingStuck()
-    {
-        // Slow down movement & prevent player jump & slide if stuck
-        if (isStuck && GameManager.GetInstance().GetState() == GameManager.GameState.Play)
-        {
-            inputVerticalAxis = 0;
-            jumpAndDashKeyDown = false;
-            jumpAndDashKey = false;
-
-            // Move player left as staying still is actually moving forward
-            Vector2 newPos = transform.position;
-            newPos.x -= ChunkSpawner.GetInstance().speed / stuckSlowdownFactor * Time.deltaTime;
-            transform.position = newPos;
         }
     }
 
@@ -385,6 +382,7 @@ public class Player : MonoBehaviour
     private void HandlePushPlayerOverWall()
     {
         float pushUpAmount = 10f;
+        if (GameManager.GetInstance().GetState() != GameManager.GameState.Play) { pushUpAmount = 12.5f; }
 
         if (!IsOnRightWall() && FeetAreOnRightWall() && inputHorizontalAxis > 0 && inputVerticalAxis > 0)
         {
@@ -793,10 +791,12 @@ public class Player : MonoBehaviour
 
     public void RemoveHealth(int healthToRemove)
     {
-        if (!isInvincible)
+        if (!isInvincible && healthToRemove > 0)
         {
             health -= healthToRemove;
             if (health < 0) { health = 0; }
+            SetInvincible(timeInvincibleAfterHurt);
+            FMODUnity.RuntimeManager.PlayOneShot(lifeLostSound);
         }
     }
 
@@ -815,6 +815,7 @@ public class Player : MonoBehaviour
         if (timeSecs > 0 && !isStuck)
         {
             isStuck = true;
+            GetComponent<SpriteRenderer>().color = Color.grey;
             Invoke("ResumePlayerMovement", timeSecs);
         }
     }
@@ -822,6 +823,7 @@ public class Player : MonoBehaviour
     private void ResumePlayerMovement()
     {
         isStuck = false;
+        GetComponent<SpriteRenderer>().color = Color.white;
     }
 
     public void SetInvincible(float timeSecs)
