@@ -52,7 +52,7 @@ PrefabInstance:
     - target: {fileID: 1616336039528603882, guid: b7caae235e5537849ba9e12161071614,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1616336039528603882, guid: b7caae235e5537849ba9e12161071614,
         type: 3}
@@ -104,10 +104,41 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1803594085600876961, guid: b7caae235e5537849ba9e12161071614,
+        type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.x
+      value: 0.96
+      objectReference: {fileID: 0}
+    - target: {fileID: 1803594085600876961, guid: b7caae235e5537849ba9e12161071614,
+        type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.y
+      value: 0.25
+      objectReference: {fileID: 0}
     - target: {fileID: 4145566710044807291, guid: b7caae235e5537849ba9e12161071614,
         type: 3}
       propertyPath: m_Name
       value: Awning
+      objectReference: {fileID: 0}
+    - target: {fileID: 5455307490085607839, guid: b7caae235e5537849ba9e12161071614,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 95cd83b06a5fdec42883453782f7a279,
+        type: 3}
+    - target: {fileID: 5455307490085607839, guid: b7caae235e5537849ba9e12161071614,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.935
+      objectReference: {fileID: 0}
+    - target: {fileID: 5455307490085607839, guid: b7caae235e5537849ba9e12161071614,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.935
+      objectReference: {fileID: 0}
+    - target: {fileID: 5455307490085607839, guid: b7caae235e5537849ba9e12161071614,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.935
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b7caae235e5537849ba9e12161071614, type: 3}
@@ -198,6 +229,37 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Stall
+      objectReference: {fileID: 0}
+    - target: {fileID: 5455307490085607839, guid: dab9017854eaa8d4591df8d39223de87,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 0.96
+      objectReference: {fileID: 0}
+    - target: {fileID: 5455307490085607839, guid: dab9017854eaa8d4591df8d39223de87,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 0.96
+      objectReference: {fileID: 0}
+    - target: {fileID: 5455307490085607839, guid: dab9017854eaa8d4591df8d39223de87,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: eea48dc40f150514fbe667a5c99548bd,
+        type: 3}
+    - target: {fileID: 5455307490085607839, guid: dab9017854eaa8d4591df8d39223de87,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.894
+      objectReference: {fileID: 0}
+    - target: {fileID: 5455307490085607839, guid: dab9017854eaa8d4591df8d39223de87,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.894
+      objectReference: {fileID: 0}
+    - target: {fileID: 5455307490085607839, guid: dab9017854eaa8d4591df8d39223de87,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.894
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dab9017854eaa8d4591df8d39223de87, type: 3}
