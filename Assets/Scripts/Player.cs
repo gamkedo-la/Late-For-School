@@ -27,6 +27,7 @@ public class Player : MonoBehaviour
     public float timeInvincibleAfterHurt = 2.5f;
     public float stuckSlowdownFactor = 2.0f;
     public float stuckMovemendSpeedDecreaseFactor = 5f;
+    public bool ledgeAutoStop = true; // stops the player when they reach a ledge and arent moving
     public bool upToJump = false; // this allows the up key to allow jumping as well as jump key CURRENTLY BROKEN AS HOLDING IT CHANGES HOW WE AFFECT GRAVITY SO CHANGES GAME
     public List<GameObject> healthContainers;
     public GameObject dashContainer;
@@ -242,6 +243,16 @@ public class Player : MonoBehaviour
             // Running sound
             bool isRunning = (GameManager.GetInstance().GetState() == GameManager.GameState.Play && IsGrounded() && !isSliding && !isOnWall) ||
                      (GameManager.GetInstance().GetState() != GameManager.GameState.Play && IsGrounded() && inputHorizontalAxis != 0 && !isSliding && !isOnWall);
+
+            // Stop at ledge
+            if (GameManager.GetInstance().GetState() == GameManager.GameState.Play && AtRightLedge() && inputHorizontalAxis == 0 && ledgeAutoStop)
+            {
+                Vector2 pos = transform.position;
+                pos.x -= ChunkSpawner.GetInstance().speed * Time.deltaTime;
+                transform.position = pos;
+                isRunning = false;
+            }
+
             if (isRunning)
             {
                 StartRunSound();
@@ -602,6 +613,14 @@ public class Player : MonoBehaviour
         Vector2 topLeft = new Vector2(bounds.center.x - bounds.extents.x - 0.01f, bounds.center.y - bounds.extents.y + slideColliderHeight);
         Vector2 bottomRight = new Vector2(bounds.center.x - bounds.extents.x, bounds.center.y - bounds.extents.y + 0.01f);
         return !Physics2D.OverlapArea(topLeft, bottomRight, platformsLayerMask);
+    }
+
+    private bool AtRightLedge()
+    {
+        Vector2 position = new Vector2(boxCollider2d.bounds.center.x + boxCollider2d.bounds.extents.x,
+                                       boxCollider2d.bounds.center.y - boxCollider2d.bounds.extents.y);
+        float radius = 0.01f;
+        return IsGrounded() && !Physics2D.OverlapCircle(position, radius, platformsLayerMask);
     }
 
     public void StartSlide()
