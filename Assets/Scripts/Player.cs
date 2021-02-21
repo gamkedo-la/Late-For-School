@@ -468,7 +468,8 @@ public class Player : MonoBehaviour
 
     private void HandleSlide()
     {
-        if (inputVerticalAxis == -1 && IsGrounded() && !isSliding)
+        bool isOnWall = IsOnLeftWall() || IsOnRightWall();
+        if (inputVerticalAxis == -1 && IsGrounded() && !isSliding && !isOnWall)
         {
             StartSlide();
         }
@@ -487,6 +488,17 @@ public class Player : MonoBehaviour
             slideTimeLeft -= Time.deltaTime;
         }
         else if (isSliding && slideTimeLeft <= 0 && !ObstructionAbove(0.5f))
+        {
+            StopSlide();
+        }
+
+
+        // Stop sliding if we hit a wall or for some reason we're no longer on the ground
+        if (isSliding && isOnWall)
+        {
+            StopSlide();
+        }
+        if (isSliding && !IsGrounded())
         {
             StopSlide();
         }
