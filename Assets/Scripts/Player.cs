@@ -285,9 +285,15 @@ public class Player : MonoBehaviour
     {
         Collider2D isOnLeftWall = IsOnLeftWall();
         Collider2D isOnRightWall = IsOnRightWall();
+        bool isOnWall = isOnLeftWall || isOnRightWall;
+        bool isGrounded = IsGrounded();
 
-        bool attachToWall = ((isOnLeftWall && inputHorizontalAxis < 0) || (isOnRightWall && inputHorizontalAxis > 0));
-        bool detatchFromWall = (!isOnLeftWall && !isOnRightWall) || ((isOnLeftWall && inputHorizontalAxis > 0) || (isOnRightWall && inputHorizontalAxis < 0));
+        bool attachToWall = ((isOnLeftWall && !isGrounded && inputHorizontalAxis < 0) || 
+                             (isOnRightWall && !isGrounded && inputHorizontalAxis > 0) ||
+                             (isOnWall && isGrounded && inputVerticalAxis > 0));
+        bool detatchFromWall = (!isOnLeftWall && !isOnRightWall) || 
+                               ((isOnLeftWall && inputHorizontalAxis > 0) || (isOnRightWall && inputHorizontalAxis < 0) || 
+                               (isGrounded && inputVerticalAxis <= 0));
         if (attachToWall) { isGrabbingWall = true; }
         if (detatchFromWall) { isGrabbingWall = false; }
 
@@ -306,11 +312,11 @@ public class Player : MonoBehaviour
         }
 
         // set wall to parent
-        if (isOnLeftWall && gameObject.transform.parent != isOnLeftWall.transform)
+        if (isGrabbingWall && isOnLeftWall && gameObject.transform.parent != isOnLeftWall.transform)
         {
             gameObject.transform.parent = isOnLeftWall.transform;
         }
-        else if (isOnRightWall && gameObject.transform.parent != isOnRightWall.transform)
+        else if (isGrabbingWall && isOnRightWall && gameObject.transform.parent != isOnRightWall.transform)
         {
             gameObject.transform.parent = isOnRightWall.transform;
         }
@@ -568,7 +574,6 @@ public class Player : MonoBehaviour
 
     public void Dash(float x, float y)
     {
-        Debug.Log($"{x}, {y}");
         rigidbody2d.velocity = Vector2.zero;
         rigidbody2d.velocity += new Vector2(x, y).normalized * dashVelocity;
         dashAvailable = false;
