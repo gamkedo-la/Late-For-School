@@ -61,7 +61,8 @@ public class Player : MonoBehaviour
     private bool isGrabbingWall = false;
     private bool isStuck = false;
     private bool isInvincible = false;
-
+    private float prevVelocityX = 0;
+    
     private const KeyCode GrabWallKey = KeyCode.LeftShift;
     private const KeyCode JumpAndDashKey = KeyCode.Space;
 
@@ -288,8 +289,8 @@ public class Player : MonoBehaviour
         bool isOnWall = isOnLeftWall || isOnRightWall;
         bool isGrounded = IsGrounded();
 
-        bool attachToWall = ((isOnLeftWall && !isGrounded && inputHorizontalAxis < 0) || 
-                             (isOnRightWall && !isGrounded && inputHorizontalAxis > 0) ||
+        bool attachToWall = ((isOnLeftWall && !isGrounded && prevVelocityX < 0 && !isWallJumpingRight) ||
+                             (isOnRightWall && !isGrounded && prevVelocityX > 0 && !isWallJumpingLeft) ||
                              (isOnWall && isGrounded && inputVerticalAxis > 0));
         bool detatchFromWall = (!isOnLeftWall && !isOnRightWall) || 
                                ((isOnLeftWall && inputHorizontalAxis > 0) || (isOnRightWall && inputHorizontalAxis < 0) || 
@@ -304,6 +305,9 @@ public class Player : MonoBehaviour
             {
                 rigidBodyGravityScale = rigidbody2d.gravityScale;
                 rigidbody2d.gravityScale = 0;
+                
+                if (isOnLeftWall) { rigidbody2d.velocity = new Vector2(-100, 0); }
+                else if (isOnRightWall) { rigidbody2d.velocity = new Vector2(100, 0); }
             }
         }
         else
@@ -324,6 +328,8 @@ public class Player : MonoBehaviour
         {
             gameObject.transform.parent = null;
         }
+
+        prevVelocityX = rigidbody2d.velocity.x;
     }
 
     private void HandleWallJump()
@@ -489,8 +495,8 @@ public class Player : MonoBehaviour
     private bool IsGrounded()
     {
         Bounds bounds = boxCollider2d.bounds;
-        Vector2 topLeft = new Vector2(bounds.center.x - bounds.extents.x + 0.01f, bounds.center.y - bounds.extents.y + 0.01f);
-        Vector2 bottomRight = new Vector2(bounds.center.x + bounds.extents.x - 0.01f, bounds.center.y - bounds.extents.y - 0.01f);
+        Vector2 topLeft = new Vector2(bounds.center.x - bounds.extents.x + 0.05f, bounds.center.y - bounds.extents.y);
+        Vector2 bottomRight = new Vector2(bounds.center.x + bounds.extents.x - 0.05f, bounds.center.y - bounds.extents.y - 0.01f);
         return Physics2D.OverlapArea(topLeft, bottomRight, platformsLayerMask);
     }
 
@@ -498,14 +504,14 @@ public class Player : MonoBehaviour
     {
         Bounds bounds = boxCollider2d.bounds;
         Vector2 topLeft = new Vector2(bounds.center.x - bounds.extents.x - 0.01f, bounds.center.y + bounds.extents.y - 0.01f);
-        Vector2 bottomRight = new Vector2(bounds.center.x - bounds.extents.x + 0.01f, bounds.center.y - bounds.extents.y + 0.01f);
+        Vector2 bottomRight = new Vector2(bounds.center.x - bounds.extents.x, bounds.center.y - bounds.extents.y + 0.01f);
         return Physics2D.OverlapArea(topLeft, bottomRight, platformsLayerMask);
     }
 
     private Collider2D IsOnRightWall()
     {
         Bounds bounds = boxCollider2d.bounds;
-        Vector2 topLeft = new Vector2(bounds.center.x + bounds.extents.x - 0.01f, bounds.center.y + bounds.extents.y - 0.01f);
+        Vector2 topLeft = new Vector2(bounds.center.x + bounds.extents.x, bounds.center.y + bounds.extents.y - 0.01f);
         Vector2 bottomRight = new Vector2(bounds.center.x + bounds.extents.x + 0.01f, bounds.center.y - bounds.extents.y + 0.01f);
         return Physics2D.OverlapArea(topLeft, bottomRight, platformsLayerMask);
     }
