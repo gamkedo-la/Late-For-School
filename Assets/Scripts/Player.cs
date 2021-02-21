@@ -1,9 +1,7 @@
-﻿using NUnit.Framework;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -68,7 +66,8 @@ public class Player : MonoBehaviour
     private bool isStuck = false;
     private bool isInvincible = false;
     private float prevVelocityX = 0;
-    
+    private bool jumpedWhileAgainstRightWall = false;
+
     private const KeyCode GrabWallKey = KeyCode.LeftShift;
     private const KeyCode JumpAndDashKey = KeyCode.Space;
 
@@ -198,8 +197,14 @@ public class Player : MonoBehaviour
                 FMODUnity.RuntimeManager.PlayOneShot(jumpSound);
 
                 if (jumpFxPrefab) Instantiate(jumpFxPrefab, transform.position, Quaternion.identity);
+
+                // This variable is used to prevent the player from auto grabbing if jumping too near the wall (see in HandleWallGrab)
+                if (IsNearRightWall()) { jumpedWhileAgainstRightWall = true; }
             }
         }
+
+        if (!IsNearRightWall()) { jumpedWhileAgainstRightWall = false; }
+        Debug.Log(jumpedWhileAgainstRightWall);
     }
 
     private void HandleHorizontalMovement()
@@ -304,9 +309,14 @@ public class Player : MonoBehaviour
         bool isOnWall = isOnLeftWall || isOnRightWall;
         bool isGrounded = IsGrounded();
 
+        bool backgroundMoving = GameManager.GetInstance().GetState() == GameManager.GameState.Play;
+
         bool attachToWall = ((isOnLeftWall && !isGrounded && prevVelocityX < 0 && !isWallJumpingRight) ||
                              (isOnRightWall && !isGrounded && prevVelocityX > 0 && !isWallJumpingLeft) ||
-                             (isOnWall && isGrounded && inputVerticalAxis > 0));
+                             (isOnWall && isGrounded && inputVerticalAxis > 0) ||
+                             // want to attach to wall if background moving and velocity is 0, since this still means we're moving right
+                             // except if we jump when we're close to the wall, we probably don't want to attach since we'll attach too low
+                             (backgroundMoving && isOnRightWall && !isGrounded && prevVelocityX >= 0 && !isWallJumpingLeft && !jumpedWhileAgainstRightWall));
         bool detatchFromWall = (!isOnLeftWall && !isOnRightWall) || 
                                ((isOnLeftWall && inputHorizontalAxis > 0) || (isOnRightWall && inputHorizontalAxis < 0) || 
                                (isGrounded && inputVerticalAxis <= 0));
