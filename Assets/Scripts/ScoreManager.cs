@@ -5,6 +5,7 @@ public class ScoreManager : MonoBehaviour
 {
     public float timeForEachPoint = 1;
     public Text scoreDisplay;
+    public Text bestDisplay;
 
     private float timeLeftForNextPoint;
     private int score;
@@ -20,7 +21,14 @@ public class ScoreManager : MonoBehaviour
     {
         instance = this;
     }
-
+    private void Start() 
+    {
+        ChunkSpawner.GetInstance().UpdateSeedFromUI();
+        string lookUp = GetBestSavedScoreLookUp();
+        int best = PlayerPrefs.GetInt(lookUp, 0); 
+        bestDisplay.text = "Best: " + best.ToString();
+        Debug.Log(best + " Should be the HighScore WORK IN PROGRESS");
+    }
     void Update()
     {
         scoreDisplay.text = "Score: " + score.ToString();
@@ -32,7 +40,22 @@ public class ScoreManager : MonoBehaviour
             timeLeftForNextPoint += timeForEachPoint;
         }
     }
-
+    private string GetBestSavedScoreLookUp(){
+        int seed = ChunkSpawner.GetInstance().randomSeed;
+        string lookUp = "SeedScore" + seed;
+        return lookUp;
+    }
+    public void SaveScore(){
+        int score = GetScore();
+        string lookUp = GetBestSavedScoreLookUp();
+        int best = PlayerPrefs.GetInt(lookUp, 0); 
+        if(score > best) {
+            Debug.Log("New Best Score for Seed " + lookUp + " was " + best + " now " + score);
+            PlayerPrefs.SetInt(lookUp, score);
+        } else {
+            Debug.Log("Did not get Best Score for Seed " + lookUp + " was " + best + " now " + score);
+        }
+    }
     public void ResetScore()
     {
         score = 0;

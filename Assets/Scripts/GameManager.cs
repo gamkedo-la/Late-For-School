@@ -31,18 +31,7 @@ public class GameManager : MonoBehaviour
     {
         return instance;
     }
-    public void SaveScore(){
-        int seed = ChunkSpawner.GetInstance().randomSeed;
-        int score = scoreManager.GetScore();
-        string lookUp = "SeedScore" + seed;
-        int best = PlayerPrefs.GetInt(lookUp, 0); 
-        if(score > best) {
-            Debug.Log("New Best Score for Seed " + seed + " was " + best + " now " + score);
-            PlayerPrefs.SetInt(lookUp, score);
-        } else {
-            Debug.Log("Did not get Best Score for Seed " + seed + " was " + best + " now " + score);
-        }
-    }
+    
     private void Awake()
     {
         instance = this;

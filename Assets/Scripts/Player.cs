@@ -127,7 +127,7 @@ public class Player : MonoBehaviour
         if (health <= 0)
         {
             Debug.Log("Player Lost");
-            GameManager.GetInstance().SaveScore();
+            ScoreManager.GetInstance().SaveScore();
             StopAllLoopingSounds();
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
