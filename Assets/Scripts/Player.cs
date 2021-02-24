@@ -126,6 +126,8 @@ public class Player : MonoBehaviour
         // reset level if dead
         if (health <= 0)
         {
+            Debug.Log("Player Lost");
+            GameManager.GetInstance().SaveScore();
             StopAllLoopingSounds();
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
