@@ -12,6 +12,10 @@ public class ChunkSpawner : MonoBehaviour
     public int milestoneInterval = 1;
     public Text seedInput;
 
+    [Header("Debug Only (set to -1 for normal gameplay)")]
+    [Tooltip("Only spawn this one chunk over and over:")]
+    public int debugForceChunkIndex = -1;
+
     private List<GameObject> activeChunks = new List<GameObject>();
     private int milestoneChunkCounter;
 
@@ -66,6 +70,8 @@ public class ChunkSpawner : MonoBehaviour
         {
             UnityEngine.Random.InitState(randomSeed);
             int chunkIndex = UnityEngine.Random.Range(0, chunks.Count);
+
+            if (debugForceChunkIndex != -1) chunkIndex = debugForceChunkIndex;
 
             ChunkBounds[] chunkBounds = chunks[chunkIndex].GetComponentsInChildren<ChunkBounds>();
             float chunkOffset = 0f;

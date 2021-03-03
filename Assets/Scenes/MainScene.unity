@@ -20675,6 +20675,7 @@ MonoBehaviour:
   - {fileID: 4551153796685374035, guid: 1e4616c627070ce488837c676e735c5b, type: 3}
   milestoneInterval: 1
   seedInput: {fileID: 1254449476}
+  debugForceChunkIndex: -1
 --- !u!4 &618240592
 Transform:
   m_ObjectHideFlags: 0
