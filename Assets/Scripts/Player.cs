@@ -5,6 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
+    public enum Skill
+    {
+        Jump,
+        Dash,
+        Slide,
+        WallClimb,
+        WallJump
+    }
+
     public LayerMask platformsLayerMask; // what counts as a platform (will trigger isGrounded)
     public SpriteMask crouchSpriteMask;
     public int maxHealth = 3;
