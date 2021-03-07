@@ -20753,10 +20753,10 @@ MonoBehaviour:
   - {fileID: 4551153796685374035, guid: 1e4616c627070ce488837c676e735c5b, type: 3}
   milestoneInterval: 1
   seedInput: {fileID: 1254449476}
-  debugForceChunkIndex: -1
   maxIntensity: 0
   includedSkills: 
   includeTutorialChunks: 0
+  debugForceChunkIndex: -1
 --- !u!4 &618240592
 Transform:
   m_ObjectHideFlags: 0
@@ -42575,7 +42575,8 @@ MonoBehaviour:
   slideSound: event:/Slide
   wallSlideSound: event:/Wall Slide
   wallClimbSound: event:/Wall Climb
-  lifeLostSound: 
+  lifeLostSound: event:/Life Lost
+  dashSound: event:/Dash
 --- !u!212 &1578492303
 SpriteRenderer:
   m_ObjectHideFlags: 0

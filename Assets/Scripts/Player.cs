@@ -59,6 +59,8 @@ public class Player : MonoBehaviour
     public string wallClimbSound;
     [FMODUnity.EventRef]
     public string lifeLostSound;
+    [FMODUnity.EventRef]
+    public string dashSound;
 
     private int health = 3;
     private Rigidbody2D rigidbody2d;
@@ -700,6 +702,8 @@ public class Player : MonoBehaviour
             rigidBodyGravityScale = rigidbody2d.gravityScale;
             rigidbody2d.gravityScale = 0;
         }
+
+        FMODUnity.RuntimeManager.PlayOneShot(dashSound);
     }
 
     public void WallSlide()
