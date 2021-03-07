@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 666605457945005034}
   - component: {fileID: 2039651622696857258}
   - component: {fileID: 4668435368390356957}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: railing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
