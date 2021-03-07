@@ -13,7 +13,7 @@ public class ChunkSpawner : MonoBehaviour
     [Range(0.0f, 10.0f)]
     public float maxIntensity;
     public List<Player.Skill> includedSkills;
-    public bool includeTutorialChunks;
+    public bool includeTutorialChunks = true;
 
     [Header("Debug Only (set to -1 for normal gameplay)")]
     [Tooltip("Only spawn this one chunk over and over:")]
@@ -35,11 +35,10 @@ public class ChunkSpawner : MonoBehaviour
     {
         instance = this;
 
-        // Setup starting chunk
+        unusableChunks.AddRange(chunks);
         if (includeTutorialChunks)
         {
             // Only have jump tutorial as first chunk
-            unusableChunks.AddRange(chunks);
             foreach (GameObject chunk in unusableChunks)
             {
                 Chunk chunkDetails = chunk.GetComponent<Chunk>();
@@ -50,10 +49,9 @@ public class ChunkSpawner : MonoBehaviour
                     usableChunks.Add(chunk);
                 }
             }
-            if (unusableChunks.Count <= 0)
+            if (usableChunks.Count <= 0)
             {
-                Debug.Log("No tutorial jump chunk provided");
-                // TODO: Prevent going past this point - this should be an error.
+                throw new Exception("No tutorial jump chunk provided");
             }
         }
         else
@@ -109,6 +107,8 @@ public class ChunkSpawner : MonoBehaviour
             // Don't add chunks with a higher intensity than what is set to max
             if (chunkDetails.intensity > maxIntensity) { include = false; }
 
+            Debug.Log(include);
+
             if (include) { usableChunks.Add(chunk); }
         }
 
@@ -119,9 +119,9 @@ public class ChunkSpawner : MonoBehaviour
 
             Chunk chunkDetails = chunk.GetComponent<Chunk>();
 
-            if (includeTutorialChunks && !chunkDetails.tutorialChunk)
+            // Remove tutorial chunk if we already know all the included skills
+            if (includeTutorialChunks && chunkDetails.tutorialChunk)
             {
-                // Don't add a tutorial chunk if we already know all the included skills
                 bool allSkillsKnown = true;
                 foreach (Player.Skill skill in chunkDetails.includedSkills)
                 {
@@ -137,7 +137,17 @@ public class ChunkSpawner : MonoBehaviour
     private GameObject ChooseNextChunk()
     {
         // TODO: choose a chunk based on recent intensity & if we still have moves left to teach
-        return null;
+        GameObject chosenChunk;
+        if (debugForceChunkIndex > -1)
+        {
+            chosenChunk = chunks[debugForceChunkIndex];
+        }
+        else
+        {
+            int chunkIndex = UnityEngine.Random.Range(0, usableChunks.Count);
+            chosenChunk = usableChunks[chunkIndex];
+        }
+        return chosenChunk;
     }
 
     private void ChunkSpawnerUpdate()
@@ -179,7 +189,6 @@ public class ChunkSpawner : MonoBehaviour
         if (spawnNewChunk)
         {
             UnityEngine.Random.InitState(randomSeed);
-            int chunkIndex = UnityEngine.Random.Range(0, usableChunks.Count);
 
             GameObject chosenChunk = ChooseNextChunk();
             ChunkBounds[] chunkBounds = chosenChunk.GetComponentsInChildren<ChunkBounds>();
@@ -211,7 +220,17 @@ public class ChunkSpawner : MonoBehaviour
                 milestoneChunkCounter++;
             }
 
-            activeChunks.Add(newChunk);
+            // Add learnt skill(s) to known skills if tutorial chunk was used
+            Chunk chunkDetails = chosenChunk.GetComponent<Chunk>();
+            if (chunkDetails.tutorialChunk)
+            {
+                foreach (Player.Skill skill in chunkDetails.includedSkills)
+                {
+                    if (!knownSkills.Contains(skill)) { knownSkills.Add(skill); }
+                }
+            }
+
+                activeChunks.Add(newChunk);
             randomSeed++;
         }
 
@@ -221,9 +240,7 @@ public class ChunkSpawner : MonoBehaviour
             Destroy(chunk);
         }
 
-        // TODO Add to known skills list
-
-        UpdateUsableChunks();
+        UpdateUsableChunks(); // Get all chunks we can now use based on learnt skills
     }
 
     private void ChunkSpawnerUpdateOld()
@@ -267,7 +284,7 @@ public class ChunkSpawner : MonoBehaviour
             UnityEngine.Random.InitState(randomSeed);
             int chunkIndex = UnityEngine.Random.Range(0, chunks.Count);
 
-            if (debugForceChunkIndex != -1) chunkIndex = debugForceChunkIndex;
+            if (debugForceChunkIndex > -1) chunkIndex = debugForceChunkIndex;
 
             ChunkBounds[] chunkBounds = chunks[chunkIndex].GetComponentsInChildren<ChunkBounds>();
             float chunkOffset = 0f;
@@ -311,7 +328,8 @@ public class ChunkSpawner : MonoBehaviour
 
     void FixedUpdate() // Atleast the move needs to be in FixedUpdate to work correctly, just keeping it all in here for now
     {
-        ChunkSpawnerUpdateOld(); // TODO: Replace with ChunkSpawnerUpdate() when there are enough chunks for it to work correctly.
+        //ChunkSpawnerUpdateOld(); // TODO: Replace with ChunkSpawnerUpdate() when there are enough chunks for it to work correctly.
+        ChunkSpawnerUpdate();
     }
 
     public void UpdateSeedFromUI() {

@@ -20754,10 +20754,10 @@ MonoBehaviour:
   - {fileID: 4551153796685374035, guid: 49c8926125fb21b468ad4a90814a5f75, type: 3}
   milestoneInterval: 1
   seedInput: {fileID: 1254449476}
-  maxIntensity: 0
-  includedSkills: 
+  maxIntensity: 10
+  includedSkills: 0000000001000000020000000300000004000000
   includeTutorialChunks: 0
-  debugForceChunkIndex: 8
+  debugForceChunkIndex: -1
 --- !u!4 &618240592
 Transform:
   m_ObjectHideFlags: 0
