@@ -12,7 +12,7 @@ public class parallaxBackground : MonoBehaviour
     {
         for (int i = 0; i < backgroundQuads.Count; i++)
         {      
-            Vector2 uv = new Vector2((Time.time+777) * backgroundSpeeds[i] * currentSpeed, 0);
+            Vector2 uv = new Vector2((Time.time+7777) * backgroundSpeeds[i] * currentSpeed, 0);
             backgroundQuads[i].material.mainTextureOffset = uv;
         }
     }
