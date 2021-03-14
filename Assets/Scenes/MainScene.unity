@@ -20740,7 +20740,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56f2a78952d7bdc4d9832667b13b5bc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelKey: 0S500I1000M10T1Ps1s2s3s4
+  levelKey: 0S500I1000M10T0Ps1s2s3s4
   chunks:
   - {fileID: 8397681959016776686, guid: 060b4b210e1eddc4a835ba83966f232c, type: 3}
   - {fileID: 8397681959016776686, guid: 48e016c3c9c501f49a72d06f9800595b, type: 3}
@@ -43621,7 +43621,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2147117517
 Transform:
   m_ObjectHideFlags: 0
