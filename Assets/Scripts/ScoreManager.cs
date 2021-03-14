@@ -23,7 +23,7 @@ public class ScoreManager : MonoBehaviour
     }
     private void Start() 
     {
-        ChunkSpawner.GetInstance().UpdateSeedFromUI();
+        //ChunkSpawner.GetInstance().UpdateKeyFromUI();
         string lookUp = GetBestSavedScoreLookUp();
         int best = PlayerPrefs.GetInt(lookUp, 0); 
         bestDisplay.text = "Best: " + best.ToString();
@@ -41,8 +41,8 @@ public class ScoreManager : MonoBehaviour
         }
     }
     private string GetBestSavedScoreLookUp(){
-        int seed = ChunkSpawner.GetInstance().randomSeed;
-        string lookUp = "SeedScore" + seed;
+        string levelKey = ChunkSpawner.GetInstance().levelKey;
+        string lookUp = levelKey;
         return lookUp;
     }
     public void SaveScore(){
@@ -50,10 +50,10 @@ public class ScoreManager : MonoBehaviour
         string lookUp = GetBestSavedScoreLookUp();
         int best = PlayerPrefs.GetInt(lookUp, 0); 
         if(score > best) {
-            Debug.Log("New Best Score for Seed " + lookUp + " was " + best + " now " + score);
+            Debug.Log("New Best Score for Level " + lookUp + " was " + best + " now " + score);
             PlayerPrefs.SetInt(lookUp, score);
         } else {
-            Debug.Log("Did not get Best Score for Seed " + lookUp + " was " + best + " now " + score);
+            Debug.Log("Did not get Best Score for Level " + lookUp + " was " + best + " now " + score);
         }
     }
     public void ResetScore()

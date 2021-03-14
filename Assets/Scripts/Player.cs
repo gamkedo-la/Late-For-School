@@ -265,7 +265,7 @@ public class Player : MonoBehaviour
             if (GameManager.GetInstance().GetState() == GameManager.GameState.Play && AtRightLedge() && inputHorizontalAxis == 0 && ledgeAutoStop)
             {
                 Vector2 pos = transform.position;
-                pos.x -= ChunkSpawner.GetInstance().speed * Time.deltaTime;
+                pos.x -= ChunkSpawner.GetInstance().levelConfig.speed * Time.deltaTime;
                 transform.position = pos;
                 isRunning = false;
             }

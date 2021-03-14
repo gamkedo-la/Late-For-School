@@ -5,19 +5,15 @@ using System;
 
 public class ChunkSpawner : MonoBehaviour
 {
-    public int randomSeed;
-    public float speed = 2.5f;
+    public string levelKey = "0S500I1000M10T1Ps1s2s3s4";
     public List<GameObject> chunks;
-    public int milestoneInterval = 1;
-    public Text seedInput;
-    [Range(0.0f, 10.0f)]
-    public float maxIntensity;
-    public List<Player.Skill> includedSkills;
-    public bool includeTutorialChunks = true;
+    public Text keyInput;
 
     [Header("Debug Only (set to -1 for normal gameplay)")]
     [Tooltip("Only spawn this one chunk over and over:")]
     public int debugForceChunkIndex = -1;
+
+    [HideInInspector] public LevelKeyHandler.LevelConfig levelConfig;
 
     private List<GameObject> activeChunks = new List<GameObject>();
     private int milestoneChunkCounter;
@@ -34,9 +30,27 @@ public class ChunkSpawner : MonoBehaviour
     private void Awake()
     {
         instance = this;
+    }
+
+    private void Reset()
+    {
+        Debug.Log("Resetting level");
+        DestroyChunks();
+        knownSkills.Clear();
+        usableChunks.Clear();
+        unusableChunks.Clear();
+        milestoneChunkCounter = 0;
+    }
+
+    private void InitialiseWithLevelKey(string levelKey)
+    {
+        Reset();
+
+        levelConfig = LevelKeyHandler.ReadKey(levelKey);
+        levelConfig.includedSkills.Add(Player.Skill.Jump);
 
         unusableChunks.AddRange(chunks);
-        if (includeTutorialChunks)
+        if (levelConfig.includeTutorialChunks)
         {
             // Only have jump tutorial as first chunk
             foreach (GameObject chunk in unusableChunks)
@@ -77,7 +91,7 @@ public class ChunkSpawner : MonoBehaviour
                 include = false;
             }
 
-            if (includeTutorialChunks)
+            if (levelConfig.includeTutorialChunks)
             {
                 if (!chunkDetails.tutorialChunk)
                 {
@@ -105,14 +119,13 @@ public class ChunkSpawner : MonoBehaviour
             }
 
             // Don't add chunks with a higher intensity than what is set to max
-            if (chunkDetails.intensity > maxIntensity) { include = false; }
-
-            Debug.Log(include);
+            if (chunkDetails.intensity > levelConfig.maxIntensity) { include = false; }
 
             if (include) { usableChunks.Add(chunk); }
         }
 
         // Remove chunks that are no longer usable
+        List<GameObject> toRemove = new List<GameObject>();
         foreach (GameObject chunk in usableChunks)
         {
             bool remove = false;
@@ -120,7 +133,7 @@ public class ChunkSpawner : MonoBehaviour
             Chunk chunkDetails = chunk.GetComponent<Chunk>();
 
             // Remove tutorial chunk if we already know all the included skills
-            if (includeTutorialChunks && chunkDetails.tutorialChunk)
+            if (levelConfig.includeTutorialChunks && chunkDetails.tutorialChunk)
             {
                 bool allSkillsKnown = true;
                 foreach (Player.Skill skill in chunkDetails.includedSkills)
@@ -130,8 +143,9 @@ public class ChunkSpawner : MonoBehaviour
                 if (allSkillsKnown) { remove = true; }
             }
 
-            if (remove) { usableChunks.Remove(chunk); }
+            if (remove) { toRemove.Add(chunk); }
         }
+        usableChunks.RemoveAll(chunk => toRemove.Contains(chunk));
     }
 
     private GameObject ChooseNextChunk()
@@ -159,7 +173,7 @@ public class ChunkSpawner : MonoBehaviour
         {
             // Move chunks
             Vector2 newPos = chunk.transform.position;
-            newPos.x -= speed * Time.deltaTime;
+            newPos.x -= levelConfig.speed * Time.deltaTime;
             chunk.transform.position = newPos;
 
             // Prevent spawning new chunk if there is one in the way
@@ -188,7 +202,7 @@ public class ChunkSpawner : MonoBehaviour
 
         if (spawnNewChunk)
         {
-            UnityEngine.Random.InitState(randomSeed);
+            UnityEngine.Random.InitState(levelConfig.randomSeed);
 
             GameObject chosenChunk = ChooseNextChunk();
             ChunkBounds[] chunkBounds = chosenChunk.GetComponentsInChildren<ChunkBounds>();
@@ -203,7 +217,7 @@ public class ChunkSpawner : MonoBehaviour
             Vector2 spawnPos = new Vector2(transform.position.x + chunkOffset, transform.position.y);
             GameObject newChunk = Instantiate(chosenChunk, spawnPos, Quaternion.identity, transform);
 
-            if (milestoneChunkCounter >= milestoneInterval)
+            if (milestoneChunkCounter >= levelConfig.milestoneInterval)
             {
                 ChunkBounds[] newChunkBounds = newChunk.GetComponentsInChildren<ChunkBounds>();
                 foreach (ChunkBounds bounds in newChunkBounds)
@@ -230,8 +244,8 @@ public class ChunkSpawner : MonoBehaviour
                 }
             }
 
-                activeChunks.Add(newChunk);
-            randomSeed++;
+            activeChunks.Add(newChunk);
+            levelConfig.randomSeed++;
         }
 
         foreach (GameObject chunk in toRemove)
@@ -252,7 +266,7 @@ public class ChunkSpawner : MonoBehaviour
         {
             // Move chunks
             Vector2 newPos = chunk.transform.position;
-            newPos.x -= speed * Time.deltaTime;
+            newPos.x -= levelConfig.speed * Time.deltaTime;
             chunk.transform.position = newPos;
 
             // Prevent spawning new chunk if there is one in the way
@@ -281,7 +295,7 @@ public class ChunkSpawner : MonoBehaviour
 
         if (spawnNewChunk)
         {
-            UnityEngine.Random.InitState(randomSeed);
+            UnityEngine.Random.InitState(levelConfig.randomSeed);
             int chunkIndex = UnityEngine.Random.Range(0, chunks.Count);
 
             if (debugForceChunkIndex > -1) chunkIndex = debugForceChunkIndex;
@@ -298,7 +312,7 @@ public class ChunkSpawner : MonoBehaviour
             Vector2 spawnPos = new Vector2(transform.position.x + chunkOffset, transform.position.y);
             GameObject newChunk = Instantiate(chunks[chunkIndex], spawnPos, Quaternion.identity, transform);
 
-            if (milestoneChunkCounter >= milestoneInterval)
+            if (milestoneChunkCounter >= levelConfig.milestoneInterval)
             {
                 ChunkBounds[] newChunkBounds = newChunk.GetComponentsInChildren<ChunkBounds>();
                 foreach (ChunkBounds bounds in newChunkBounds)
@@ -316,7 +330,7 @@ public class ChunkSpawner : MonoBehaviour
             }
 
             activeChunks.Add(newChunk);
-            randomSeed++;
+            levelConfig.randomSeed++;
         }
 
         foreach (GameObject chunk in toRemove)
@@ -328,28 +342,25 @@ public class ChunkSpawner : MonoBehaviour
 
     void FixedUpdate() // Atleast the move needs to be in FixedUpdate to work correctly, just keeping it all in here for now
     {
-        //ChunkSpawnerUpdateOld(); // TODO: Replace with ChunkSpawnerUpdate() when there are enough chunks for it to work correctly.
-        ChunkSpawnerUpdate();
+        if (levelConfig != null)
+        {
+            //ChunkSpawnerUpdateOld(); // TODO: Replace with ChunkSpawnerUpdate() when there are enough chunks for it to work correctly.
+            ChunkSpawnerUpdate();
+        }
     }
 
-    public void UpdateSeedFromUI() {
-        if (seedInput != null)
+    public void UpdateKeyFromUI() {
+        if (keyInput != null && keyInput.text != "")
         {
-            try
-            {
-                randomSeed = Int32.Parse(seedInput.text);
-                Debug.Log("Starting with seed from UI:" + randomSeed);
-            }
-            catch (FormatException)
-            {
-                Debug.Log("Starting with seed from Inspector:" + randomSeed);
-            }
+            levelKey = keyInput.text;
+            Debug.Log("Starting with level key from UI: " + levelKey);
         }
         else
         {
-            Debug.Log("Starting with seed from Inspector:" + randomSeed);
+            Debug.Log("Starting with level key from Inspector: " + levelKey);
         }
 
+        InitialiseWithLevelKey(levelKey);
     }
 
     public void DestroyChunks()

@@ -7,15 +7,15 @@ public class LevelKeyHandler
     public class LevelConfig
     {
         public int randomSeed;
-        public float speed = 2.5f;
-        public float maxIntensity = 10;
-        public int milestoneInterval = 10;
-        public bool includeTutorialChunks = true;
-        public List<Player.Skill> includedSkills = new List<Player.Skill>();
+        public float speed;
+        public float maxIntensity;
+        public int milestoneInterval;
+        public bool includeTutorialChunks;
+        public List<Player.Skill> includedSkills;
 
         public LevelConfig(
             int randomSeed = 0,
-            float speed = 2.5f,
+            float speed = 5f,
             float maxIntensity = 10,
             int milestoneInterval = 10,
             bool includeTutorialChunks = true,
@@ -30,6 +30,18 @@ public class LevelKeyHandler
                 new List<Player.Skill> { Player.Skill.Dash, Player.Skill.Slide, Player.Skill.WallClimb, Player.Skill.WallJump } :
                 includedSkills;
         }
+
+        public override string ToString()
+        {
+            string str = $"Seed: {randomSeed}, Speed: {speed}, Intensity: {maxIntensity}, Milestone Interval: {milestoneInterval}, Tutorial: {includeTutorialChunks}";
+            int i = 1;
+            foreach (Player.Skill skill in includedSkills)
+            {
+                str += $", Skill {i}: {skill}";
+                i++;
+            }
+            return str;
+        }
     }
 
     public static Dictionary<Player.Skill, int> skillDictionary = new Dictionary<Player.Skill, int> {
@@ -39,7 +51,7 @@ public class LevelKeyHandler
         {Player.Skill.WallJump, 4}
     };
 
-    string GenerateKey(LevelConfig levelConfig)
+    public static string GenerateKey(LevelConfig levelConfig)
     {
         string key = "";
         // Seed
@@ -72,11 +84,11 @@ public class LevelKeyHandler
             }
         }
 
-        Debug.Log(key);
+        Debug.Log("Level Key generated: " + key);
         return key;
     }
 
-    LevelConfig ReadKey(string key)
+    public static LevelConfig ReadKey(string key)
     {
         char[] delimiterChars = { 'S', 'I', 'M', 'T', 'P' };
         string[] configVals = key.Split(delimiterChars);
@@ -91,10 +103,14 @@ public class LevelKeyHandler
         List<Player.Skill> includedSkills = new List<Player.Skill>();
         foreach (string skillKey in includedSkillsKeys)
         {
-            Player.Skill skill = skillDictionary.FirstOrDefault(x => x.Value == int.Parse(skillKey)).Key;
-            includedSkills.Add(skill);
+            if (int.TryParse(skillKey, out int skillKeyInt))
+            {
+                Player.Skill skill = skillDictionary.FirstOrDefault(x => x.Value == skillKeyInt).Key;
+                includedSkills.Add(skill);
+            }
         }
 
+        Debug.Log("Level Config generated: " + (new LevelConfig(randomSeed, speed, maxIntensity, milestoneInterval, includeTutorialChunks, includedSkills)).ToString());
         return new LevelConfig(randomSeed, speed, maxIntensity, milestoneInterval, includeTutorialChunks, includedSkills);
     }
 }
