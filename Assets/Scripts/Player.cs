@@ -309,7 +309,14 @@ public class Player : MonoBehaviour
         if (dashAvailable && !IsGrounded() && !isNearWall && !justStartedWallJumping && jumpAndDashKeyDown && (inputHorizontalAxis != 0 || inputVerticalAxis != 0))
         {
             Dash(inputHorizontalAxis, inputVerticalAxis);
-            if (dashFxPrefab) Instantiate(dashFxPrefab, transform.position, Quaternion.identity);
+            
+            if (dashFxPrefab) {
+                GameObject go = Instantiate(dashFxPrefab, transform.position, Quaternion.identity);
+                go.transform.SetParent(transform); // stay inside the player so the trail follows you as you move
+            }
+            
+            // if (dashParticles) dashParticles.Play();//Stop(); IDEA: maybe turn on anf off a looping ps instead
+            
             wallJumpTimeLeft = 0; // if we dash mid wall jump, we don't want to still be in the wall jump state
         }
     }
