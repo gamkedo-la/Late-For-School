@@ -77,14 +77,6 @@ public class GameManager : MonoBehaviour
     {
         gameState = GameState.MainMenu;
         ChunkSpawner.DestroyChunks();
-        ChunkSpawner.gameObject.SetActive(false);
-        PlayBlock.gameObject.SetActive(true);
-        LevelManagerBlock.gameObject.SetActive(true);
-        CreditsBlock.gameObject.SetActive(true);
-        scoreManager.scoreDisplay.gameObject.SetActive(false);
-        BackBlock.gameObject.SetActive(false);
-        LeavesSlow.gameObject.SetActive(true);
-        LeavesFast.gameObject.SetActive(false);
         logo.SetActive(true);
 
         BackBlock.SetPlayerCollisionAction(null);
@@ -99,15 +91,7 @@ public class GameManager : MonoBehaviour
         gameState = GameState.Play;
         ChunkSpawner.DestroyChunks();
         ChunkSpawner.UpdateKeyFromUI();
-        ChunkSpawner.gameObject.SetActive(true);
-        PlayBlock.gameObject.SetActive(false);
-        LevelManagerBlock.gameObject.SetActive(false);
-        CreditsBlock.gameObject.SetActive(false);
-        scoreManager.scoreDisplay.gameObject.SetActive(true);
         scoreManager.ResetScore();
-        BackBlock.gameObject.SetActive(false);
-        LeavesSlow.gameObject.SetActive(false);
-        LeavesFast.gameObject.SetActive(true);
         logo.SetActive(false);
 
         PlayBlock.SetPlayerCollisionAction(null);
@@ -119,10 +103,6 @@ public class GameManager : MonoBehaviour
     void TransitionToLevelManagerState()
     {
         gameState = GameState.LevelManager;
-        PlayBlock.gameObject.SetActive(false);
-        LevelManagerBlock.gameObject.SetActive(false);
-        CreditsBlock.gameObject.SetActive(false);
-        BackBlock.gameObject.SetActive(true);
 
         PlayBlock.SetPlayerCollisionAction(null);
         LevelManagerBlock.SetPlayerCollisionAction(null);
@@ -133,11 +113,7 @@ public class GameManager : MonoBehaviour
 
     void TransitionToCreditsState()
     {
-        gameState = GameState.LevelManager;
-        PlayBlock.gameObject.SetActive(false);
-        LevelManagerBlock.gameObject.SetActive(false);
-        CreditsBlock.gameObject.SetActive(false);
-        BackBlock.gameObject.SetActive(true);
+        gameState = GameState.Credits;
 
         PlayBlock.SetPlayerCollisionAction(null);
         LevelManagerBlock.SetPlayerCollisionAction(null);
