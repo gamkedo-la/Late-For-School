@@ -465,13 +465,13 @@ CompositeCollider2D:
   - m_Collider: {fileID: 3757825511859175666}
     m_ColliderPaths:
     - - X: 19999707
-        Y: -10000000
+        Y: -8749999
       - X: 19999707
-        Y: -5000000
+        Y: -19623
       - X: -20000000
-        Y: -5000293
+        Y: -19916
       - X: -19999707
-        Y: -10000000
+        Y: -8749999
   - m_Collider: {fileID: 614387739789111203}
     m_ColliderPaths:
     - - X: 57499707
@@ -522,10 +522,10 @@ CompositeCollider2D:
       - {x: 5.749942, y: 2}
       - {x: 4.25, y: 1.9999415}
       - {x: 4.2500587, y: -4}
-    - - {x: 1.9999415, y: -1}
-      - {x: 1.9999415, y: -0.5}
-      - {x: -2, y: -0.5000586}
-      - {x: -1.9999415, y: -1}
+    - - {x: 1.9999415, y: -0.8749999}
+      - {x: 1.9999415, y: -0.0019623}
+      - {x: -2, y: -0.0020209001}
+      - {x: -1.9999415, y: -0.8749999}
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.00005
 --- !u!1001 &2127410323196967
@@ -784,7 +784,7 @@ PrefabInstance:
     - target: {fileID: 5956305649846449340, guid: 7a63827700e57df4ca4c313835ce6c9d,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5956305649846449340, guid: 7a63827700e57df4ca4c313835ce6c9d,
         type: 3}
