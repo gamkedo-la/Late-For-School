@@ -19,7 +19,12 @@ public class GameManager : MonoBehaviour
         MainMenu,
         Play,
         Pause,
+        LevelSelect,
         LevelManager,
+        SeedInput,
+        SpeedInput,
+        IntensityInput,
+        SkillsInput,
         Credits
     }
 
@@ -44,23 +49,6 @@ public class GameManager : MonoBehaviour
         TransitionToMainMenuState();
     }
 
-    void Update()
-    {
-        switch(gameState)
-        {
-            case GameState.MainMenu:
-                break;
-            case GameState.Play:
-                break;
-            case GameState.Pause:
-                break;
-            case GameState.LevelManager:
-                break;
-            case GameState.Credits:
-                break;
-        }
-    }
-
     public void TransitionToMainMenuState()
     {
         gameState = GameState.MainMenu;
@@ -75,9 +63,34 @@ public class GameManager : MonoBehaviour
         scoreManager.ResetScore();
     }
 
+    public void TransitionToLevelSelectState()
+    {
+        gameState = GameState.LevelSelect;
+    }
+
     public void TransitionToLevelManagerState()
     {
         gameState = GameState.LevelManager;
+    }
+
+    public void TransitionToSeedInputState()
+    {
+        gameState = GameState.SeedInput;
+    }
+
+    public void TransitionToSpeedInputState()
+    {
+        gameState = GameState.SpeedInput;
+    }
+
+    public void TransitionToIntensityInputState()
+    {
+        gameState = GameState.IntensityInput;
+    }
+
+    public void TransitionToSkillsInputState()
+    {
+        gameState = GameState.SkillsInput;
     }
 
     public void TransitionToCreditsState()
