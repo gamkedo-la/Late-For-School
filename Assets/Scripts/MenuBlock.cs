@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(BoxCollider2D))]
 public class MenuBlock : MonoBehaviour
@@ -6,9 +7,10 @@ public class MenuBlock : MonoBehaviour
     [FMODUnity.EventRef]
     public string blockHitSound;
 
+    public UnityEvent onHit;
+
     private BoxCollider2D boxCollider2D;
     public delegate void PlayerCollisionAction();
-    private PlayerCollisionAction playerCollisionAction;
 
     public void Start()
     {
@@ -20,16 +22,10 @@ public class MenuBlock : MonoBehaviour
         if (collision.collider.bounds.max.y <= boxCollider2D.bounds.min.y &&
             collision.collider.bounds.min.x < boxCollider2D.bounds.max.x &&
             collision.collider.bounds.max.x > boxCollider2D.bounds.min.x &&
-            collision.collider.CompareTag("Player") &&
-            playerCollisionAction != null)
+            collision.collider.CompareTag("Player"))
         {
-            playerCollisionAction();
+            onHit.Invoke();
             FMODUnity.RuntimeManager.PlayOneShot(blockHitSound);
         }
-    }
-
-    public void SetPlayerCollisionAction(PlayerCollisionAction playerCollisionAction)
-    {
-        this.playerCollisionAction = playerCollisionAction; // Set to null to have no action
     }
 }

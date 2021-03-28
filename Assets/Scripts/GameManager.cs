@@ -61,65 +61,28 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void InitialiseMainMenuBlocks()
-    {
-        PlayBlock.SetPlayerCollisionAction(TransitionToPlayState);
-        LevelManagerBlock.SetPlayerCollisionAction(TransitionToLevelManagerState);
-        CreditsBlock.SetPlayerCollisionAction(TransitionToCreditsState);
-    }
-
-    void InitialiseBackBlock()
-    {
-        BackBlock.SetPlayerCollisionAction(TransitionToMainMenuState);
-    }
-
-    void TransitionToMainMenuState()
+    public void TransitionToMainMenuState()
     {
         gameState = GameState.MainMenu;
         ChunkSpawner.DestroyChunks();
-        logo.SetActive(true);
-
-        BackBlock.SetPlayerCollisionAction(null);
-
-        // Doing this prevents the block that appears in the 
-        // main menu screen from being hit immediately
-        Invoke("InitialiseMainMenuBlocks", 0.5f);
     }
 
-    void TransitionToPlayState()
+    public void TransitionToPlayState()
     {
         gameState = GameState.Play;
         ChunkSpawner.DestroyChunks();
         ChunkSpawner.UpdateKeyFromUI();
         scoreManager.ResetScore();
-        logo.SetActive(false);
-
-        PlayBlock.SetPlayerCollisionAction(null);
-        LevelManagerBlock.SetPlayerCollisionAction(null);
-        CreditsBlock.SetPlayerCollisionAction(null);
-        BackBlock.SetPlayerCollisionAction(null);
     }
 
-    void TransitionToLevelManagerState()
+    public void TransitionToLevelManagerState()
     {
         gameState = GameState.LevelManager;
-
-        PlayBlock.SetPlayerCollisionAction(null);
-        LevelManagerBlock.SetPlayerCollisionAction(null);
-        CreditsBlock.SetPlayerCollisionAction(null);
-
-        Invoke("InitialiseBackBlock", 0.5f);
     }
 
-    void TransitionToCreditsState()
+    public void TransitionToCreditsState()
     {
         gameState = GameState.Credits;
-
-        PlayBlock.SetPlayerCollisionAction(null);
-        LevelManagerBlock.SetPlayerCollisionAction(null);
-        CreditsBlock.SetPlayerCollisionAction(null);
-
-        Invoke("InitialiseBackBlock", 0.5f);
     }
 
     public GameState GetState()
