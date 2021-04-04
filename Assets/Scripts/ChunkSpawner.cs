@@ -5,7 +5,6 @@ using System;
 
 public class ChunkSpawner : MonoBehaviour
 {
-    public string levelKey = LevelKeyHandler.DefaultKey();
     public List<GameObject> chunks;
     public Text keyInput;
 
@@ -14,6 +13,8 @@ public class ChunkSpawner : MonoBehaviour
     public int debugForceChunkIndex = -1;
 
     [HideInInspector] public LevelKeyHandler.LevelConfig levelConfig;
+
+    private string levelKey = LevelKeyHandler.DefaultKey();
 
     private List<GameObject> activeChunks = new List<GameObject>();
     private int milestoneChunkCounter;
@@ -42,7 +43,7 @@ public class ChunkSpawner : MonoBehaviour
         milestoneChunkCounter = 0;
     }
 
-    private void InitialiseWithLevelKey(string levelKey)
+    public void InitialiseWithLevelKey(string levelKey)
     {
         Reset();
 
@@ -349,20 +350,6 @@ public class ChunkSpawner : MonoBehaviour
         }
     }
 
-    public void UpdateKeyFromUI() {
-        if (keyInput != null && keyInput.text != "")
-        {
-            levelKey = keyInput.text;
-            Debug.Log("Starting with level key from UI: " + levelKey);
-        }
-        else
-        {
-            Debug.Log("Starting with level key from Inspector: " + levelKey);
-        }
-
-        InitialiseWithLevelKey(levelKey);
-    }
-
     public void DestroyChunks()
     {
         foreach(GameObject chunk in activeChunks)
@@ -370,5 +357,15 @@ public class ChunkSpawner : MonoBehaviour
             Destroy(chunk);
         }
         activeChunks.Clear();
+    }
+
+    public void SetLevelKey(string levelKey)
+    {
+        this.levelKey = levelKey;
+    }
+
+    public string GetLevelKey()
+    {
+        return levelKey;
     }
 }

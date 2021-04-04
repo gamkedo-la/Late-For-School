@@ -83,8 +83,7 @@ public class GameManager : MonoBehaviour
     public void TransitionToPlayState()
     {
         gameState = GameState.Play;
-        ChunkSpawner.DestroyChunks();
-        ChunkSpawner.UpdateKeyFromUI();
+        ChunkSpawner.GetInstance().InitialiseWithLevelKey(LevelKeyHandler.GenerateKey(levelInputConfig));
         scoreManager.ResetScore();
     }
 

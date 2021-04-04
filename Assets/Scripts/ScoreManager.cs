@@ -41,7 +41,7 @@ public class ScoreManager : MonoBehaviour
         }
     }
     private string GetBestSavedScoreLookUp(){
-        string levelKey = ChunkSpawner.GetInstance().levelKey;
+        string levelKey = ChunkSpawner.GetInstance().GetLevelKey();
         string lookUp = levelKey;
         return lookUp;
     }
