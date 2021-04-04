@@ -16,7 +16,7 @@ public class LevelKeyHandler
         public LevelConfig(
             int randomSeed = 0,
             float speed = 5f,
-            float maxIntensity = 10,
+            float maxIntensity = 7.5f,
             int milestoneInterval = 10,
             bool includeTutorialChunks = true,
             List<Player.Skill> includedSkills = null)

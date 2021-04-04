@@ -8,26 +8,25 @@ public class GameManager : MonoBehaviour
     public ParticleSystem LeavesSlow;
     public ParticleSystem LeavesFast;
     public GameObject logo;
+    public Text levelInputKeyText;
     public Text plusMinusLevelSettingText;
 
     private ScoreManager scoreManager;
-    private PlusMinusLevelSetting chosenLevelSetting;
-    private string chosenLevelKey = LevelKeyHandler.DefaultKey();
+    private PlusMinusLevelSetting levelInputSetting;
 
-    private int chosenLevelSeed = 0;
-    private int chosenLevelSeedIncrement = 1;
-    private int chosenLevelSeedMin = 0;
-    private int chosenLevelSeedMax = 99;
+    public LevelKeyHandler.LevelConfig levelInputConfig = new LevelKeyHandler.LevelConfig();
 
-    private float chosenLevelSpeed = 5;
-    private float chosenLevelSpeedIncrement = 0.5f;
-    private float chosenLevelSpeedMin = 2.5f;
-    private float chosenLevelSpeedMax = 10f;
+    private int levelInputSeedIncrement = 1;
+    private int levelInputSeedMin = 0;
+    private int levelInputSeedMax = 99;
 
-    private float chosenLevelIntensity = 7.5f;
-    private float chosenLevelIntensityIncrement = 0.5f;
-    private float chosenLevelIntensityMin = 2.5f;
-    private float chosenLevelIntensityMax = 10f;
+    private float levelInputSpeedIncrement = 0.5f;
+    private float levelInputSpeedMin = 2.5f;
+    private float levelInputSpeedMax = 10f;
+
+    private float levelInputIntensityIncrement = 0.5f;
+    private float levelInputIntensityMin = 2.5f;
+    private float levelInputIntensityMax = 10f;
 
     public enum GameState
     {
@@ -115,7 +114,7 @@ public class GameManager : MonoBehaviour
 
     public void SetChosenLevelSetting(PlusMinusLevelSetting levelSetting)
     {
-        chosenLevelSetting = levelSetting;
+        levelInputSetting = levelSetting;
     }
 
     public void SetChosenLevelSettingToSeed()
@@ -135,57 +134,68 @@ public class GameManager : MonoBehaviour
 
     public void PlusLevelSetting()
     {
-        switch(chosenLevelSetting)
+        switch(levelInputSetting)
         {
             case PlusMinusLevelSetting.Seed:
-                chosenLevelSeed += chosenLevelSeedIncrement;
-                Mathf.Clamp(chosenLevelSeed, chosenLevelSeedMin, chosenLevelSeedMax);
+                levelInputConfig.randomSeed += levelInputSeedIncrement;
+                levelInputConfig.randomSeed = Mathf.Clamp(levelInputConfig.randomSeed, levelInputSeedMin, levelInputSeedMax);
                 break;
             case PlusMinusLevelSetting.Speed:
-                chosenLevelSpeed += chosenLevelSpeedIncrement;
-                Mathf.Clamp(chosenLevelSpeed, chosenLevelSpeedMin, chosenLevelSpeedMax);
+                levelInputConfig.speed += levelInputSpeedIncrement;
+                levelInputConfig.speed = Mathf.Clamp(levelInputConfig.speed, levelInputSpeedMin, levelInputSpeedMax);
                 break;
             case PlusMinusLevelSetting.Intensity:
-                chosenLevelIntensity += chosenLevelIntensityIncrement;
-                Mathf.Clamp(chosenLevelIntensity, chosenLevelIntensityMin, chosenLevelIntensityMax);
+                levelInputConfig.maxIntensity += levelInputIntensityIncrement;
+                levelInputConfig.maxIntensity = Mathf.Clamp(levelInputConfig.maxIntensity, levelInputIntensityMin, levelInputIntensityMax);
                 break;
         }
-        UpdatePlusMinusLevelSettingText();
+        LevelInputConfigChanged();
     }
 
     public void MinusLevelSetting()
     {
-        switch (chosenLevelSetting)
+        switch (levelInputSetting)
         {
             case PlusMinusLevelSetting.Seed:
-                chosenLevelSeed -= chosenLevelSeedIncrement;
-                Mathf.Clamp(chosenLevelSeed, chosenLevelSeedMin, chosenLevelSeedMax);
+                levelInputConfig.randomSeed -= levelInputSeedIncrement;
+                levelInputConfig.randomSeed = Mathf.Clamp(levelInputConfig.randomSeed, levelInputSeedMin, levelInputSeedMax);
                 break;
             case PlusMinusLevelSetting.Speed:
-                chosenLevelSpeed -= chosenLevelSpeedIncrement;
-                Mathf.Clamp(chosenLevelSpeed, chosenLevelSpeedMin, chosenLevelSpeedMax);
+                levelInputConfig.speed -= levelInputSpeedIncrement;
+                levelInputConfig.speed = Mathf.Clamp(levelInputConfig.speed, levelInputSpeedMin, levelInputSpeedMax);
                 break;
             case PlusMinusLevelSetting.Intensity:
-                chosenLevelIntensity -= chosenLevelIntensityIncrement;
-                Mathf.Clamp(chosenLevelIntensity, chosenLevelIntensityMin, chosenLevelIntensityMax);
+                levelInputConfig.maxIntensity -= levelInputIntensityIncrement;
+                levelInputConfig.maxIntensity = Mathf.Clamp(levelInputConfig.maxIntensity, levelInputIntensityMin, levelInputIntensityMax);
                 break;
         }
+        LevelInputConfigChanged();
+    }
+
+    public void LevelInputConfigChanged()
+    {
         UpdatePlusMinusLevelSettingText();
+        UpdateLevelInputKey();
     }
 
     public void UpdatePlusMinusLevelSettingText()
     {
-        switch (chosenLevelSetting)
+        switch (levelInputSetting)
         {
             case PlusMinusLevelSetting.Seed:
-                plusMinusLevelSettingText.text = chosenLevelSeed.ToString();
+                plusMinusLevelSettingText.text = levelInputConfig.randomSeed.ToString();
                 break;
             case PlusMinusLevelSetting.Speed:
-                plusMinusLevelSettingText.text = chosenLevelSpeed.ToString();
+                plusMinusLevelSettingText.text = levelInputConfig.speed.ToString();
                 break;
             case PlusMinusLevelSetting.Intensity:
-                plusMinusLevelSettingText.text = chosenLevelIntensity.ToString();
+                plusMinusLevelSettingText.text = levelInputConfig.maxIntensity.ToString();
                 break;
         }
+    }
+
+    public void UpdateLevelInputKey()
+    {
+        levelInputKeyText.text = LevelKeyHandler.GenerateKey(levelInputConfig);
     }
 }
