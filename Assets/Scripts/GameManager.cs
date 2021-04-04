@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +11,11 @@ public class GameManager : MonoBehaviour
     public GameObject logo;
     public Text levelInputKeyText;
     public Text plusMinusLevelSettingText;
-    public SpriteRenderer TutorialBlockRenderer;
+    public SpriteRenderer tutorialBlockRenderer;
+    public SpriteRenderer dashSkillBlockRenderer;
+    public SpriteRenderer slideSkillBlockRenderer;
+    public SpriteRenderer wallClimbSkillBlockRenderer;
+    public SpriteRenderer wallJumpSkillBlockRenderer;
 
     private ScoreManager scoreManager;
     private PlusMinusLevelSetting levelInputSetting;
@@ -203,23 +208,114 @@ public class GameManager : MonoBehaviour
     public void SwitchIncludeTutorialChunks()
     {
         levelInputConfig.includeTutorialChunks = !levelInputConfig.includeTutorialChunks;
-        UpdateIncludeTutorialChunksButtonOpacity();
+        UpdateIncludeTutorialChunksBlockOpacity();
         LevelInputConfigChanged();
     }
 
-    public void UpdateIncludeTutorialChunksButtonOpacity()
+    private void SwitchSkill(List<Player.Skill> skills, Player.Skill skill)
     {
-        if (levelInputConfig.includeTutorialChunks)
+        if (!skills.Contains(skill))
         {
-            Color color = TutorialBlockRenderer.color;
-            color.a = 1f;
-            TutorialBlockRenderer.color = color;
+            skills.Add(skill);
         }
         else
         {
-            Color color = TutorialBlockRenderer.color;
-            color.a = 0.5f;
-            TutorialBlockRenderer.color = color;
+            skills.Remove(skill);
+        }
+    }
+
+    public void SwitchDashSkill()
+    {
+        SwitchSkill(levelInputConfig.includedSkills, Player.Skill.Dash);
+        UpdateDashSkillBlockOpacity();
+        LevelInputConfigChanged();
+    }
+
+    public void SwitchSlideSkill()
+    {
+        SwitchSkill(levelInputConfig.includedSkills, Player.Skill.Slide);
+        UpdateSlideSkillBlockOpacity();
+        LevelInputConfigChanged();
+    }
+
+    public void SwitchWallClimbSkill()
+    {
+        SwitchSkill(levelInputConfig.includedSkills, Player.Skill.WallClimb);
+        UpdateWallClimbSkillBlockOpacity();
+        LevelInputConfigChanged();
+    }
+
+    public void SwitchWallJumpSkill()
+    {
+        SwitchSkill(levelInputConfig.includedSkills, Player.Skill.WallJump);
+        UpdateWallJumpSkillBlockOpacity();
+        LevelInputConfigChanged();
+    }
+
+    private void UpdateSpriteRendererOpacity(SpriteRenderer spriteRenderer, float opacity)
+    {
+        Color color = spriteRenderer.color;
+        color.a = opacity;
+        spriteRenderer.color = color;
+    }
+
+    public void UpdateIncludeTutorialChunksBlockOpacity()
+    {
+        if (levelInputConfig.includeTutorialChunks)
+        {
+            UpdateSpriteRendererOpacity(tutorialBlockRenderer, 1);
+        }
+        else
+        {
+            UpdateSpriteRendererOpacity(tutorialBlockRenderer, 0.5f);
+        }
+    }
+
+    public void UpdateDashSkillBlockOpacity()
+    {
+        if (levelInputConfig.includedSkills.Contains(Player.Skill.Dash))
+        {
+            UpdateSpriteRendererOpacity(dashSkillBlockRenderer, 1);
+        }
+        else
+        {
+            UpdateSpriteRendererOpacity(dashSkillBlockRenderer, 0.5f);
+        }
+    }
+
+    public void UpdateSlideSkillBlockOpacity()
+    {
+        if (levelInputConfig.includedSkills.Contains(Player.Skill.Slide))
+        {
+            UpdateSpriteRendererOpacity(slideSkillBlockRenderer, 1);
+        }
+        else
+        {
+            UpdateSpriteRendererOpacity(slideSkillBlockRenderer, 0.5f);
+        }
+    }
+
+    public void UpdateWallClimbSkillBlockOpacity()
+    {
+        if (levelInputConfig.includedSkills.Contains(Player.Skill.WallClimb))
+        {
+            UpdateSpriteRendererOpacity(wallClimbSkillBlockRenderer, 1);
+        }
+        else
+        {
+            UpdateSpriteRendererOpacity(wallClimbSkillBlockRenderer, 0.5f);
+        }
+    }
+
+    public void UpdateWallJumpSkillBlockOpacity()
+    {
+        if (levelInputConfig.includedSkills.Contains(Player.Skill.WallJump))
+        {
+            UpdateSpriteRendererOpacity(wallJumpSkillBlockRenderer, 1);
+        }
+        else
+        {
+            UpdateSpriteRendererOpacity(wallJumpSkillBlockRenderer, 0.5f);
         }
     }
 }
