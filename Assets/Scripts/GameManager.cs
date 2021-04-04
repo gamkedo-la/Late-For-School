@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public GameObject logo;
     public Text levelInputKeyText;
     public Text plusMinusLevelSettingText;
+    public SpriteRenderer TutorialBlockRenderer;
 
     private ScoreManager scoreManager;
     private PlusMinusLevelSetting levelInputSetting;
@@ -197,5 +198,28 @@ public class GameManager : MonoBehaviour
     public void UpdateLevelInputKey()
     {
         levelInputKeyText.text = LevelKeyHandler.GenerateKey(levelInputConfig);
+    }
+
+    public void SwitchIncludeTutorialChunks()
+    {
+        levelInputConfig.includeTutorialChunks = !levelInputConfig.includeTutorialChunks;
+        UpdateIncludeTutorialChunksButtonOpacity();
+        LevelInputConfigChanged();
+    }
+
+    public void UpdateIncludeTutorialChunksButtonOpacity()
+    {
+        if (levelInputConfig.includeTutorialChunks)
+        {
+            Color color = TutorialBlockRenderer.color;
+            color.a = 1f;
+            TutorialBlockRenderer.color = color;
+        }
+        else
+        {
+            Color color = TutorialBlockRenderer.color;
+            color.a = 0.5f;
+            TutorialBlockRenderer.color = color;
+        }
     }
 }
