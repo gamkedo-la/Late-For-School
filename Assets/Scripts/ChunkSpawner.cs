@@ -5,7 +5,7 @@ using System;
 
 public class ChunkSpawner : MonoBehaviour
 {
-    public string levelKey = "0S500I1000M10T1Ps1s2s3s4";
+    public string levelKey = LevelKeyHandler.DefaultKey();
     public List<GameObject> chunks;
     public Text keyInput;
 

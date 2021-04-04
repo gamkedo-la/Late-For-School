@@ -164,17 +164,17 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 25
-    m_FontStyle: 1
+    m_Font: {fileID: 12800000, guid: c9e5a62436b79514197006013f603a20, type: 3}
+    m_FontSize: 48
+    m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
-    m_MaxSize: 40
+    m_MaxSize: 48
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_HorizontalOverflow: 1
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: Seed
 --- !u!1 &4627489827509875628
@@ -228,14 +228,14 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 3.2, y: 1.28}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 3.2, y: 1.28}
   m_EdgeRadius: 0
 --- !u!114 &4627489827509875624
 MonoBehaviour:
@@ -250,6 +250,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockHitSound: event:/Block Hit
+  onHit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!212 &4627489827509875626
 SpriteRenderer:
   m_ObjectHideFlags: 0

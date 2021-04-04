@@ -1,18 +1,33 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public MenuBlock PlayBlock;
-    public MenuBlock LevelManagerBlock;
-    public MenuBlock CreditsBlock;
-    public MenuBlock BackBlock;
     public ChunkSpawner ChunkSpawner;
     public ParticleSystem LeavesSlow;
     public ParticleSystem LeavesFast;
     public GameObject logo;
+    public Text plusMinusLevelSettingText;
 
     private ScoreManager scoreManager;
+    private PlusMinusLevelSetting chosenLevelSetting;
+    private string chosenLevelKey = LevelKeyHandler.DefaultKey();
+
+    private int chosenLevelSeed = 0;
+    private int chosenLevelSeedIncrement = 1;
+    private int chosenLevelSeedMin = 0;
+    private int chosenLevelSeedMax = 99;
+
+    private float chosenLevelSpeed = 5;
+    private float chosenLevelSpeedIncrement = 0.5f;
+    private float chosenLevelSpeedMin = 2.5f;
+    private float chosenLevelSpeedMax = 10f;
+
+    private float chosenLevelIntensity = 7.5f;
+    private float chosenLevelIntensityIncrement = 0.5f;
+    private float chosenLevelIntensityMin = 2.5f;
+    private float chosenLevelIntensityMax = 10f;
 
     public enum GameState
     {
@@ -21,11 +36,16 @@ public class GameManager : MonoBehaviour
         Pause,
         LevelSelect,
         LevelManager,
-        SeedInput,
-        SpeedInput,
-        IntensityInput,
+        PlusMinusInput,
         SkillsInput,
         Credits
+    }
+
+    public enum PlusMinusLevelSetting
+    {
+        Seed,
+        Speed,
+        Intensity
     }
 
     private GameState gameState = GameState.MainMenu;
@@ -73,19 +93,9 @@ public class GameManager : MonoBehaviour
         gameState = GameState.LevelManager;
     }
 
-    public void TransitionToSeedInputState()
+    public void TransitionToPlusMinusInputState()
     {
-        gameState = GameState.SeedInput;
-    }
-
-    public void TransitionToSpeedInputState()
-    {
-        gameState = GameState.SpeedInput;
-    }
-
-    public void TransitionToIntensityInputState()
-    {
-        gameState = GameState.IntensityInput;
+        gameState = GameState.PlusMinusInput;
     }
 
     public void TransitionToSkillsInputState()
@@ -101,5 +111,81 @@ public class GameManager : MonoBehaviour
     public GameState GetState()
     {
         return gameState;
+    }
+
+    public void SetChosenLevelSetting(PlusMinusLevelSetting levelSetting)
+    {
+        chosenLevelSetting = levelSetting;
+    }
+
+    public void SetChosenLevelSettingToSeed()
+    {
+        SetChosenLevelSetting(PlusMinusLevelSetting.Seed);
+    }
+
+    public void SetChosenLevelSettingToSpeed()
+    {
+        SetChosenLevelSetting(PlusMinusLevelSetting.Speed);
+    }
+
+    public void SetChosenLevelSettingToIntensity()
+    {
+        SetChosenLevelSetting(PlusMinusLevelSetting.Intensity);
+    }
+
+    public void PlusLevelSetting()
+    {
+        switch(chosenLevelSetting)
+        {
+            case PlusMinusLevelSetting.Seed:
+                chosenLevelSeed += chosenLevelSeedIncrement;
+                Mathf.Clamp(chosenLevelSeed, chosenLevelSeedMin, chosenLevelSeedMax);
+                break;
+            case PlusMinusLevelSetting.Speed:
+                chosenLevelSpeed += chosenLevelSpeedIncrement;
+                Mathf.Clamp(chosenLevelSpeed, chosenLevelSpeedMin, chosenLevelSpeedMax);
+                break;
+            case PlusMinusLevelSetting.Intensity:
+                chosenLevelIntensity += chosenLevelIntensityIncrement;
+                Mathf.Clamp(chosenLevelIntensity, chosenLevelIntensityMin, chosenLevelIntensityMax);
+                break;
+        }
+        UpdatePlusMinusLevelSettingText();
+    }
+
+    public void MinusLevelSetting()
+    {
+        switch (chosenLevelSetting)
+        {
+            case PlusMinusLevelSetting.Seed:
+                chosenLevelSeed -= chosenLevelSeedIncrement;
+                Mathf.Clamp(chosenLevelSeed, chosenLevelSeedMin, chosenLevelSeedMax);
+                break;
+            case PlusMinusLevelSetting.Speed:
+                chosenLevelSpeed -= chosenLevelSpeedIncrement;
+                Mathf.Clamp(chosenLevelSpeed, chosenLevelSpeedMin, chosenLevelSpeedMax);
+                break;
+            case PlusMinusLevelSetting.Intensity:
+                chosenLevelIntensity -= chosenLevelIntensityIncrement;
+                Mathf.Clamp(chosenLevelIntensity, chosenLevelIntensityMin, chosenLevelIntensityMax);
+                break;
+        }
+        UpdatePlusMinusLevelSettingText();
+    }
+
+    public void UpdatePlusMinusLevelSettingText()
+    {
+        switch (chosenLevelSetting)
+        {
+            case PlusMinusLevelSetting.Seed:
+                plusMinusLevelSettingText.text = chosenLevelSeed.ToString();
+                break;
+            case PlusMinusLevelSetting.Speed:
+                plusMinusLevelSettingText.text = chosenLevelSpeed.ToString();
+                break;
+            case PlusMinusLevelSetting.Intensity:
+                plusMinusLevelSettingText.text = chosenLevelIntensity.ToString();
+                break;
+        }
     }
 }

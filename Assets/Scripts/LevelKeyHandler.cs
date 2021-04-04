@@ -113,4 +113,9 @@ public class LevelKeyHandler
         Debug.Log("Level Config generated: " + (new LevelConfig(randomSeed, speed, maxIntensity, milestoneInterval, includeTutorialChunks, includedSkills)).ToString());
         return new LevelConfig(randomSeed, speed, maxIntensity, milestoneInterval, includeTutorialChunks, includedSkills);
     }
+
+    public static string DefaultKey()
+    {
+        return "0S500I1000M10T1Ps1s2s3s4";
+    }
 }
