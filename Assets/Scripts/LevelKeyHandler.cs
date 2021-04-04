@@ -51,7 +51,6 @@ public class LevelKeyHandler
         {Player.Skill.WallJump, 4}
     };
 
-    // TODO: always have included skills in order
     public static string GenerateKey(LevelConfig levelConfig)
     {
         string key = "";
@@ -75,6 +74,7 @@ public class LevelKeyHandler
         key += levelConfig.includeTutorialChunks ? 1 : 0;
 
         // Skills
+        levelConfig.includedSkills.Sort(SortByKey);
         key += "P";
         foreach (Player.Skill skill in levelConfig.includedSkills)
         {
@@ -89,7 +89,6 @@ public class LevelKeyHandler
         return key;
     }
 
-    // TODO: Always read included skills in order
     public static LevelConfig ReadKey(string key)
     {
         char[] delimiterChars = { 'S', 'I', 'M', 'T', 'P' };
@@ -111,9 +110,24 @@ public class LevelKeyHandler
                 includedSkills.Add(skill);
             }
         }
+        includedSkills.Sort(SortByKey);
 
         Debug.Log("Level Config generated: " + (new LevelConfig(randomSeed, speed, maxIntensity, milestoneInterval, includeTutorialChunks, includedSkills)).ToString());
         return new LevelConfig(randomSeed, speed, maxIntensity, milestoneInterval, includeTutorialChunks, includedSkills);
+    }
+
+    public static string FixSkillOrderInLevelKey(string levelKey)
+    {
+        return GenerateKey(ReadKey(levelKey));
+    }
+
+    private static int SortByKey(Player.Skill s1, Player.Skill s2)
+    {
+        if (skillDictionary.TryGetValue(s1, out int s1Key) && skillDictionary.TryGetValue(s2, out int s2Key))
+        {
+            return s1Key.CompareTo(s2Key);
+        }
+        return 0; // assume equal if one doesn't exist
     }
 
     public static string DefaultKey()
