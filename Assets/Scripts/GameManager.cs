@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     public SpriteRenderer slideSkillBlockRenderer;
     public SpriteRenderer wallClimbSkillBlockRenderer;
     public SpriteRenderer wallJumpSkillBlockRenderer;
+    public float runSummaryScreenTime = 5;
 
     private ScoreManager scoreManager;
     private PlusMinusLevelSetting levelInputSetting;
@@ -43,6 +44,7 @@ public class GameManager : MonoBehaviour
         PlusMinusInput,
         SkillsInput,
         Credits,
+        RunSummary
     }
 
     public enum PlusMinusLevelSetting
@@ -94,11 +96,26 @@ public class GameManager : MonoBehaviour
         ChunkSpawner.DestroyChunks();
     }
 
+    private void PostRunSummary()
+    {
+        TransitionToMainMenuState();
+        Player.GetInstance().UnFreezePos();
+        Player.GetInstance().ResetHealth();
+    }
+
+    public void TransitionToRunSummaryState()
+    {
+        gameState = GameState.RunSummary;
+        scoreManager.StopCounting();
+        Invoke("PostRunSummary", runSummaryScreenTime);
+    }
+
     public void TransitionToPlayState()
     {
         gameState = GameState.Play;
         ChunkSpawner.GetInstance().InitialiseWithLevelKey(LevelKeyHandler.GenerateKey(levelInputConfig));
         scoreManager.ResetScore();
+        scoreManager.StartCounting();
     }
 
     public void PauseGame()
@@ -136,6 +153,11 @@ public class GameManager : MonoBehaviour
     public void TransitionToCreditsState()
     {
         gameState = GameState.Credits;
+    }
+
+    public void TriggerRunSummary()
+    {
+
     }
 
     public GameState GetState()

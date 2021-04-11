@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
 
     public LayerMask platformsLayerMask; // what counts as a platform (will trigger isGrounded)
     public SpriteMask crouchSpriteMask;
+    public Vector2 startPos;
     public int maxHealth = 3;
     public float jumpVelocity = 10f;
     public float fallMultiplier = 2.5f;
@@ -108,6 +109,17 @@ public class Player : MonoBehaviour
 
     private Animator anim;
 
+    private static Player instance;
+
+    public static Player GetInstance()
+    {
+        return instance;
+    }
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     void Start()
     {
@@ -115,6 +127,8 @@ public class Player : MonoBehaviour
         boxCollider2d = GetComponent<BoxCollider2D>();
         rigidBodyGravityScale = rigidbody2d.gravityScale;
         anim = GetComponent<Animator>();
+
+        ResetPos();
     }
 
     private void Update()
@@ -140,7 +154,10 @@ public class Player : MonoBehaviour
             Debug.Log("Player Lost");
             ScoreManager.GetInstance().SaveScore();
             StopAllLoopingSounds();
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            GameManager.GetInstance().TransitionToRunSummaryState();
+            ResetPos();
+            FreezePos();
+            rigidbody2d.velocity = Vector3.zero;
         }
 
         if (useMobileInput) // Reset wall and grab button to not pressed
@@ -908,5 +925,28 @@ public class Player : MonoBehaviour
             yield return new WaitForSeconds(intervalTime);
         }
         renderer.enabled = true;
+    }
+
+    public void ResetPos()
+    {
+        Vector3 position = transform.position;
+        position.x = startPos.x;
+        position.y = startPos.y;
+        transform.position = position;
+    }
+
+    public void FreezePos()
+    {
+        rigidbody2d.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+    }
+
+    public void UnFreezePos()
+    {
+        rigidbody2d.constraints = RigidbodyConstraints2D.FreezeRotation;
+    }
+
+    public void ResetHealth()
+    {
+        health = maxHealth;
     }
 }

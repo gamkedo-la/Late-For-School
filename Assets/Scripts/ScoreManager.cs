@@ -1,14 +1,16 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class ScoreManager : MonoBehaviour
 {
     public float timeForEachPoint = 1;
-    public Text scoreDisplay;
-    public Text bestDisplay;
+    public List<Text> scoreDisplays;
+    public List<Text> bestDisplays;
 
     private float timeLeftForNextPoint;
     private int score;
+    private bool shouldCount = false;
 
     public static ScoreManager instance;
 
@@ -26,18 +28,27 @@ public class ScoreManager : MonoBehaviour
         //ChunkSpawner.GetInstance().UpdateKeyFromUI();
         string lookUp = GetBestSavedScoreLookUp();
         int best = PlayerPrefs.GetInt(lookUp, 0); 
-        bestDisplay.text = "Best: " + best.ToString();
+        foreach (Text bestDisplay in bestDisplays)
+        {
+            bestDisplay.text = "Best: " + best.ToString();
+        }
         Debug.Log(best + " Should be the HighScore WORK IN PROGRESS");
     }
     void Update()
     {
-        scoreDisplay.text = "Score: " + score.ToString();
-
-        timeLeftForNextPoint -= Time.deltaTime;
-        if (timeLeftForNextPoint <= 0)
+        foreach (Text scoreDisplay in scoreDisplays)
         {
-            score++;
-            timeLeftForNextPoint += timeForEachPoint;
+            scoreDisplay.text = "Score: " + score.ToString();
+        }
+
+        if (shouldCount)
+        {
+            timeLeftForNextPoint -= Time.deltaTime;
+            if (timeLeftForNextPoint <= 0)
+            {
+                score++;
+                timeLeftForNextPoint += timeForEachPoint;
+            }
         }
     }
     private string GetBestSavedScoreLookUp(){
@@ -63,4 +74,14 @@ public class ScoreManager : MonoBehaviour
      public int GetScore(){
          return score;
      }
+
+    public void StartCounting()
+    {
+        shouldCount = true;
+    }
+
+    public void StopCounting()
+    {
+        shouldCount = false;
+    }
 }
