@@ -353,7 +353,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.53333336, g: 0.8941177, b: 0.9686275, a: 0.5019608}
+  m_Color: {r: 0.050980393, g: 0.16862746, b: 0.27058825, a: 0.7254902}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -420,6 +420,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Text
       value: Climb
+      objectReference: {fileID: 0}
+    - target: {fileID: 2171524886568709664, guid: b35c97461874a4d47af3f6ad540d895c,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0.7254902
+      objectReference: {fileID: 0}
+    - target: {fileID: 2171524886568709664, guid: b35c97461874a4d47af3f6ad540d895c,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.27058825
+      objectReference: {fileID: 0}
+    - target: {fileID: 2171524886568709664, guid: b35c97461874a4d47af3f6ad540d895c,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.16862746
+      objectReference: {fileID: 0}
+    - target: {fileID: 2171524886568709664, guid: b35c97461874a4d47af3f6ad540d895c,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.050980393
       objectReference: {fileID: 0}
     - target: {fileID: 2171524886568709664, guid: b35c97461874a4d47af3f6ad540d895c,
         type: 3}
