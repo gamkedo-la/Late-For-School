@@ -45,12 +45,17 @@ public class MenuBlock : MonoBehaviour
             hitTimeOutLeft <= 0)
         {
             onHit.Invoke();
-            FMODUnity.RuntimeManager.PlayOneShot(blockHitSound);
+            PlayBlockHitSound();
         }
     }
 
     private void OnEnable()
     {
         hitTimeOutLeft = hitTimeOutSeconds;
+    }
+
+    public void PlayBlockHitSound()
+    {
+        FMODUnity.RuntimeManager.PlayOneShot(blockHitSound);
     }
 }
