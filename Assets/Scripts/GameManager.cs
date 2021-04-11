@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -43,7 +42,7 @@ public class GameManager : MonoBehaviour
         LevelManager,
         PlusMinusInput,
         SkillsInput,
-        Credits
+        Credits,
     }
 
     public enum PlusMinusLevelSetting
@@ -74,6 +73,21 @@ public class GameManager : MonoBehaviour
         TransitionToMainMenuState();
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            if (gameState == GameState.Pause)
+            {
+                UnPauseGame();
+            }
+            else if (gameState == GameState.Play)
+            {
+                PauseGame();
+            }
+        }
+    }
+
     public void TransitionToMainMenuState()
     {
         gameState = GameState.MainMenu;
@@ -85,6 +99,18 @@ public class GameManager : MonoBehaviour
         gameState = GameState.Play;
         ChunkSpawner.GetInstance().InitialiseWithLevelKey(LevelKeyHandler.GenerateKey(levelInputConfig));
         scoreManager.ResetScore();
+    }
+
+    public void PauseGame()
+    {
+        gameState = GameState.Pause;
+        Time.timeScale = 0;
+    }
+
+    public void UnPauseGame()
+    {
+        gameState = GameState.Play;
+        Time.timeScale = 1;
     }
 
     public void TransitionToLevelSelectState()
