@@ -295,7 +295,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: c9e5a62436b79514197006013f603a20, type: 3}
-    m_FontSize: 48
+    m_FontSize: 46
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -306,7 +306,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Intensity
+  m_Text: Difficulty
 --- !u!1 &4627489827509875628
 GameObject:
   m_ObjectHideFlags: 0
