@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
 
     public LayerMask platformsLayerMask; // what counts as a platform (will trigger isGrounded)
     public SpriteMask crouchSpriteMask;
+    public GameObject slideSprite;
     public Vector2 startPos;
     public int maxHealth = 3;
     public float jumpVelocity = 10f;
@@ -63,6 +64,7 @@ public class Player : MonoBehaviour
     [FMODUnity.EventRef]
     public string dashSound;
 
+    private SpriteRenderer uprightSprite;
     private int health = 3;
     private Rigidbody2D rigidbody2d;
     private BoxCollider2D boxCollider2d;
@@ -123,16 +125,15 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        uprightSprite = GetComponent<SpriteRenderer>();
         rigidbody2d = GetComponent<Rigidbody2D>();
         boxCollider2d = GetComponent<BoxCollider2D>();
         rigidBodyGravityScale = rigidbody2d.gravityScale;
         anim = GetComponent<Animator>();
-
         ResetPos();
     }
 
-    private void Update()
-    {
+    private void Update() {
         GetPlayerInput();
 
         HandleGravity();
@@ -145,12 +146,16 @@ public class Player : MonoBehaviour
         HandleLookDirection();
         HandlePushPlayerOverWall();
 
+        if (slideSprite.activeSelf != isSliding) {
+            slideSprite.SetActive(isSliding);
+            uprightSprite.enabled = !isSliding;
+        }
+
         DisplayHealth();
         DisplayDashAvailability();
 
         // reset level if dead
-        if (health <= 0)
-        {
+        if (health <= 0) {
             Debug.Log("Player Lost");
             ScoreManager.GetInstance().SaveScore();
             StopAllLoopingSounds();
@@ -170,6 +175,14 @@ public class Player : MonoBehaviour
     void FixedUpdate()
     {
         HandleWallGrab();
+    }
+
+    private void LateUpdate() {
+        // workaround for strange bug that sometimes led to seeing both forms
+        // was mostly observed while climbing, or at ground level next to a wall
+        if(slideSprite.activeSelf == uprightSprite.enabled) {
+            slideSprite.SetActive(!uprightSprite.enabled);
+        }
     }
 
     private void DisplayHealth()
@@ -672,6 +685,7 @@ public class Player : MonoBehaviour
     public void StartSlide()
     {
         isSliding = true;
+
         slideTimeLeft = slideTime;
         slideDirection = lookDirection;
 
@@ -682,13 +696,13 @@ public class Player : MonoBehaviour
         boxCollider2d.size = new Vector2(boxCollider2d.size.x, crouchSize);
         boxCollider2d.offset = new Vector2(boxCollider2d.offset.x, verticalOffset);
 
-        Vector3 spriteMaskScale = crouchSpriteMask.transform.localScale;
+        /*Vector3 spriteMaskScale = crouchSpriteMask.transform.localScale;
         spriteMaskScale.y = crouchSize;
         crouchSpriteMask.transform.localScale = spriteMaskScale;
 
         Vector3 spriteMaskPos = crouchSpriteMask.transform.localPosition;
         spriteMaskPos.y = verticalOffset;
-        crouchSpriteMask.transform.localPosition = spriteMaskPos;
+        crouchSpriteMask.transform.localPosition = spriteMaskPos;*/
 
         FMODUnity.RuntimeManager.PlayOneShot(slideSound); // TODO: Make slide loopable and stop sound in StopSlide()
     }
@@ -704,13 +718,13 @@ public class Player : MonoBehaviour
         boxCollider2d.size = new Vector2(boxCollider2d.size.x, standSize);
         boxCollider2d.offset = new Vector2(boxCollider2d.offset.x, verticalOffset);
 
-        Vector3 spriteMaskScale = crouchSpriteMask.transform.localScale;
+        /*Vector3 spriteMaskScale = crouchSpriteMask.transform.localScale;
         spriteMaskScale.y = standSize;
         crouchSpriteMask.transform.localScale = spriteMaskScale;
 
         Vector3 spriteMaskPos = crouchSpriteMask.transform.localPosition;
         spriteMaskPos.y = -verticalOffset;
-        crouchSpriteMask.transform.localPosition = spriteMaskPos;
+        crouchSpriteMask.transform.localPosition = spriteMaskPos;*/
     }
 
     public void Dash(float x, float y)
