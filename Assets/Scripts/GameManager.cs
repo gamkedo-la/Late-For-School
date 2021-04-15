@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -228,6 +229,12 @@ public class GameManager : MonoBehaviour
     public void LevelInputConfigChanged()
     {
         UpdatePlusMinusLevelSettingText();
+        UpdateDashSkillBlockOpacity();
+        UpdateSlideSkillBlockOpacity();
+        UpdateWallClimbSkillBlockOpacity();
+        UpdateWallJumpSkillBlockOpacity();
+        UpdateIncludeTutorialChunksBlockOpacity();
+
         UpdateLevelInputKey();
     }
 
@@ -255,7 +262,6 @@ public class GameManager : MonoBehaviour
     public void SwitchIncludeTutorialChunks()
     {
         levelInputConfig.includeTutorialChunks = !levelInputConfig.includeTutorialChunks;
-        UpdateIncludeTutorialChunksBlockOpacity();
         LevelInputConfigChanged();
     }
 
@@ -274,28 +280,24 @@ public class GameManager : MonoBehaviour
     public void SwitchDashSkill()
     {
         SwitchSkill(levelInputConfig.includedSkills, Player.Skill.Dash);
-        UpdateDashSkillBlockOpacity();
         LevelInputConfigChanged();
     }
 
     public void SwitchSlideSkill()
     {
         SwitchSkill(levelInputConfig.includedSkills, Player.Skill.Slide);
-        UpdateSlideSkillBlockOpacity();
         LevelInputConfigChanged();
     }
 
     public void SwitchWallClimbSkill()
     {
         SwitchSkill(levelInputConfig.includedSkills, Player.Skill.WallClimb);
-        UpdateWallClimbSkillBlockOpacity();
         LevelInputConfigChanged();
     }
 
     public void SwitchWallJumpSkill()
     {
         SwitchSkill(levelInputConfig.includedSkills, Player.Skill.WallJump);
-        UpdateWallJumpSkillBlockOpacity();
         LevelInputConfigChanged();
     }
 
@@ -364,5 +366,26 @@ public class GameManager : MonoBehaviour
         {
             UpdateSpriteRendererOpacity(wallJumpSkillBlockRenderer, 0.5f);
         }
+    }
+
+    public void PasteLevelKey()
+    {
+        LevelKeyHandler.LevelConfig loadedLevelConfig = LevelKeyHandler.ReadKey(EditorGUIUtility.systemCopyBuffer);
+        if (loadedLevelConfig != null)
+        {
+            levelInputConfig = loadedLevelConfig;
+            LevelInputConfigChanged();
+            Debug.Log("Level loaded from pasted key");
+        }
+        else
+        {
+            Debug.Log("Pasted level key is invalid, could not load level");
+        }
+    }
+
+    public void CopyLevelKey()
+    {
+        EditorGUIUtility.systemCopyBuffer = levelInputKeyText.text;
+        Debug.Log("Level key copied to clipboard");
     }
 }

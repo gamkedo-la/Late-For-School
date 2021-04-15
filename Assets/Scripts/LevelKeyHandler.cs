@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class LevelKeyHandler
 {
@@ -91,29 +92,37 @@ public class LevelKeyHandler
 
     public static LevelConfig ReadKey(string key)
     {
-        char[] delimiterChars = { 'S', 'I', 'M', 'T', 'P' };
-        string[] configVals = key.Split(delimiterChars);
-
-        int randomSeed = int.Parse(configVals[0]);
-        float speed = float.Parse(configVals[1]) / 100;
-        float maxIntensity = float.Parse(configVals[2]) / 100;
-        int milestoneInterval = int.Parse(configVals[3]);
-        bool includeTutorialChunks = int.Parse(configVals[4]) == 0 ? false : true;
-
-        string[]includedSkillsKeys = configVals[5].Split('s');
-        List<Player.Skill> includedSkills = new List<Player.Skill>();
-        foreach (string skillKey in includedSkillsKeys)
+        try
         {
-            if (int.TryParse(skillKey, out int skillKeyInt))
-            {
-                Player.Skill skill = skillDictionary.FirstOrDefault(x => x.Value == skillKeyInt).Key;
-                includedSkills.Add(skill);
-            }
-        }
-        includedSkills.Sort(SortByKey);
+            char[] delimiterChars = { 'S', 'I', 'M', 'T', 'P' };
+            string[] configVals = key.Split(delimiterChars);
 
-        Debug.Log("Level Config generated: " + (new LevelConfig(randomSeed, speed, maxIntensity, milestoneInterval, includeTutorialChunks, includedSkills)).ToString());
-        return new LevelConfig(randomSeed, speed, maxIntensity, milestoneInterval, includeTutorialChunks, includedSkills);
+            int randomSeed = int.Parse(configVals[0]);
+            float speed = float.Parse(configVals[1]) / 100;
+            float maxIntensity = float.Parse(configVals[2]) / 100;
+            int milestoneInterval = int.Parse(configVals[3]);
+            bool includeTutorialChunks = int.Parse(configVals[4]) == 0 ? false : true;
+
+            string[] includedSkillsKeys = configVals[5].Split('s');
+            List<Player.Skill> includedSkills = new List<Player.Skill>();
+            foreach (string skillKey in includedSkillsKeys)
+            {
+                if (int.TryParse(skillKey, out int skillKeyInt))
+                {
+                    Player.Skill skill = skillDictionary.FirstOrDefault(x => x.Value == skillKeyInt).Key;
+                    includedSkills.Add(skill);
+                }
+            }
+            includedSkills.Sort(SortByKey);
+
+            Debug.Log("Level Config generated: " + (new LevelConfig(randomSeed, speed, maxIntensity, milestoneInterval, includeTutorialChunks, includedSkills)).ToString());
+            return new LevelConfig(randomSeed, speed, maxIntensity, milestoneInterval, includeTutorialChunks, includedSkills);
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e.Message);
+            return null;
+        }
     }
 
     public static string FixSkillOrderInLevelKey(string levelKey)
