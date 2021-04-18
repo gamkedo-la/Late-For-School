@@ -2,6 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Runtime.InteropServices;
 
 public class GameManager : MonoBehaviour
 {
@@ -370,7 +371,27 @@ public class GameManager : MonoBehaviour
 
     public void PasteLevelKey()
     {
-        LevelKeyHandler.LevelConfig loadedLevelConfig = LevelKeyHandler.ReadKey(EditorGUIUtility.systemCopyBuffer);
+#if UNITY_WEBGL
+        ReadTextFromClipboard(gameObject.name, "LoadLevelFromKey");
+#else
+        LoadLevelFromKey(EditorGUIUtility.systemCopyBuffer);
+#endif
+    }
+
+    public void CopyLevelKey()
+    {
+#if UNITY_WEBGL
+        WriteTextToClipboard(levelInputKeyText.text);
+#else
+        EditorGUIUtility.systemCopyBuffer = levelInputKeyText.text;
+#endif
+        Debug.Log("Level key copied to clipboard");
+        PopupTooltipManager.GetInstance().copyLevelKeySuccessful.Activate();
+    }
+
+    public void LoadLevelFromKey(string key)
+    {
+        LevelKeyHandler.LevelConfig loadedLevelConfig = LevelKeyHandler.ReadKey(key);
         if (loadedLevelConfig != null)
         {
             levelInputConfig = loadedLevelConfig;
@@ -385,10 +406,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void CopyLevelKey()
-    {
-        EditorGUIUtility.systemCopyBuffer = levelInputKeyText.text;
-        Debug.Log("Level key copied to clipboard");
-        PopupTooltipManager.GetInstance().copyLevelKeySuccessful.Activate();
-    }
+    [DllImport("__Internal")]
+    private static extern void WriteTextToClipboard(string text);
+
+    [DllImport("__Internal")]
+    private static extern void ReadTextFromClipboard(string gameObjectName, string functionName);
 }
