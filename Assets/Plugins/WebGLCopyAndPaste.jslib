@@ -11,11 +11,8 @@ mergeInto(LibraryManager.library, {
   ReadTextFromClipboard: function (gameObjectName, functionName) {
       gameObjectName = UTF8ToString(gameObjectName);
       functionName = UTF8ToString(functionName);
-      navigator.clipboard.readText().then(function(text) {
-        unityInstance.SendMessage(gameObjectName, functionName, text);
-      }, function() {
-        unityInstance.SendMessage(gameObjectName, functionName, "no text in clipboard");
-      })
+      var text = prompt("Please paste level key here:", "");
+      SendMessage(gameObjectName, functionName, text);
   }
 });
 
