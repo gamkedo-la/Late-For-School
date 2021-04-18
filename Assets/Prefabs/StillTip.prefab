@@ -11,9 +11,8 @@ GameObject:
   - component: {fileID: 2171524886568709670}
   - component: {fileID: 2171524886568709665}
   - component: {fileID: 2171524886568709664}
-  - component: {fileID: 2171524886568709671}
   m_Layer: 5
-  m_Name: BouncingTipText
+  m_Name: TipText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -75,48 +74,12 @@ MonoBehaviour:
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 1
+    m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: 'Tip Here!
 
 '
---- !u!114 &2171524886568709671
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2171524886568709669}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2464eb4114fdc3a4bb70e5131f84eb05, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  offsetX: 0
-  offsetY: 0
-  offsetZ: 0
-  rotOffsetX: 0
-  rotOffsetY: 180
-  rotOffsetZ: 0
-  speedX: 0
-  speedY: 3.5
-  speedZ: 0
-  magnitudeX: 0
-  magnitudeY: 10
-  magnitudeZ: 0
-  scalespeedX: 0
-  scalespeedY: 0
-  scalespeedZ: 0
-  scalemagnitudeX: 0
-  scalemagnitudeY: 0
-  scalemagnitudeZ: 0
-  rotspeedX: 0
-  rotspeedY: 0
-  rotspeedZ: 10
-  rotmagnitudeX: 0
-  rotmagnitudeY: 0
-  rotmagnitudeZ: 2.5
 --- !u!1 &2171524887577697832
 GameObject:
   m_ObjectHideFlags: 0
@@ -130,7 +93,7 @@ GameObject:
   - component: {fileID: 2171524887577697835}
   - component: {fileID: 2171524887577697834}
   m_Layer: 5
-  m_Name: BouncingTip 1
+  m_Name: StillTip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

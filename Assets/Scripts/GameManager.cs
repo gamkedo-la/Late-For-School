@@ -376,10 +376,12 @@ public class GameManager : MonoBehaviour
             levelInputConfig = loadedLevelConfig;
             LevelInputConfigChanged();
             Debug.Log("Level loaded from pasted key");
+            PopupTooltipManager.GetInstance().pasteLevelKeySuccessful.Activate();
         }
         else
         {
             Debug.Log("Pasted level key is invalid, could not load level");
+            PopupTooltipManager.GetInstance().pasteLevelKeyFailed.Activate();
         }
     }
 
@@ -387,5 +389,6 @@ public class GameManager : MonoBehaviour
     {
         EditorGUIUtility.systemCopyBuffer = levelInputKeyText.text;
         Debug.Log("Level key copied to clipboard");
+        PopupTooltipManager.GetInstance().copyLevelKeySuccessful.Activate();
     }
 }
