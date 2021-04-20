@@ -30,14 +30,29 @@ public class PopupTooltip : MonoBehaviour
         text.text = this.text;
         text.fontSize = fontSize;
         text.color = textColor;
+
+        RectTransform rt = text.GetComponent<RectTransform>();
+        rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, textWidth);
+
         timeLeft = fadeTime;
         startScale = tooltip.transform.localScale;
+    }
+
+    private void OnEnable()
+    {
+        // if enabled, this means it was disabled, so we need to make sure any 
+        // in progress tooltip is destroyed
+
+        if (tooltip != null)
+        {
+            Destroy(tooltip);
+        }
     }
 
     private void Update()
     {
         timeLeft -= Time.deltaTime;
-        if (timeLeft < 0)
+        if (timeLeft < 0 && tooltip != null)
         {
             Destroy(tooltip);
         }
