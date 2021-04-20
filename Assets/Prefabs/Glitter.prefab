@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3907470950240533085}
   - component: {fileID: 8234406191284365720}
   m_Layer: 0
-  m_Name: Milestone Particles
+  m_Name: Glitter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42,7 +42,7 @@ ParticleSystem:
   serializedVersion: 6
   lengthInSec: 3
   simulationSpeed: 1
-  stopAction: 0
+  stopAction: 2
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
