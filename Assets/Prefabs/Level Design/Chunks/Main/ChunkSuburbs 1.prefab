@@ -1359,8 +1359,10 @@ MonoBehaviour:
   chunkEnd: 1
   isMilestone: 0
   milestoneSound: event:/Milestone
-  milestoneSkyEffect: {fileID: 0}
-  milestonePlayerEffect: {fileID: 0}
+  milestoneSkyEffect: {fileID: 956545745070192379, guid: 07cba600d5b5ce843b89af67f0b65ecf,
+    type: 3}
+  milestonePlayerEffect: {fileID: 8796150976950980979, guid: 274876703d5a28a4e8e9cda1551d4958,
+    type: 3}
 --- !u!61 &3486183146568700536
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2044,8 +2046,10 @@ MonoBehaviour:
   chunkEnd: 0
   isMilestone: 0
   milestoneSound: event:/Milestone
-  milestoneSkyEffect: {fileID: 0}
-  milestonePlayerEffect: {fileID: 0}
+  milestoneSkyEffect: {fileID: 956545745070192379, guid: 07cba600d5b5ce843b89af67f0b65ecf,
+    type: 3}
+  milestonePlayerEffect: {fileID: 8796150976950980979, guid: 274876703d5a28a4e8e9cda1551d4958,
+    type: 3}
 --- !u!61 &3705229069498407833
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3135,6 +3139,7 @@ MonoBehaviour:
   intensity: 2
   tutorialChunk: 0
   includedSkills: 0000000001000000
+  version: 1
 --- !u!1001 &2127410323196967
 PrefabInstance:
   m_ObjectHideFlags: 0
