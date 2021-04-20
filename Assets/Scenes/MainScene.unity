@@ -26651,7 +26651,7 @@ ParticleSystem:
     x:
       serializedVersion: 2
       minMaxState: 0
-      scalar: -2
+      scalar: 0
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -26807,7 +26807,7 @@ ParticleSystem:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-    inWorldSpace: 0
+    inWorldSpace: 1
     randomizePerFrame: 0
   ExternalForcesModule:
     serializedVersion: 2
@@ -29845,6 +29845,7 @@ MonoBehaviour:
   wallJumpSkillBlockRenderer: {fileID: 1527078739}
   plusMinusInstructionText: {fileID: 2089588741}
   tutorialPopupTooltip: {fileID: 1943878592}
+  paperSheets: {fileID: 2021785898}
   runSummaryScreenTime: 5
 --- !u!4 &2093883856
 Transform:

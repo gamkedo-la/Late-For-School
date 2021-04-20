@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     public SpriteRenderer wallJumpSkillBlockRenderer;
     public Text plusMinusInstructionText;
     public PopupTooltip tutorialPopupTooltip;
+    public ParticleSystem paperSheets;
     public float runSummaryScreenTime = 5;
 
     private ScoreManager scoreManager;
@@ -99,6 +100,10 @@ public class GameManager : MonoBehaviour
     {
         gameState = GameState.MainMenu;
         ChunkSpawner.DestroyChunks();
+
+        // Make paper sheets stop flying
+        var fol = paperSheets.forceOverLifetime;
+        fol.xMultiplier = 0;
     }
 
     private void PostRunSummary()
@@ -121,6 +126,10 @@ public class GameManager : MonoBehaviour
         ChunkSpawner.GetInstance().InitialiseWithLevelKey(LevelKeyHandler.GenerateKey(levelInputConfig));
         scoreManager.ResetScore();
         scoreManager.StartCounting();
+
+        // make paper sheets fly in play direction
+        var fol = paperSheets.forceOverLifetime;
+        fol.xMultiplier = -ChunkSpawner.GetInstance().levelConfig.speed;
     }
 
     public void PauseGame()
