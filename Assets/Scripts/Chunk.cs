@@ -7,4 +7,5 @@ public class Chunk : MonoBehaviour
     public float intensity;
     public bool tutorialChunk = false;
     public List<Player.Skill> includedSkills;
+    public int version = 1;
 }

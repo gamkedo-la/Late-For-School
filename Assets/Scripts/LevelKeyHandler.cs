@@ -13,6 +13,7 @@ public class LevelKeyHandler
         public int milestoneInterval;
         public bool includeTutorialChunks;
         public List<Player.Skill> includedSkills;
+        public int version;
 
         public LevelConfig(
             int randomSeed = 0,
@@ -20,7 +21,8 @@ public class LevelKeyHandler
             float maxIntensity = 7.5f,
             int milestoneInterval = 10,
             bool includeTutorialChunks = true,
-            List<Player.Skill> includedSkills = null)
+            List<Player.Skill> includedSkills = null,
+            int version = 1)
         {
             this.randomSeed = randomSeed;
             this.speed = speed;
@@ -30,11 +32,12 @@ public class LevelKeyHandler
             this.includedSkills = includedSkills == null ?
                 new List<Player.Skill> { Player.Skill.Dash, Player.Skill.Slide, Player.Skill.WallClimb, Player.Skill.WallJump } :
                 includedSkills;
+            this.version = version;
         }
 
         public override string ToString()
         {
-            string str = $"Seed: {randomSeed}, Speed: {speed}, Intensity: {maxIntensity}, Milestone Interval: {milestoneInterval}, Tutorial: {includeTutorialChunks}";
+            string str = $"Version: {version}, Seed: {randomSeed}, Speed: {speed}, Intensity: {maxIntensity}, Milestone Interval: {milestoneInterval}, Tutorial: {includeTutorialChunks}";
             int i = 1;
             foreach (Player.Skill skill in includedSkills)
             {
@@ -86,6 +89,10 @@ public class LevelKeyHandler
             }
         }
 
+        // Version
+        key += "V";
+        key += levelConfig.version;
+
         Debug.Log("Level Key generated: " + key);
         return key;
     }
@@ -94,7 +101,7 @@ public class LevelKeyHandler
     {
         try
         {
-            char[] delimiterChars = { 'S', 'I', 'M', 'T', 'P' };
+            char[] delimiterChars = { 'S', 'I', 'M', 'T', 'P', 'V' };
             string[] configVals = key.Split(delimiterChars);
 
             int randomSeed = int.Parse(configVals[0]);
@@ -115,8 +122,11 @@ public class LevelKeyHandler
             }
             includedSkills.Sort(SortByKey);
 
-            Debug.Log("Level Config generated: " + (new LevelConfig(randomSeed, speed, maxIntensity, milestoneInterval, includeTutorialChunks, includedSkills)).ToString());
-            return new LevelConfig(randomSeed, speed, maxIntensity, milestoneInterval, includeTutorialChunks, includedSkills);
+            int version = int.Parse(configVals[6]);
+
+            LevelConfig levelConfig = new LevelConfig(randomSeed, speed, maxIntensity, milestoneInterval, includeTutorialChunks, includedSkills, version);
+            Debug.Log("Level Config generated: " + levelConfig.ToString());
+            return levelConfig;
         }
         catch (Exception e)
         {
@@ -141,6 +151,6 @@ public class LevelKeyHandler
 
     public static string DefaultKey()
     {
-        return "0S500I1000M10T1Ps1s2s3s4";
+        return "0S500I1000M10T1Ps1s2s3s4V1";
     }
 }

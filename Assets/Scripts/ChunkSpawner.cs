@@ -59,7 +59,8 @@ public class ChunkSpawner : MonoBehaviour
                 Chunk chunkDetails = chunk.GetComponent<Chunk>();
                 if (chunkDetails.tutorialChunk &&
                     chunkDetails.includedSkills.Count == 1 &&
-                    chunkDetails.includedSkills.Contains(Player.Skill.Jump))
+                    chunkDetails.includedSkills.Contains(Player.Skill.Jump) &&
+                    chunkDetails.version <= levelConfig.version)
                 {
                     usableChunks.Add(chunk);
                 }
@@ -87,7 +88,8 @@ public class ChunkSpawner : MonoBehaviour
             Chunk chunkDetails = chunk.GetComponent<Chunk>();
 
             // Don't add chunk if it already exists
-            if (usableChunks.Contains(chunk))
+            // or if the level key version is lower than the chunk version (this would mean the chunk came out after this level key was generated)
+            if (usableChunks.Contains(chunk) || chunkDetails.version > levelConfig.version)
             {
                 include = false;
             }
