@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
     private ScoreManager scoreManager;
     private PlusMinusLevelSetting levelInputSetting;
 
-    public LevelKeyHandler.LevelConfig levelInputConfig = new LevelKeyHandler.LevelConfig();
+    public LevelKeyHandler.LevelConfig levelInputConfig;
 
     private int levelInputSeedIncrement = 1;
     private int levelInputSeedMin = 0;
@@ -70,6 +70,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        levelInputConfig = LevelKeyHandler.ReadKey(LevelKeyHandler.DefaultKey());
     }
 
     private void Start()
