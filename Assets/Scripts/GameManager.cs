@@ -17,8 +17,7 @@ public class GameManager : MonoBehaviour
     public SpriteRenderer slideSkillBlockRenderer;
     public SpriteRenderer wallClimbSkillBlockRenderer;
     public SpriteRenderer wallJumpSkillBlockRenderer;
-    public PopupTooltip plusPopupTooltip;
-    public PopupTooltip minusPopupTooltip;
+    public Text plusMinusInstructionText;
     public PopupTooltip tutorialPopupTooltip;
     public float runSummaryScreenTime = 5;
 
@@ -173,6 +172,19 @@ public class GameManager : MonoBehaviour
     public void SetChosenLevelSetting(PlusMinusLevelSetting levelSetting)
     {
         levelInputSetting = levelSetting;
+
+        switch (levelInputSetting)
+        {
+            case PlusMinusLevelSetting.Seed:
+                plusMinusInstructionText.text = "Adjust Random Seed To Generate Different Levels With The Same Parameters";
+                break;
+            case PlusMinusLevelSetting.Speed:
+                plusMinusInstructionText.text = "Adjust The Speed Of The Level";
+                break;
+            case PlusMinusLevelSetting.Intensity:
+                plusMinusInstructionText.text = "Adjust The Difficulty Of The Level";
+                break;
+        }
     }
 
     public void SetChosenLevelSettingToSeed()
@@ -197,20 +209,17 @@ public class GameManager : MonoBehaviour
             case PlusMinusLevelSetting.Seed:
                 levelInputConfig.randomSeed += levelInputSeedIncrement;
                 levelInputConfig.randomSeed = Mathf.Clamp(levelInputConfig.randomSeed, levelInputSeedMin, levelInputSeedMax);
-                plusPopupTooltip.text = "Random Seed Incremented";
                 break;
             case PlusMinusLevelSetting.Speed:
                 levelInputConfig.speed += levelInputSpeedIncrement;
                 levelInputConfig.speed = Mathf.Clamp(levelInputConfig.speed, levelInputSpeedMin, levelInputSpeedMax);
-                plusPopupTooltip.text = "Level Speed Increased";
                 break;
             case PlusMinusLevelSetting.Intensity:
                 levelInputConfig.maxIntensity += levelInputIntensityIncrement;
                 levelInputConfig.maxIntensity = Mathf.Clamp(levelInputConfig.maxIntensity, levelInputIntensityMin, levelInputIntensityMax);
-                plusPopupTooltip.text = "Level Difficulty Increased";
                 break;
         }
-        plusPopupTooltip.Activate();
+
         LevelInputConfigChanged();
     }
 
@@ -221,20 +230,16 @@ public class GameManager : MonoBehaviour
             case PlusMinusLevelSetting.Seed:
                 levelInputConfig.randomSeed -= levelInputSeedIncrement;
                 levelInputConfig.randomSeed = Mathf.Clamp(levelInputConfig.randomSeed, levelInputSeedMin, levelInputSeedMax);
-                minusPopupTooltip.text = "Random Seed Decremented";
                 break;
             case PlusMinusLevelSetting.Speed:
                 levelInputConfig.speed -= levelInputSpeedIncrement;
                 levelInputConfig.speed = Mathf.Clamp(levelInputConfig.speed, levelInputSpeedMin, levelInputSpeedMax);
-                minusPopupTooltip.text = "Level Speed Decreased";
                 break;
             case PlusMinusLevelSetting.Intensity:
                 levelInputConfig.maxIntensity -= levelInputIntensityIncrement;
                 levelInputConfig.maxIntensity = Mathf.Clamp(levelInputConfig.maxIntensity, levelInputIntensityMin, levelInputIntensityMax);
-                minusPopupTooltip.text = "Level Difficulty Decreased";
                 break;
         }
-        minusPopupTooltip.Activate();
         LevelInputConfigChanged();
     }
 
