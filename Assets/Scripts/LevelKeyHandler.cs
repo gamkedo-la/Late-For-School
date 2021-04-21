@@ -151,6 +151,6 @@ public class LevelKeyHandler
 
     public static string DefaultKey()
     {
-        return "0S500I1000M10T1Ps1s2s3s4V1";
+        return "0S500I750M10T1Ps1s2s3s4V1";
     }
 }

@@ -48,6 +48,7 @@ public class ChunkSpawner : MonoBehaviour
         Reset();
 
         levelConfig = LevelKeyHandler.ReadKey(levelKey);
+        this.levelKey = LevelKeyHandler.GenerateKey(levelConfig);
         levelConfig.includedSkills.Add(Player.Skill.Jump);
 
         unusableChunks.AddRange(chunks);

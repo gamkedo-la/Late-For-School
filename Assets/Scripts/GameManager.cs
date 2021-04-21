@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     public PopupTooltip tutorialPopupTooltip;
     public ParticleSystem paperSheets;
     public float runSummaryScreenTime = 5;
+    public Text runSummaryLevelKey;
 
     private ScoreManager scoreManager;
     private PlusMinusLevelSetting levelInputSetting;
@@ -117,6 +118,7 @@ public class GameManager : MonoBehaviour
     {
         gameState = GameState.RunSummary;
         scoreManager.StopCounting();
+        runSummaryLevelKey.text = ChunkSpawner.GetInstance().GetLevelKey();
         Invoke("PostRunSummary", runSummaryScreenTime);
     }
 
@@ -167,11 +169,6 @@ public class GameManager : MonoBehaviour
     public void TransitionToCreditsState()
     {
         gameState = GameState.Credits;
-    }
-
-    public void TriggerRunSummary()
-    {
-
     }
 
     public GameState GetState()
