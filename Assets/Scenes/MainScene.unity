@@ -22698,7 +22698,7 @@ MonoBehaviour:
     type: 3}
   landFxPrefab: {fileID: 450957876343489719, guid: 75e9f9c4f9c8bd34a9e263bf0ae0b824,
     type: 3}
-  wallgrabFxPrefab: {fileID: 3854950274296858172, guid: 69a0ff625e140ad43a6fc60ac40e5ea4,
+  slideFxPrefab: {fileID: 3854950274296858172, guid: 69a0ff625e140ad43a6fc60ac40e5ea4,
     type: 3}
   walljumpFxPrefab: {fileID: 3259140997364470229, guid: 18c6ce50a5dc60c458a9097893b22f59,
     type: 3}

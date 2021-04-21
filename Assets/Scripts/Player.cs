@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -44,7 +45,7 @@ public class Player : MonoBehaviour
     public GameObject runParticles; // looping, turned off and on
     public GameObject jumpFxPrefab;
     public GameObject landFxPrefab;
-    public GameObject wallgrabFxPrefab;
+    public GameObject slideFxPrefab;
     public GameObject walljumpFxPrefab;
     public GameObject dashFxPrefab;
 
@@ -544,7 +545,6 @@ public class Player : MonoBehaviour
             if (inputVerticalAxis != 0)
             {
                 StartWallClimbSound();
-                if (wallgrabFxPrefab) Instantiate(wallgrabFxPrefab, transform.position, Quaternion.identity);
                 anim.SetBool("isClimbing", true);
             }
             else
@@ -592,6 +592,16 @@ public class Player : MonoBehaviour
         }
         if (isSliding && slideTimeLeft > 0)
         {
+            if (slideFxPrefab) {
+                var slideParticles = Instantiate(slideFxPrefab, transform.position + new Vector3(0, -0.5f, 0), Quaternion.identity);
+                if ((GameManager.GetInstance().GetState() == GameManager.GameState.Play ||
+                    GameManager.GetInstance().GetState() == GameManager.GameState.RunSummary)
+                    && ChunkSpawner.GetInstance().LastChunk() != null)
+                {
+                    // attach particles to a chunk so that they move left if the game is being played
+                    slideParticles.transform.parent = ChunkSpawner.GetInstance().LastChunk().transform;
+                }
+            };
             // If we're not playing the game, then the game is not moving - get player slide to move
             if (GameManager.GetInstance().GetState() != GameManager.GameState.Play)
             {

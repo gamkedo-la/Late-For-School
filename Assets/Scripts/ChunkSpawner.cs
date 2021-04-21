@@ -370,4 +370,13 @@ public class ChunkSpawner : MonoBehaviour
     {
         return levelKey;
     }
+
+    public GameObject LastChunk()
+    {
+        if (activeChunks.Count > 0)
+        {
+            return activeChunks[activeChunks.Count - 1];
+        }
+        return null;
+    }
 }
