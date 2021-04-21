@@ -38,6 +38,7 @@ public class Player : MonoBehaviour
     public float stuckMovemendSpeedDecreaseFactor = 5f;
     public bool ledgeAutoStop = true; // stops the player when they reach a ledge and arent moving
     public bool upToJump = false; // this allows the up key to allow jumping as well as jump key CURRENTLY BROKEN AS HOLDING IT CHANGES HOW WE AFFECT GRAVITY SO CHANGES GAME
+    public float groundedRecentlyTime = 0.15f; // amount of time we decide it's okay for the player to jump instead of dash after leaving the ground
     public List<GameObject> healthContainers;
     public GameObject dashContainer;
     public GameObject runParticles; // looping, turned off and on
@@ -81,6 +82,8 @@ public class Player : MonoBehaviour
     private bool isInvincible = false;
     private float prevVelocityX = 0;
     private bool jumpedWhileAgainstRightWall = false;
+    private float timeSinceLeftGround = 0;
+    private bool leftGroundFromJump = false;
 
     private const KeyCode GrabWallKey = KeyCode.LeftShift;
     private const KeyCode JumpAndDashKey = KeyCode.Space;
@@ -136,13 +139,24 @@ public class Player : MonoBehaviour
     private void Update() {
         GetPlayerInput();
 
+        // reset variables associated with when and how we left the ground
+        if (IsGrounded())
+        {
+            timeSinceLeftGround = 0;
+            leftGroundFromJump = false;
+        }
+        else
+        {
+            timeSinceLeftGround += Time.deltaTime;
+        }
+
         HandleGravity();
         HandleHorizontalMovement();
+        HandleDash(); // Dash has to be before jump, for jumping at edge to work
         HandleJump();
         HandleWallClimb();
         HandleWallJump();
         HandleSlide();
-        HandleDash();
         HandleLookDirection();
         HandlePushPlayerOverWall();
 
@@ -229,7 +243,8 @@ public class Player : MonoBehaviour
         if (!isDashing)
         {
             // jump
-            if (IsGrounded() && (jumpAndDashKeyDown || (upToJump && inputVerticalAxisDown > 0)))
+            bool canJump = IsGrounded() || (timeSinceLeftGround <= groundedRecentlyTime && !leftGroundFromJump);
+            if (canJump && (jumpAndDashKeyDown || (upToJump && inputVerticalAxisDown > 0)))
             {
                 if (isSliding)
                 {
@@ -243,6 +258,8 @@ public class Player : MonoBehaviour
 
                 // This variable is used to prevent the player from auto grabbing if jumping too near the wall (see in HandleWallGrab)
                 if (IsNearRightWall()) { jumpedWhileAgainstRightWall = true; }
+
+                leftGroundFromJump = true;
             }
         }
 
@@ -336,7 +353,8 @@ public class Player : MonoBehaviour
         // dash
         bool justStartedWallJumping = wallJumpTimeLeft > wallJumpResetTime - 0.1;
         bool isNearWall = IsNearLeftWall() || IsNearRightWall();
-        if (dashAvailable && !IsGrounded() && !isNearWall && !justStartedWallJumping && jumpAndDashKeyDown && (inputHorizontalAxis != 0 || inputVerticalAxis != 0))
+        bool canJump = IsGrounded() || (timeSinceLeftGround <= groundedRecentlyTime && !leftGroundFromJump); // this line causes handledash to have to be before handlejump (otherwise jump will set leftGroundFromJump)
+        if (dashAvailable && !canJump && !isNearWall && !justStartedWallJumping && jumpAndDashKeyDown && (inputHorizontalAxis != 0 || inputVerticalAxis != 0))
         {
             Dash(inputHorizontalAxis, inputVerticalAxis);
             
