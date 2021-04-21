@@ -545,17 +545,19 @@ public class Player : MonoBehaviour
             {
                 StartWallClimbSound();
                 if (wallgrabFxPrefab) Instantiate(wallgrabFxPrefab, transform.position, Quaternion.identity);
-
+                anim.SetBool("isClimbing", true);
             }
             else
             {
                 StopWallClimbSound();
+                anim.SetBool("isClimbing", false);
             }
             anim.SetBool("isWallGrabbing", true);
         }
         else
         {
             anim.SetBool("isWallGrabbing", false);
+            anim.SetBool("isClimbing", false);
             StopWallClimbSound();
         }
     }
