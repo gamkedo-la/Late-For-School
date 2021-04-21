@@ -21455,6 +21455,11 @@ PrefabInstance:
       objectReference: {fileID: 1668726366}
     - target: {fileID: 7261294336377830693, guid: 315c550690dee4347be33b71230dbfc0,
         type: 3}
+      propertyPath: textWidth
+      value: 320
+      objectReference: {fileID: 0}
+    - target: {fileID: 7261294336377830693, guid: 315c550690dee4347be33b71230dbfc0,
+        type: 3}
       propertyPath: position.x
       value: 7
       objectReference: {fileID: 0}
