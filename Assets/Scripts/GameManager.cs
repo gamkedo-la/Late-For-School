@@ -104,8 +104,6 @@ public class GameManager : MonoBehaviour
         // Make paper sheets stop flying
         var fol = paperSheets.forceOverLifetime;
         fol.xMultiplier = 0;
-
-        Debug.Log("going to menu");
     }
 
     private void PostRunSummary()

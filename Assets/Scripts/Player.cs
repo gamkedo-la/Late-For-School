@@ -155,7 +155,7 @@ public class Player : MonoBehaviour
         DisplayDashAvailability();
 
         // reset level if dead
-        if (health <= 0) {
+        if (health <= 0 && GameManager.GetInstance().GetState() == GameManager.GameState.Play) {
             Debug.Log("Player Lost");
             ScoreManager.GetInstance().SaveScore();
             StopAllLoopingSounds();
