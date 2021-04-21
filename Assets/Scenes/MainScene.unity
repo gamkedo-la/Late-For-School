@@ -22417,8 +22417,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1543215942}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.69, y: -2.66, z: -1}
-  m_LocalScale: {x: 200, y: 4, z: 1}
+  m_LocalPosition: {x: -10.69, y: -1.4, z: -1}
+  m_LocalScale: {x: 400, y: 8, z: 1}
   m_Children: []
   m_Father: {fileID: 694244061713832674}
   m_RootOrder: 12
@@ -29784,6 +29784,8 @@ MonoBehaviour:
   paperSheets: {fileID: 2021785898}
   runSummaryScreenTime: 5
   runSummaryLevelKey: {fileID: 1662030272}
+  parallaxBackground: {fileID: 694244061713832685}
+  foreroundGrassIndex: 11
 --- !u!4 &2093883856
 Transform:
   m_ObjectHideFlags: 0

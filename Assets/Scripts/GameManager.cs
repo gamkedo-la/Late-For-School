@@ -22,6 +22,8 @@ public class GameManager : MonoBehaviour
     public ParticleSystem paperSheets;
     public float runSummaryScreenTime = 5;
     public Text runSummaryLevelKey;
+    public parallaxBackground parallaxBackground;
+    public int foreroundGrassIndex;
 
     private ScoreManager scoreManager;
     private PlusMinusLevelSetting levelInputSetting;
@@ -105,6 +107,8 @@ public class GameManager : MonoBehaviour
         // Make paper sheets stop flying
         var fol = paperSheets.forceOverLifetime;
         fol.xMultiplier = 0;
+
+        parallaxBackground.backgroundSpeeds[11] = 0;
     }
 
     private void PostRunSummary()
@@ -132,6 +136,9 @@ public class GameManager : MonoBehaviour
         // make paper sheets fly in play direction
         var fol = paperSheets.forceOverLifetime;
         fol.xMultiplier = -ChunkSpawner.GetInstance().levelConfig.speed;
+
+        // make foreground grass start moving
+        parallaxBackground.backgroundSpeeds[11] = ChunkSpawner.GetInstance().levelConfig.speed / 10;
     }
 
     public void PauseGame()
