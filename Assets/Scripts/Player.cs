@@ -551,9 +551,11 @@ public class Player : MonoBehaviour
             {
                 StopWallClimbSound();
             }
+            anim.SetBool("isWallGrabbing", true);
         }
         else
         {
+            anim.SetBool("isWallGrabbing", false);
             StopWallClimbSound();
         }
     }
