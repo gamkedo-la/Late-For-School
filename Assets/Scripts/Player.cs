@@ -926,7 +926,8 @@ public class Player : MonoBehaviour
         if (timeSecs > 0 && !isStuck)
         {
             isStuck = true;
-            GetComponent<SpriteRenderer>().color = stuckColour;
+            uprightSprite.color = stuckColour;
+            slideSprite.color = stuckColour;
             Invoke("ResumePlayerMovement", timeSecs);
         }
     }
@@ -934,7 +935,8 @@ public class Player : MonoBehaviour
     private void ResumePlayerMovement()
     {
         isStuck = false;
-        GetComponent<SpriteRenderer>().color = Color.white;
+        uprightSprite.color = Color.white;
+        slideSprite.color = Color.white;
     }
 
     public void SetInvincible(float timeSecs)
