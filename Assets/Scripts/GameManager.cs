@@ -116,6 +116,7 @@ public class GameManager : MonoBehaviour
         TransitionToMainMenuState();
         Player.GetInstance().UnFreezePos();
         Player.GetInstance().ResetHealth();
+        Player.GetInstance().GetComponent<Rigidbody2D>().velocity = new Vector2(0, -1);
     }
 
     public void TransitionToRunSummaryState()
