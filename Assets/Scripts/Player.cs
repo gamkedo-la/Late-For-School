@@ -33,8 +33,10 @@ public class Player : MonoBehaviour
     public float groundedDistance = 0.25f;
     public float slideTime = 1f;
     public float timeInvincibleAfterHurt = 2.5f;
-    public float stuckSlowdownFactor = 2.0f;
-    public float stuckMovemendSpeedDecreaseFactor = 5f;
+    public float stuckSlowdownFactor = 5.0f;
+    public float jumpSlowdownFactor = 1.75f;
+    public float dashSlowdownFactor = 2.0f;
+    public Color stuckColour = Color.grey;
     public bool ledgeAutoStop = true; // stops the player when they reach a ledge and arent moving
     public bool upToJump = false; // this allows the up key to allow jumping as well as jump key CURRENTLY BROKEN AS HOLDING IT CHANGES HOW WE AFFECT GRAVITY SO CHANGES GAME
     public float groundedRecentlyTime = 0.15f; // amount of time we decide it's okay for the player to jump instead of dash after leaving the ground
@@ -250,7 +252,9 @@ public class Player : MonoBehaviour
                     StopSlide();
                 }
 
-                rigidbody2d.velocity = Vector2.up * jumpVelocity;
+                Vector2 jumpVector = Vector2.up * jumpVelocity;
+                if (isStuck) { jumpVector /= jumpSlowdownFactor; }
+                rigidbody2d.velocity = jumpVector;
                 FMODUnity.RuntimeManager.PlayOneShot(jumpSound);
 
                 if (jumpFxPrefab) Instantiate(jumpFxPrefab, transform.position, Quaternion.identity);
@@ -280,11 +284,6 @@ public class Player : MonoBehaviour
                 }
                 else if (GameManager.GetInstance().GetState() == GameManager.GameState.Play && isStuck)
                 {
-                    inputVerticalAxis = 0;
-                    inputVerticalAxisDown = 0;
-                    jumpAndDashKeyDown = false;
-                    jumpAndDashKey = false;
-
                     float velX = -1 * stuckSlowdownFactor;
                     velX += (inputHorizontalAxis * speed) / stuckSlowdownFactor;
                     rigidbody2d.velocity = new Vector2(velX, rigidbody2d.velocity.y);
@@ -458,8 +457,9 @@ public class Player : MonoBehaviour
                 velocityX = -wallJumpVelocity;
                 isWallJumpingLeft = true;
             }
-
-            rigidbody2d.velocity = new Vector2(velocityX, wallJumpVelocity);
+            Vector2 wallJumpVector = new Vector2(velocityX, wallJumpVelocity);
+            if (isStuck) { wallJumpVector /= jumpSlowdownFactor; }
+            rigidbody2d.velocity = wallJumpVector;
             wallJumpTimeLeft = wallJumpResetTime;
             FMODUnity.RuntimeManager.PlayOneShot(wallJumpSound);
             if (walljumpFxPrefab) Instantiate(walljumpFxPrefab, transform.position, Quaternion.identity);
@@ -538,7 +538,9 @@ public class Player : MonoBehaviour
         // wall climb
         if (isGrabbingWall)
         {
-            rigidbody2d.velocity = new Vector2(0, inputVerticalAxis * speed);
+            Vector2 climbVector = new Vector2(0, inputVerticalAxis * speed);
+            if (isStuck) { climbVector /= stuckSlowdownFactor; }
+            rigidbody2d.velocity = climbVector;
 
             if (inputVerticalAxis != 0)
             {
@@ -760,7 +762,11 @@ public class Player : MonoBehaviour
     public void Dash(float x, float y)
     {
         rigidbody2d.velocity = Vector2.zero;
-        rigidbody2d.velocity += new Vector2(x, y).normalized * dashVelocity;
+
+        Vector2 dashVector = new Vector2(x, y).normalized * dashVelocity;
+        if (isStuck) { dashVector /= dashSlowdownFactor; }
+
+        rigidbody2d.velocity += dashVector;
         dashAvailable = false;
         isDashing = true;
         rigidbody2d.drag = 10; // TODO: make this value configurable in inspector
@@ -926,7 +932,7 @@ public class Player : MonoBehaviour
         if (timeSecs > 0 && !isStuck)
         {
             isStuck = true;
-            GetComponent<SpriteRenderer>().color = Color.grey;
+            GetComponent<SpriteRenderer>().color = stuckColour;
             Invoke("ResumePlayerMovement", timeSecs);
         }
     }

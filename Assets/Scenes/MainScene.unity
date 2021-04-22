@@ -22623,7 +22623,9 @@ MonoBehaviour:
   slideTime: 1
   timeInvincibleAfterHurt: 1.5
   stuckSlowdownFactor: 5
-  stuckMovemendSpeedDecreaseFactor: 12
+  jumpSlowdownFactor: 1.5
+  dashSlowdownFactor: 2
+  stuckColour: {r: 0.2924528, g: 0, b: 0, a: 1}
   ledgeAutoStop: 1
   upToJump: 0
   groundedRecentlyTime: 0.15
