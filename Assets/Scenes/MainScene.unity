@@ -801,6 +801,7 @@ MonoBehaviour:
   activeDuringTheseGameStates: 0500000006000000
   onDelay: 0
   offDelay: 0
+  onlyFirstChildren: 0
 --- !u!1 &159118193
 GameObject:
   m_ObjectHideFlags: 0
@@ -1056,6 +1057,7 @@ MonoBehaviour:
   activeDuringTheseGameStates: 00000000
   onDelay: 0
   offDelay: 0
+  onlyFirstChildren: 0
 --- !u!1 &205459649 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3258044060110118854, guid: 8361de3bd00d9694a825017228a2ac1c,
@@ -1461,6 +1463,7 @@ MonoBehaviour:
   activeDuringTheseGameStates: 010000000200000008000000
   onDelay: 0
   offDelay: 0
+  onlyFirstChildren: 0
 --- !u!4 &308685641
 Transform:
   m_ObjectHideFlags: 0
@@ -2114,6 +2117,7 @@ MonoBehaviour:
   activeDuringTheseGameStates: 00000000
   onDelay: 0
   offDelay: 0
+  onlyFirstChildren: 0
 --- !u!1 &408314587
 GameObject:
   m_ObjectHideFlags: 0
@@ -7166,6 +7170,7 @@ MonoBehaviour:
   activeDuringTheseGameStates: 06000000
   onDelay: 0
   offDelay: 0
+  onlyFirstChildren: 0
 --- !u!1001 &497130446
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13648,6 +13653,7 @@ MonoBehaviour:
   activeDuringTheseGameStates: 04000000
   onDelay: 0
   offDelay: 0
+  onlyFirstChildren: 0
 --- !u!4 &855350669 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4729800245294500754, guid: 95a578821e46d67419a9c823401757a4,
@@ -18579,6 +18585,7 @@ MonoBehaviour:
   activeDuringTheseGameStates: 0300000002000000
   onDelay: 0
   offDelay: 0
+  onlyFirstChildren: 0
 --- !u!114 &915085063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18694,6 +18701,7 @@ MonoBehaviour:
   activeDuringTheseGameStates: 07000000
   onDelay: 0
   offDelay: 0
+  onlyFirstChildren: 0
 --- !u!114 &916856291
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19864,6 +19872,7 @@ MonoBehaviour:
   activeDuringTheseGameStates: 000000000300000004000000
   onDelay: 0
   offDelay: 0
+  onlyFirstChildren: 0
 --- !u!4 &1143214954
 Transform:
   m_ObjectHideFlags: 0
@@ -20125,6 +20134,7 @@ MonoBehaviour:
   activeDuringTheseGameStates: 040000000500000006000000
   onDelay: 0
   offDelay: 0
+  onlyFirstChildren: 0
 --- !u!114 &1221379555
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21535,6 +21545,7 @@ MonoBehaviour:
   activeDuringTheseGameStates: 05000000
   onDelay: 0
   offDelay: 0
+  onlyFirstChildren: 0
 --- !u!1001 &1422252836
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21723,6 +21734,7 @@ MonoBehaviour:
   activeDuringTheseGameStates: 08000000
   onDelay: 0
   offDelay: 0
+  onlyFirstChildren: 0
 --- !u!1 &1462932300
 GameObject:
   m_ObjectHideFlags: 0
@@ -21770,6 +21782,7 @@ MonoBehaviour:
   activeDuringTheseGameStates: 010000000200000008000000
   onDelay: 0
   offDelay: 0
+  onlyFirstChildren: 0
 --- !u!1 &1487914401
 GameObject:
   m_ObjectHideFlags: 0
@@ -22349,6 +22362,7 @@ MonoBehaviour:
   activeDuringTheseGameStates: 0700000004000000
   onDelay: 0
   offDelay: 0
+  onlyFirstChildren: 0
 --- !u!1 &1543215942
 GameObject:
   m_ObjectHideFlags: 0
@@ -22804,6 +22818,7 @@ MonoBehaviour:
   activeDuringTheseGameStates: 02000000
   onDelay: 0
   offDelay: 0
+  onlyFirstChildren: 0
 --- !u!114 &1583045769
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23126,6 +23141,7 @@ MonoBehaviour:
   activeDuringTheseGameStates: 040000000500000006000000
   onDelay: 0
   offDelay: 0
+  onlyFirstChildren: 0
 --- !u!4 &1668726366
 Transform:
   m_ObjectHideFlags: 0
@@ -23348,6 +23364,7 @@ MonoBehaviour:
   activeDuringTheseGameStates: 010000000200000008000000
   onDelay: 0
   offDelay: 0
+  onlyFirstChildren: 1
 --- !u!1 &1743173096
 GameObject:
   m_ObjectHideFlags: 0
@@ -23642,6 +23659,7 @@ MonoBehaviour:
   activeDuringTheseGameStates: 06000000
   onDelay: 0
   offDelay: 0
+  onlyFirstChildren: 0
 --- !u!114 &1817268100
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23833,6 +23851,7 @@ MonoBehaviour:
   activeDuringTheseGameStates: 00000000
   onDelay: 0
   offDelay: 0
+  onlyFirstChildren: 0
 --- !u!1 &1915217939
 GameObject:
   m_ObjectHideFlags: 0
@@ -29187,6 +29206,7 @@ MonoBehaviour:
   activeDuringTheseGameStates: 0100000002000000
   onDelay: 0
   offDelay: 0
+  onlyFirstChildren: 0
 --- !u!114 &2042450807
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29896,6 +29916,7 @@ MonoBehaviour:
   activeDuringTheseGameStates: 05000000
   onDelay: 0
   offDelay: 0
+  onlyFirstChildren: 0
 --- !u!114 &2143728832
 MonoBehaviour:
   m_ObjectHideFlags: 0
