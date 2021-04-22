@@ -287,7 +287,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: FMOD/Build/Desktop/Master.bank
   Name: Master
-  lastModified: 637507361410001280
+  lastModified: 637547258931822098
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -411,12 +411,13 @@ MonoBehaviour:
   - {fileID: -9037826530104834769}
   - {fileID: -4591615760995640192}
   - {fileID: -443170735685717406}
+  - {fileID: 5170205654762372263}
   EditorParameters: []
   MasterBanks:
   - {fileID: -3133939523981617787}
   StringsBanks:
   - {fileID: 4451186097141386055}
-  stringsBankWriteTime: 637507361410142415
+  stringsBankWriteTime: 637547258931841790
   cacheVersion: 5
 --- !u!114 &495876067313185471
 MonoBehaviour:
@@ -538,12 +539,35 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: FMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
-  lastModified: 637507361410142415
+  lastModified: 637547258931841790
   LoadResult: 0
   FileSizes:
   - Name: 
-    Value: 1206
+    Value: 1242
   Exists: 1
+--- !u!114 &5170205654762372263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Crows
+  m_EditorClassIdentifier: 
+  Path: event:/Crows
+  guid: 66b3be229cff754389f965d7896b149e
+  Banks:
+  - {fileID: -3133939523981617787}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 1500
 --- !u!114 &6079804929413049435
 MonoBehaviour:
   m_ObjectHideFlags: 0

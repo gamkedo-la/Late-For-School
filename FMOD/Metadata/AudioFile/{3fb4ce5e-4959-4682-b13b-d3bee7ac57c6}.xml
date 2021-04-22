@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.01.00">
+	<object class="AudioFile" id="{3fb4ce5e-4959-4682-b13b-d3bee7ac57c6}">
+		<property name="assetPath">
+			<value>sfx/crows.mp3</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>48</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>146.71199999999999</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{d1bd9530-e950-45e0-be22-969022c6ca6b}</destination>
+		</relationship>
+	</object>
+</objects>

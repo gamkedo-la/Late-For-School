@@ -45,6 +45,7 @@ public class ChunkBounds : MonoBehaviour
             if (milestoneSkyEffect) Instantiate(milestoneSkyEffect,other.gameObject.transform.position,Quaternion.identity);
             if (milestonePlayerEffect) Instantiate(milestonePlayerEffect,other.gameObject.transform.position,Quaternion.identity);
             FMODUnity.RuntimeManager.PlayOneShot(milestoneSound);
+            FMODUnity.RuntimeManager.PlayOneShot(GameManager.GetInstance().crowSound);
             hasPoppedMilestone = true; // Stops player from triggering milestone more than once
         }
     }

@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour
     public parallaxBackground parallaxBackground;
     public int foreroundGrassIndex;
     public Text levelMenuHighScoreText;
+    [FMODUnity.EventRef]
+    public string crowSound;
 
     private ScoreManager scoreManager;
     private PlusMinusLevelSetting levelInputSetting;

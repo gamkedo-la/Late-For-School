@@ -29932,6 +29932,7 @@ MonoBehaviour:
   parallaxBackground: {fileID: 694244061713832685}
   foreroundGrassIndex: 11
   levelMenuHighScoreText: {fileID: 20510034}
+  crowSound: event:/Crows
 --- !u!4 &2093883856
 Transform:
   m_ObjectHideFlags: 0
