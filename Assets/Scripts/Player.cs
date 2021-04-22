@@ -474,53 +474,56 @@ public class Player : MonoBehaviour
 
     private void HandleLookDirection()
     {
-        // Set isLookingRight
-        if (isGrabbingWall)
+        if (GameManager.GetInstance().GetState() != GameManager.GameState.Pause)
         {
-            if (IsOnLeftWall())
+            // Set isLookingRight
+            if (isGrabbingWall)
             {
-                lookDirection = HorizontalDirection.Left;
-            }
-            else if (IsOnRightWall())
-            {
-                lookDirection = HorizontalDirection.Right;
-            }
-        }
-        else if (isWallJumpingLeft)
-        {
-            lookDirection = HorizontalDirection.Left;
-        }
-        else if (isWallJumpingRight)
-        {
-            lookDirection = HorizontalDirection.Right;
-        }
-        else if (GameManager.GetInstance().GetState() != GameManager.GameState.Play)
-        {
-            if (!isSliding) // Don't allow changing direction mid slide
-            {
-                if (inputHorizontalAxis > 0)
-                {
-                    lookDirection = HorizontalDirection.Right;
-                }
-                else if (inputHorizontalAxis < 0)
+                if (IsOnLeftWall())
                 {
                     lookDirection = HorizontalDirection.Left;
                 }
+                else if (IsOnRightWall())
+                {
+                    lookDirection = HorizontalDirection.Right;
+                }
             }
-        }
-        else
-        {
-            lookDirection = HorizontalDirection.Right;
-        }
+            else if (isWallJumpingLeft)
+            {
+                lookDirection = HorizontalDirection.Left;
+            }
+            else if (isWallJumpingRight)
+            {
+                lookDirection = HorizontalDirection.Right;
+            }
+            else if (GameManager.GetInstance().GetState() != GameManager.GameState.Play)
+            {
+                if (!isSliding) // Don't allow changing direction mid slide
+                {
+                    if (inputHorizontalAxis > 0)
+                    {
+                        lookDirection = HorizontalDirection.Right;
+                    }
+                    else if (inputHorizontalAxis < 0)
+                    {
+                        lookDirection = HorizontalDirection.Left;
+                    }
+                }
+            }
+            else
+            {
+                lookDirection = HorizontalDirection.Right;
+            }
 
-        // Change transform to look left or right
-        if (lookDirection == HorizontalDirection.Right)
-        {
-            transform.rotation = Quaternion.Euler(transform.rotation.x, 0, transform.rotation.z);
-        }
-        else
-        {
-            transform.rotation = Quaternion.Euler(transform.rotation.x, 180, transform.rotation.z);
+            // Change transform to look left or right
+            if (lookDirection == HorizontalDirection.Right)
+            {
+                transform.rotation = Quaternion.Euler(transform.rotation.x, 0, transform.rotation.z);
+            }
+            else
+            {
+                transform.rotation = Quaternion.Euler(transform.rotation.x, 180, transform.rotation.z);
+            }
         }
     }
 
