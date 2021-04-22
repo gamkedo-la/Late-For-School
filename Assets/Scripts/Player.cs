@@ -14,8 +14,7 @@ public class Player : MonoBehaviour
     }
 
     public LayerMask platformsLayerMask; // what counts as a platform (will trigger isGrounded)
-    public SpriteMask crouchSpriteMask;
-    public GameObject slideSprite;
+    public SpriteRenderer slideSprite;
     public Vector2 startPos;
     public int maxHealth = 3;
     public float jumpVelocity = 10f;
@@ -161,8 +160,8 @@ public class Player : MonoBehaviour
         HandleLookDirection();
         HandlePushPlayerOverWall();
 
-        if (slideSprite.activeSelf != isSliding) {
-            slideSprite.SetActive(isSliding);
+        if (slideSprite.enabled != isSliding && !isInvincible) {
+            slideSprite.enabled = isSliding;
             uprightSprite.enabled = !isSliding;
         }
 
@@ -190,14 +189,6 @@ public class Player : MonoBehaviour
     void FixedUpdate()
     {
         HandleWallGrab();
-    }
-
-    private void LateUpdate() {
-        // workaround for strange bug that sometimes led to seeing both forms
-        // was mostly observed while climbing, or at ground level next to a wall
-        if(slideSprite.activeSelf == uprightSprite.enabled) {
-            slideSprite.SetActive(!uprightSprite.enabled);
-        }
     }
 
     private void DisplayHealth()
@@ -966,15 +957,34 @@ public class Player : MonoBehaviour
     IEnumerator Flash(float time, float intervalTime)
     {
         float elapsedTime = 0f;
-        Renderer renderer = GetComponent<Renderer>();
         while (elapsedTime < time)
         {
+            SpriteRenderer renderer;
+            if (isSliding)
+            {
+                renderer = slideSprite;
+                uprightSprite.enabled = false;
+            }
+            else
+            {
+                renderer = uprightSprite;
+                slideSprite.enabled = false;
+            }
             renderer.enabled = !renderer.enabled;
 
             elapsedTime += Time.deltaTime + intervalTime;
             yield return new WaitForSeconds(intervalTime);
         }
-        renderer.enabled = true;
+        if (isSliding)
+        {
+            slideSprite.enabled = true;
+            uprightSprite.enabled = false;
+        }
+        else
+        {
+            uprightSprite.enabled = true;
+            slideSprite.enabled = false;
+        }
     }
 
     public void ResetPos()

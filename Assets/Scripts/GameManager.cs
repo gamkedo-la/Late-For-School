@@ -131,6 +131,7 @@ public class GameManager : MonoBehaviour
     {
         gameState = GameState.Play;
         ChunkSpawner.GetInstance().InitialiseWithLevelKey(LevelKeyHandler.GenerateKey(levelInputConfig));
+        Player.GetInstance().ResetHealth();
         scoreManager.ResetScore();
         scoreManager.StartCounting();
 

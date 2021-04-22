@@ -13256,7 +13256,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &709480063
 Transform:
   m_ObjectHideFlags: 0
@@ -22603,8 +22603,7 @@ MonoBehaviour:
   platformsLayerMask:
     serializedVersion: 2
     m_Bits: 1280
-  crouchSpriteMask: {fileID: 0}
-  slideSprite: {fileID: 709480062}
+  slideSprite: {fileID: 709480064}
   startPos: {x: 0, y: 7}
   maxHealth: 3
   jumpVelocity: 15
