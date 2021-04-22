@@ -84,7 +84,6 @@ public class ChunkSpawner : MonoBehaviour
         foreach (GameObject chunk in unusableChunks)
         {
             bool include = true;
-            // TODO: Do logic for includeTutorialChunks = false
 
             Chunk chunkDetails = chunk.GetComponent<Chunk>();
 
@@ -114,6 +113,14 @@ public class ChunkSpawner : MonoBehaviour
                         if (!knownSkills.Contains(skill)) { allSkillsKnown = false; }
                     }
                     if (allSkillsKnown) { include = false; }
+
+                    // Don't add a tutorial chunk if we don't know any of the skills that aren't the main skill (index 0)
+                    int index = 0;
+                    foreach (Player.Skill skill in chunkDetails.includedSkills)
+                    {
+                        if (index != 0 && !knownSkills.Contains(skill)) { include = false; }
+                        index++;
+                    }
                 }
             }
             else

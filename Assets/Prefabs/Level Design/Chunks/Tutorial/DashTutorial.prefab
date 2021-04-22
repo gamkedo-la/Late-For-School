@@ -514,7 +514,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   intensity: 0
   tutorialChunk: 1
-  includedSkills: 0000000001000000
+  includedSkills: 0100000000000000
   version: 1
 --- !u!1 &5290552775563261401
 GameObject:
