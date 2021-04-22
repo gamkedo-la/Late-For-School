@@ -12,6 +12,9 @@ mergeInto(LibraryManager.library, {
       gameObjectName = UTF8ToString(gameObjectName);
       functionName = UTF8ToString(functionName);
       var text = prompt("Please paste level key here:", "");
+      if (text === null) {
+        return;
+      }
       SendMessage(gameObjectName, functionName, text);
   }
 });
