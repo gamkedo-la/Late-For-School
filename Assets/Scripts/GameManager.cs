@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     public Text runSummaryLevelKey;
     public parallaxBackground parallaxBackground;
     public int foreroundGrassIndex;
+    public Text levelMenuHighScoreText;
 
     private ScoreManager scoreManager;
     private PlusMinusLevelSetting levelInputSetting;
@@ -41,6 +42,8 @@ public class GameManager : MonoBehaviour
     private float levelInputIntensityIncrement = 0.5f;
     private float levelInputIntensityMin = 2.5f;
     private float levelInputIntensityMax = 10f;
+
+    private int highScore = 0;
 
     public enum GameState
     {
@@ -97,6 +100,8 @@ public class GameManager : MonoBehaviour
                 PauseGame();
             }
         }
+
+        levelMenuHighScoreText.text = "Best: " + highScore;
     }
 
     public void TransitionToMainMenuState()
@@ -123,6 +128,10 @@ public class GameManager : MonoBehaviour
     {
         gameState = GameState.RunSummary;
         scoreManager.StopCounting();
+        if (scoreManager.GetScore() > highScore)
+        {
+            highScore = scoreManager.GetScore();
+        }
         runSummaryLevelKey.text = ChunkSpawner.GetInstance().GetLevelKey();
         Invoke("PostRunSummary", runSummaryScreenTime);
     }
@@ -269,6 +278,8 @@ public class GameManager : MonoBehaviour
         UpdateIncludeTutorialChunksBlockOpacity();
 
         UpdateLevelInputKey();
+
+        highScore = 0;
     }
 
     public void UpdatePlusMinusLevelSettingText()
