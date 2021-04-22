@@ -225,7 +225,6 @@ Transform:
   - {fileID: 3950373149689455478}
   - {fileID: 1112154384521064127}
   - {fileID: 2114339536143364795}
-  - {fileID: 4129800752225047636}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -391,6 +390,7 @@ Transform:
   m_Children:
   - {fileID: 5432607105541947764}
   - {fileID: 2936288693222606858}
+  - {fileID: 4129800752225047636}
   m_Father: {fileID: 4551153796685374032}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -443,12 +443,38 @@ CompositeCollider2D:
         Y: 22499707
       - X: 10000293
         Y: 17500000
+  - m_Collider: {fileID: 4384643189827387541}
+    m_ColliderPaths:
+    - - X: 54999707
+        Y: -40000000
+      - X: 54999707
+        Y: 30000000
+      - X: 50000000
+        Y: 29999707
+      - X: 50000293
+        Y: -40000000
+  - m_Collider: {fileID: 3368018253578099889}
+    m_ColliderPaths:
+    - - X: 72999707
+        Y: 20000000
+      - X: 72999707
+        Y: 30000000
+      - X: 50000000
+        Y: 29999707
+      - X: 50000293
+        Y: 20000000
   m_CompositePaths:
     m_Paths:
-    - - {x: 4.999942, y: 1.75}
-      - {x: 4.999942, y: 2.25}
+    - - {x: 5.499942, y: -4}
+      - {x: 5.5, y: 2}
+      - {x: 7.2999706, y: 2.0000293}
+      - {x: 7.2999415, y: 3}
+      - {x: 5, y: 2.9999413}
+      - {x: 4.999974, y: 2.25}
       - {x: 1, y: 2.2499413}
       - {x: 1.0000587, y: 1.75}
+      - {x: 5.0000052, y: 1.7499707}
+      - {x: 5.0000587, y: -4}
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.00005
 --- !u!1 &7886517474781541532
@@ -1004,7 +1030,7 @@ PrefabInstance:
     - target: {fileID: 2171524887577697833, guid: b35c97461874a4d47af3f6ad540d895c,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2171524887577697833, guid: b35c97461874a4d47af3f6ad540d895c,
         type: 3}
@@ -1145,12 +1171,12 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 4551153796685374032}
+    m_TransformParent: {fileID: 1112154384521064127}
     m_Modifications:
     - target: {fileID: 925655404999688148, guid: cf45582a2064cbe4980b32bf61d7c7fc,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 925655404999688148, guid: cf45582a2064cbe4980b32bf61d7c7fc,
         type: 3}
@@ -1209,6 +1235,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cf45582a2064cbe4980b32bf61d7c7fc, type: 3}
+--- !u!61 &4384643189827387541 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 670482778601663253, guid: cf45582a2064cbe4980b32bf61d7c7fc,
+    type: 3}
+  m_PrefabInstance: {fileID: 3861670967527795584}
+  m_PrefabAsset: {fileID: 0}
+--- !u!61 &3368018253578099889 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 1957644758375675697, guid: cf45582a2064cbe4980b32bf61d7c7fc,
+    type: 3}
+  m_PrefabInstance: {fileID: 3861670967527795584}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4129800752225047636 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 925655404999688148, guid: cf45582a2064cbe4980b32bf61d7c7fc,
