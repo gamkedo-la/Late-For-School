@@ -11,6 +11,7 @@ public class ChunkSpawner : MonoBehaviour
     [Header("Debug Only (set to -1 for normal gameplay)")]
     [Tooltip("Only spawn this one chunk over and over:")]
     public int debugForceChunkIndex = -1;
+    public int minimumChunksBetweenTutorials = 3;
 
     [HideInInspector] public LevelKeyHandler.LevelConfig levelConfig;
 
@@ -21,6 +22,7 @@ public class ChunkSpawner : MonoBehaviour
     private List<Player.Skill> knownSkills = new List<Player.Skill>();
     private List<GameObject> usableChunks = new List<GameObject>();
     private List<GameObject> unusableChunks = new List<GameObject>();
+    private int chunksSinceLastTutorial;
 
     private static ChunkSpawner instance;
     public static ChunkSpawner GetInstance()
@@ -92,6 +94,7 @@ public class ChunkSpawner : MonoBehaviour
             if (usableChunks.Contains(chunk) || chunkDetails.version > levelConfig.version)
             {
                 include = false;
+                continue;
             }
 
             if (levelConfig.includeTutorialChunks)
@@ -120,6 +123,11 @@ public class ChunkSpawner : MonoBehaviour
                     {
                         if (index != 0 && !knownSkills.Contains(skill)) { include = false; }
                         index++;
+                    }
+
+                    // Don't add a tutorial chunk if we've had a tutorial chunk recently
+                    if (chunksSinceLastTutorial < minimumChunksBetweenTutorials) {
+                        include = false;
                     }
                 }
             }
@@ -152,6 +160,12 @@ public class ChunkSpawner : MonoBehaviour
                     if (!knownSkills.Contains(skill)) { allSkillsKnown = false; }
                 }
                 if (allSkillsKnown) { remove = true; }
+            }
+
+            // Remove all tutorial chunks if we've had a tutorial chunk recently
+            if (chunkDetails.tutorialChunk && chunksSinceLastTutorial < minimumChunksBetweenTutorials)
+            {
+                remove = true;
             }
 
             if (remove) { toRemove.Add(chunk); }
@@ -253,6 +267,13 @@ public class ChunkSpawner : MonoBehaviour
                 {
                     if (!knownSkills.Contains(skill)) { knownSkills.Add(skill); }
                 }
+            }
+
+            // Update chunks since last tutorial
+            chunksSinceLastTutorial++;
+            if (chunkDetails.tutorialChunk)
+            {
+                chunksSinceLastTutorial = 0;
             }
 
             activeChunks.Add(newChunk);
