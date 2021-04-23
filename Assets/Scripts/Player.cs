@@ -392,6 +392,8 @@ public class Player : MonoBehaviour
         bool detatchFromWall = (!isOnLeftWall && !isOnRightWall) || 
                                ((isOnLeftWall && inputHorizontalAxis > 0) || (isOnRightWall && inputHorizontalAxis < 0) || 
                                (isGrounded && inputVerticalAxis <= 0));
+        if (IsOnDangerousObject()) { attachToWall = false; }
+
         if (attachToWall) { isGrabbingWall = true; }
         if (detatchFromWall) { isGrabbingWall = false; }
 
@@ -696,6 +698,19 @@ public class Player : MonoBehaviour
         Vector2 position = new Vector2(boxCollider2d.bounds.center.x + boxCollider2d.bounds.size.x / 2, boxCollider2d.bounds.center.y);
         float radius = 0.03f;
         return Physics2D.OverlapCircle(position, radius, platformsLayerMask);
+    }
+
+    private bool IsOnDangerousObject()
+    {
+        var colliders = Physics2D.OverlapBoxAll(boxCollider2d.bounds.center, boxCollider2d.bounds.extents * 2f, 0);
+        foreach (var collider in colliders)
+        {
+            if (collider.gameObject.GetComponent<StationaryDangerousObstacle>()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private Collider2D FeetAreOnRightWall()
