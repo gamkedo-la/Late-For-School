@@ -203,7 +203,7 @@ public class GameManager : MonoBehaviour
         switch (levelInputSetting)
         {
             case PlusMinusLevelSetting.Seed:
-                plusMinusInstructionText.text = "Adjust Random Seed To Generate Different Levels With The Same Parameters";
+                plusMinusInstructionText.text = "Adjust Seed To Change To A New Level With The Same Difficult, Skills, Etc.";
                 break;
             case PlusMinusLevelSetting.Speed:
                 plusMinusInstructionText.text = "Adjust The Speed Of The Level";
