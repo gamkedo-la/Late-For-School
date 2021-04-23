@@ -88,6 +88,7 @@ public class Player : MonoBehaviour
     private bool leftGroundFromJump = false;
     private bool wallClimbTooltipShown = false;
     private bool wallDetachTooltipShown = false;
+    private bool wasGrounded = false;
 
     private const KeyCode GrabWallKey = KeyCode.LeftShift;
     private const KeyCode JumpAndDashKey = KeyCode.Space;
@@ -147,11 +148,15 @@ public class Player : MonoBehaviour
         if (IsGrounded())
         {
             timeSinceLeftGround = 0;
-            leftGroundFromJump = false;
         }
         else
         {
             timeSinceLeftGround += Time.deltaTime;
+        }
+
+        if (IsGrounded() && !wasGrounded)
+        {
+            leftGroundFromJump = false;
         }
 
         HandleGravity();
@@ -188,6 +193,8 @@ public class Player : MonoBehaviour
             grabKeyDown = false;
             jumpAndDashKeyDown = false;
         }
+
+        wasGrounded = IsGrounded();
     }
 
     void FixedUpdate()
