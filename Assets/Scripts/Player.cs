@@ -380,7 +380,7 @@ public class Player : MonoBehaviour
 
         bool attachToWall = ((isOnLeftWall && !isGrounded && prevVelocityX < 0 && !isWallJumpingRight) ||
                              (isOnRightWall && !isGrounded && prevVelocityX > 0 && !isWallJumpingLeft) ||
-                             (isOnWall && isGrounded && inputVerticalAxis > 0) ||
+                             (isOnWall && inputVerticalAxis > 0) ||
                              // want to attach to wall if background moving and velocity is 0, since this still means we're moving right
                              // except if we jump when we're close to the wall, we probably don't want to attach since we'll attach too low
                              (backgroundMoving && isOnRightWall && !isGrounded && prevVelocityX >= 0 && !isWallJumpingLeft && !jumpedWhileAgainstRightWall));
