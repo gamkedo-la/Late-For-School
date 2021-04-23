@@ -651,7 +651,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   intensity: 4
   tutorialChunk: 0
-  includedSkills: 00000000
+  includedSkills: 0000000003000000
   version: 1
 --- !u!1001 &2782236338252066689
 PrefabInstance:

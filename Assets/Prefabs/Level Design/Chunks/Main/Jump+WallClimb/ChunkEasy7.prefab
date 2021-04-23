@@ -664,7 +664,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 604b96edc3b17c742b6c5d7d4415ac03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  intensity: 2
+  intensity: 3
   tutorialChunk: 0
   includedSkills: 0000000003000000
   version: 1
