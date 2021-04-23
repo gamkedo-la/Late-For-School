@@ -392,7 +392,7 @@ public class Player : MonoBehaviour
         bool detatchFromWall = (!isOnLeftWall && !isOnRightWall) || 
                                ((isOnLeftWall && inputHorizontalAxis > 0) || (isOnRightWall && inputHorizontalAxis < 0) || 
                                (isGrounded && inputVerticalAxis <= 0));
-        if (IsOnDangerousObject()) { attachToWall = false; }
+        if (IsOnDangerousObjectOnWall()) { attachToWall = false; }
 
         if (attachToWall) { isGrabbingWall = true; }
         if (detatchFromWall) { isGrabbingWall = false; }
@@ -583,6 +583,7 @@ public class Player : MonoBehaviour
             if (GameManager.GetInstance().GetState() == GameManager.GameState.Play &&
                 GameManager.GetInstance().levelInputConfig.includeTutorialChunks &&
                 IsOnLeftWall() &&
+                !ChunkSpawner.GetInstance().IsKnownSkill(Skill.WallJump) && 
                 !wallDetachTooltipShown)
             {
                 wallDetachTooltip.parent = ChunkSpawner.GetInstance().LastChunk().transform;
@@ -700,12 +701,12 @@ public class Player : MonoBehaviour
         return Physics2D.OverlapCircle(position, radius, platformsLayerMask);
     }
 
-    private bool IsOnDangerousObject()
+    private bool IsOnDangerousObjectOnWall()
     {
         var colliders = Physics2D.OverlapBoxAll(boxCollider2d.bounds.center, boxCollider2d.bounds.extents * 2f, 0);
         foreach (var collider in colliders)
         {
-            if (collider.gameObject.GetComponent<StationaryDangerousObstacle>()) {
+            if (collider.gameObject.GetComponent<StationaryDangerousObstacle>() && collider.gameObject.GetComponent<StationaryDangerousObstacle>().isOnWall) {
                 return true;
             }
         }
