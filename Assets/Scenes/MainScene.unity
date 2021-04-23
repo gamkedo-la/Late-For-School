@@ -13057,9 +13057,12 @@ MonoBehaviour:
   - {fileID: 8397681959016776686, guid: a529116324cb1b84e8531f803a71578e, type: 3}
   - {fileID: 4551153796685374035, guid: be532e2587f590046a999240ded0cfab, type: 3}
   - {fileID: 4551153796685374035, guid: 6be5044292f89fb4899bac410dc58b4f, type: 3}
+  - {fileID: 4551153796685374035, guid: 5214a23cd35aca5468dbf33e083858c4, type: 3}
+  - {fileID: 4551153796685374035, guid: c09508f4440d294429fe083b030aef3a, type: 3}
+  - {fileID: 4551153796685374035, guid: a988051a4296ebb43b3891bc24f6c55c, type: 3}
   keyInput: {fileID: 0}
   debugForceChunkIndex: -1
-  minimumChunksBetweenTutorials: 3
+  minimumChunksBetweenTutorials: 2
 --- !u!4 &618240592
 Transform:
   m_ObjectHideFlags: 0
