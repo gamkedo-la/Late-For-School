@@ -109,19 +109,25 @@ public class ChunkSpawner : MonoBehaviour
                 }
                 else
                 {
-                    // Don't add a tutorial chunk if we already know all the included skills
+                    // Don't add a tutorial chunk if we already know all the included skills or skill isn't in level config
                     bool allSkillsKnown = true;
                     foreach (Player.Skill skill in chunkDetails.includedSkills)
                     {
-                        if (!knownSkills.Contains(skill)) { allSkillsKnown = false; }
+                        if (!knownSkills.Contains(skill) && levelConfig.includedSkills.Contains(skill)) { allSkillsKnown = false; }
                     }
-                    if (allSkillsKnown) { include = false; }
+                    if (allSkillsKnown) { 
+                        include = false;
+                        continue;
+                    }
 
                     // Don't add a tutorial chunk if we don't know any of the skills that aren't the main skill (index 0)
                     int index = 0;
                     foreach (Player.Skill skill in chunkDetails.includedSkills)
                     {
-                        if (index != 0 && !knownSkills.Contains(skill)) { include = false; }
+                        if (index != 0 && !knownSkills.Contains(skill)) { 
+                            include = false;
+                            continue;
+                        }
                         index++;
                     }
 
@@ -135,6 +141,16 @@ public class ChunkSpawner : MonoBehaviour
             {
                 // Don't include any tutorial chunks
                 if (chunkDetails.tutorialChunk) { include = false; }
+
+                // Don't include chunks that have skills that aren't included in the level config
+                foreach (var skill in chunkDetails.includedSkills)
+                {
+                    if (!levelConfig.includedSkills.Contains(skill))
+                    {
+                        include = false;
+                        continue;
+                    }
+                }
             }
 
             // Don't add chunks with a higher intensity than what is set to max
