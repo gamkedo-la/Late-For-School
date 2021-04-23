@@ -22368,8 +22368,11 @@ MonoBehaviour:
     clouds and related background details\nI-wei Chen: Parallax background buildings,
     food stall art\nGonzalo Delgado: Initial player sprite, idle animation, run cycle\nTyler
     Funk: Floor spike art\nBrandon: Level chunk spawning and removal milestones improvements\nChris
-    DeLeon: Slide pose implementation, minor support, compiling credits\n\nGame created
-    by members in HomeTeamGameDev.com Apollo group!"
+    DeLeon: Slide pose implementation, minor support, compiling credits\nPlaytesting
+    by members in other HomeTeam groups: Will McKay and Deepbluezen\nHuge thanks
+    to all our non-HomeTeam playtesters: Ani D (MeowMeow), Awale Ismael, JennyK,
+    Serena, Hinesh, Toni (boywithsoup), TiagoThePenguin\n\nGame created by members
+    in HomeTeamGameDev.com Apollo group!"
 --- !u!222 &1487914405
 CanvasRenderer:
   m_ObjectHideFlags: 0
