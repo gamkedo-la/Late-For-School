@@ -148,6 +148,11 @@ public class Player : MonoBehaviour
         if (IsGrounded())
         {
             timeSinceLeftGround = 0;
+
+            if (!wasGrounded) { // we *just* landed!
+                if (landFxPrefab) Instantiate(landFxPrefab, new Vector3(transform.position.x,transform.position.y-1f,transform.position.z), Quaternion.identity);            
+            }
+
         }
         else
         {
