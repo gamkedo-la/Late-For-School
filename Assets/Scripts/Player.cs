@@ -627,7 +627,11 @@ public class Player : MonoBehaviour
         if (isSliding && slideTimeLeft > 0)
         {
             if (slideFxPrefab) {
-                var slideParticles = Instantiate(slideFxPrefab, transform.position + new Vector3(0, -0.5f, 0), Quaternion.identity);
+                var slideParticles = Instantiate(slideFxPrefab);
+                Vector3 particlesPosition = slideParticles.transform.position;
+                particlesPosition.x = transform.position.x;
+                particlesPosition.y = transform.position.y - 0.5f;
+                slideParticles.transform.position = particlesPosition;
                 if ((GameManager.GetInstance().GetState() == GameManager.GameState.Play ||
                     GameManager.GetInstance().GetState() == GameManager.GameState.RunSummary)
                     && ChunkSpawner.GetInstance().LastChunk() != null)
