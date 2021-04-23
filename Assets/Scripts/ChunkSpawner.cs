@@ -408,4 +408,9 @@ public class ChunkSpawner : MonoBehaviour
         }
         return null;
     }
+
+    public bool IsKnownSkill(Player.Skill skill)
+    {
+        return knownSkills.Contains(skill);
+    }
 }

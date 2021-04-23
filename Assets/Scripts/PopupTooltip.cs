@@ -21,6 +21,11 @@ public class PopupTooltip : MonoBehaviour
 
     public void Activate()
     {
+        Activate(position);
+    }
+
+    public void Activate(Vector2 position)
+    {
         if (tooltip != null)
         {
             Destroy(tooltip);

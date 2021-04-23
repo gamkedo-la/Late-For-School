@@ -47,6 +47,8 @@ public class Player : MonoBehaviour
     public GameObject slideFxPrefab;
     public GameObject walljumpFxPrefab;
     public GameObject dashFxPrefab;
+    public PopupTooltip wallClimbTooltip;
+    public PopupTooltip wallDetachTooltip;
 
     [FMODUnity.EventRef]
     public string runSound;
@@ -84,6 +86,8 @@ public class Player : MonoBehaviour
     private bool jumpedWhileAgainstRightWall = false;
     private float timeSinceLeftGround = 0;
     private bool leftGroundFromJump = false;
+    private bool wallClimbTooltipShown = false;
+    private bool wallDetachTooltipShown = false;
 
     private const KeyCode GrabWallKey = KeyCode.LeftShift;
     private const KeyCode JumpAndDashKey = KeyCode.Space;
@@ -547,6 +551,30 @@ public class Player : MonoBehaviour
                 anim.SetBool("isClimbing", false);
             }
             anim.SetBool("isWallGrabbing", true);
+
+
+            // Set off climb tooltip if player hasn't climbed in level yet
+            if (GameManager.GetInstance().GetState() == GameManager.GameState.Play &&
+                GameManager.GetInstance().levelInputConfig.includeTutorialChunks &&
+                IsOnRightWall() &&
+                !ChunkSpawner.GetInstance().IsKnownSkill(Skill.WallClimb) && 
+                !wallClimbTooltipShown)
+            {
+                wallClimbTooltip.parent = ChunkSpawner.GetInstance().LastChunk().transform;
+                wallClimbTooltip.Activate(transform.position + wallClimbTooltip.position);
+                wallClimbTooltipShown = true;
+            }
+
+            // Set off detach tooltip if player hasn't attached to left side yet
+            if (GameManager.GetInstance().GetState() == GameManager.GameState.Play &&
+                GameManager.GetInstance().levelInputConfig.includeTutorialChunks &&
+                IsOnLeftWall() &&
+                !wallDetachTooltipShown)
+            {
+                wallDetachTooltip.parent = ChunkSpawner.GetInstance().LastChunk().transform;
+                wallDetachTooltip.Activate(transform.position + wallDetachTooltip.position);
+                wallDetachTooltipShown = true;
+            }
         }
         else
         {
@@ -1013,5 +1041,11 @@ public class Player : MonoBehaviour
     public void ResetHealth()
     {
         health = maxHealth;
+    }
+
+    public void ResetTooltips()
+    {
+        wallClimbTooltipShown = false;
+        wallDetachTooltipShown = false;
     }
 }
