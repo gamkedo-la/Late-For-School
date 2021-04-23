@@ -289,7 +289,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.050980393, g: 0.16862746, b: 0.27058825, a: 0.8156863}
+  m_Color: {r: 0.050980393, g: 0.16862746, b: 0.27058825, a: 0.9411765}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -20187,7 +20187,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.53333336, g: 0.8941177, b: 0.9686275, a: 0.7607843}
+  m_Color: {r: 0.53333336, g: 0.8941177, b: 0.9686275, a: 0.9411765}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -20195,7 +20195,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: c9e5a62436b79514197006013f603a20, type: 3}
-    m_FontSize: 24
+    m_FontSize: 26
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -23690,7 +23690,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.050980393, g: 0.16862746, b: 0.27058825, a: 0.8156863}
+  m_Color: {r: 0.050980393, g: 0.16862746, b: 0.27058825, a: 0.9411765}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -23709,7 +23709,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Share me with a friend
+  m_Text: 'Share me
+
+    with a friend'
 --- !u!222 &1773324651
 CanvasRenderer:
   m_ObjectHideFlags: 0
