@@ -359,7 +359,7 @@ public class Player : MonoBehaviour
         bool justStartedWallJumping = wallJumpTimeLeft > wallJumpResetTime - 0.1;
         bool isNearWall = IsNearLeftWall() || IsNearRightWall();
         bool canJump = IsGrounded() || (timeSinceLeftGround <= groundedRecentlyTime && !leftGroundFromJump); // this line causes handledash to have to be before handlejump (otherwise jump will set leftGroundFromJump)
-        if (dashAvailable && !canJump && !isNearWall && !justStartedWallJumping && jumpAndDashKeyDown && (inputHorizontalAxis != 0 || inputVerticalAxis != 0))
+        if (dashAvailable && !canJump && !isNearWall && !justStartedWallJumping && jumpAndDashKeyDown)
         {
             Dash(inputHorizontalAxis, inputVerticalAxis);
             
@@ -817,6 +817,7 @@ public class Player : MonoBehaviour
     {
         rigidbody2d.velocity = Vector2.zero;
 
+        if (x == 0 && y == 0) { y = 1; } // default dash is up
         Vector2 dashVector = new Vector2(x, y).normalized * dashVelocity;
         if (isStuck) { dashVector /= dashSlowdownFactor; }
 
