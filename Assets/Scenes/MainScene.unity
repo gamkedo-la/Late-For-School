@@ -7235,6 +7235,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 481060211}
   m_CullTransparentMesh: 0
+--- !u!114 &494108123 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7333675154154986174, guid: 7cbbbc7374163264fa40c491e7ee3b99,
+    type: 3}
+  m_PrefabInstance: {fileID: 1272671644}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &495537506
 GameObject:
   m_ObjectHideFlags: 0
@@ -13470,6 +13482,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &730328381 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7333675154154986174, guid: 7cbbbc7374163264fa40c491e7ee3b99,
+    type: 3}
+  m_PrefabInstance: {fileID: 5126405297610845819}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &745158793
 GameObject:
   m_ObjectHideFlags: 0
@@ -30320,6 +30344,9 @@ MonoBehaviour:
   parallaxBackground: {fileID: 694244061713832685}
   foreroundGrassIndex: 11
   levelMenuHighScoreText: {fileID: 20510034}
+  backButtons:
+  - {fileID: 730328381}
+  - {fileID: 494108123}
   crowSound: event:/Crows
 --- !u!4 &2093883856
 Transform:

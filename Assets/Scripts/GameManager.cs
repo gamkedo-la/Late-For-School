@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     public parallaxBackground parallaxBackground;
     public int foreroundGrassIndex;
     public Text levelMenuHighScoreText;
+    public List<Button> backButtons;
     [FMODUnity.EventRef]
     public string crowSound;
 
@@ -100,6 +101,17 @@ public class GameManager : MonoBehaviour
             else if (gameState == GameState.Play)
             {
                 PauseGame();
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Backspace))
+        {
+            foreach (var backButton in backButtons)
+            {
+                if (backButton.gameObject.activeInHierarchy)
+                {
+                    backButton.onClick.Invoke();
+                }
             }
         }
 
