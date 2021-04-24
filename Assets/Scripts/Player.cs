@@ -313,6 +313,8 @@ public class Player : MonoBehaviour
             bool isRunning = (GameManager.GetInstance().GetState() == GameManager.GameState.Play && IsGrounded() && !isSliding && !isOnWall) ||
                      (GameManager.GetInstance().GetState() != GameManager.GameState.Play && IsGrounded() && inputHorizontalAxis != 0 && !isSliding && !isOnWall);
 
+            runParticles.gameObject.SetActive(isRunning);
+
             // Stop at ledge
             if (GameManager.GetInstance().GetState() == GameManager.GameState.Play && AtRightLedge() && inputHorizontalAxis == 0 && ledgeAutoStop)
             {
