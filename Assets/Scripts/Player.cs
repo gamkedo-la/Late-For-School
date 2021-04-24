@@ -556,7 +556,7 @@ public class Player : MonoBehaviour
             if (isStuck) { climbVector /= stuckSlowdownFactor; }
             rigidbody2d.velocity = climbVector;
 
-            if (inputVerticalAxis != 0)
+            if (inputVerticalAxis != 0 && !ObstructionAboveOverlapCircle(0.1f, 0.1f))
             {
                 StartWallClimbSound();
                 anim.SetBool("isClimbing", true);
@@ -744,6 +744,13 @@ public class Player : MonoBehaviour
         Vector2 topLeft = new Vector2(bounds.center.x - bounds.extents.x, bounds.center.y + bounds.extents.y + amountAbove);
         Vector2 bottomRight = new Vector2(bounds.center.x + bounds.extents.x, bounds.center.y + bounds.extents.y);
         return Physics2D.OverlapArea(topLeft, bottomRight, platformsLayerMask);
+    }
+
+    private bool ObstructionAboveOverlapCircle(float amountAbove, float radius)
+    {
+        Bounds bounds = boxCollider2d.bounds;
+        Vector2 position = new Vector2(bounds.center.x, bounds.center.y + bounds.extents.y + amountAbove);
+        return Physics2D.OverlapCircle(position, radius, platformsLayerMask);
     }
 
     private bool CanSlideRight(float slideColliderHeight)

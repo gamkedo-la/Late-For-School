@@ -23760,7 +23760,7 @@ GameObject:
   - component: {fileID: 1722572949}
   - component: {fileID: 1722572948}
   - component: {fileID: 1722572950}
-  m_Layer: 9
+  m_Layer: 8
   m_Name: TopBounds
   m_TagString: Untagged
   m_Icon: {fileID: 0}
