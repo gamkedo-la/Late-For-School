@@ -9,7 +9,7 @@ public class MenuBlock : MonoBehaviour
 
     public UnityEvent onHit;
 
-    private static float hitTimeOutSeconds = 0.5f;
+    private static float hitTimeOutSeconds = 0.1f;
     private static float hitTimeOutLeft = 0;
     public static bool hitTimeOutUpdatedThisFrame = false;
 
