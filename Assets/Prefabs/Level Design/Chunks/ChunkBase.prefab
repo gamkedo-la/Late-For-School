@@ -294,7 +294,7 @@ MonoBehaviour:
   intensity: 0
   tutorialChunk: 0
   includedSkills: 
-  version: 1
+  version: 2
 --- !u!1 &4988067795106944371
 GameObject:
   m_ObjectHideFlags: 0
