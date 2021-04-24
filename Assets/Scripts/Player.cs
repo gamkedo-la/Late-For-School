@@ -298,6 +298,10 @@ public class Player : MonoBehaviour
                 // normal movement
                 else if (!isWallJumpingLeft && !isWallJumpingRight)
                 {
+                    if (isSliding && inputHorizontalAxis < 0)
+                    {
+                        inputHorizontalAxis /= 2;
+                    }
                     rigidbody2d.velocity = new Vector2(inputHorizontalAxis * speed, rigidbody2d.velocity.y);
                 }
                 // prevent moving back to the wall if jumping away from it
