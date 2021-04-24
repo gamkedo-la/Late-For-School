@@ -454,7 +454,7 @@ public class Player : MonoBehaviour
         }
 
         // wall jump
-        if (isNearWall && !IsGrounded() && jumpAndDashKeyDown && !justStartedWallJumping)
+        if (isNearWall && !IsGrounded() && jumpAndDashKeyDown && !justStartedWallJumping && !IsOnDangerousObjectOnWall())
         {
             isGrabbingWall = false; // let go of wall
             float velocityX;
