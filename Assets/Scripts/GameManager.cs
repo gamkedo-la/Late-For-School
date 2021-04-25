@@ -179,7 +179,7 @@ public class GameManager : MonoBehaviour
         fol.xMultiplier = -ChunkSpawner.GetInstance().levelConfig.speed;
 
         // make foreground grass start moving
-        parallaxBackground.backgroundSpeeds[11] = ChunkSpawner.GetInstance().levelConfig.speed / 10;
+        parallaxBackground.backgroundSpeeds[11] = ChunkSpawner.GetInstance().levelConfig.speed / 15;
 
         gameMusicInstance.setParameterByID(isPlayStateParameterId, 1);
     }
