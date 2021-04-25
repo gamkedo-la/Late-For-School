@@ -338,13 +338,13 @@ CompositeCollider2D:
   - m_Collider: {fileID: 2652326944306319978}
     m_ColliderPaths:
     - - X: -60000293
-        Y: 17500000
+        Y: 12800000
       - X: -60000293
         Y: 22500000
       - X: -100000000
         Y: 22499707
       - X: -99999707
-        Y: 17500000
+        Y: 12800000
   - m_Collider: {fileID: 6751420712142080123}
     m_ColliderPaths:
     - - X: -45000293
@@ -448,13 +448,13 @@ CompositeCollider2D:
   - m_Collider: {fileID: 7295461699713075645}
     m_ColliderPaths:
     - - X: 90199715
-        Y: 17500000
+        Y: 12800000
       - X: 90199715
         Y: 22500000
       - X: 50200004
         Y: 22499707
       - X: 50200297
-        Y: 17500000
+        Y: 12800000
   - m_Collider: {fileID: 6804831544059861476}
     m_ColliderPaths:
     - - X: 105199715
@@ -614,8 +614,8 @@ CompositeCollider2D:
       - {x: -6, y: 3.4999416}
       - {x: -6.000005, y: 2.25}
       - {x: -10, y: 2.2499413}
-      - {x: -9.999942, y: 1.75}
-      - {x: -5.999995, y: 1.7499707}
+      - {x: -9.999942, y: 1.28}
+      - {x: -5.999986, y: 1.2799706}
       - {x: -5.999942, y: -4}
       - {x: -3.0607688, y: -4.000029}
     - - {x: 9.020031, y: -3.999971}
@@ -624,8 +624,8 @@ CompositeCollider2D:
       - {x: 9.02, y: 3.4999416}
       - {x: 9.019996, y: 2.25}
       - {x: 5.0200005, y: 2.2499413}
-      - {x: 5.020059, y: 1.75}
-      - {x: 9.020006, y: 1.7499707}
+      - {x: 5.020059, y: 1.28}
+      - {x: 9.020016, y: 1.2799706}
     - - {x: -16.029844, y: -4.2999225}
       - {x: -10.0794525, y: -4.2761717}
       - {x: -10.0317955, y: -4.2999473}
@@ -811,7 +811,7 @@ PrefabInstance:
     - target: {fileID: 811408689398896442, guid: e42c8eb443498f242bcadaa07759b711,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 811408689398896442, guid: e42c8eb443498f242bcadaa07759b711,
         type: 3}
@@ -1842,7 +1842,7 @@ PrefabInstance:
     - target: {fileID: 811408689398896442, guid: e42c8eb443498f242bcadaa07759b711,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 811408689398896442, guid: e42c8eb443498f242bcadaa07759b711,
         type: 3}
@@ -3731,7 +3731,7 @@ PrefabInstance:
     - target: {fileID: 811408689398896442, guid: e42c8eb443498f242bcadaa07759b711,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 811408689398896442, guid: e42c8eb443498f242bcadaa07759b711,
         type: 3}
