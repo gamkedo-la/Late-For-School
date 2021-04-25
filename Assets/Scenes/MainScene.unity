@@ -23157,6 +23157,7 @@ MonoBehaviour:
     type: 3}
   wallClimbTooltip: {fileID: 516608994}
   wallDetachTooltip: {fileID: 2008830636}
+  zPos: -2
   runSound: event:/Run
   jumpSound: event:/Jump
   wallJumpSound: event:/Wall Jump
@@ -23294,7 +23295,7 @@ GameObject:
   - component: {fileID: 1583045769}
   - component: {fileID: 1583045768}
   m_Layer: 5
-  m_Name: PauseCanvas (Behind Player)
+  m_Name: PauseCanvas (In Front of Player)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

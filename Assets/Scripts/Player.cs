@@ -50,6 +50,7 @@ public class Player : MonoBehaviour
     public GameObject dashFxPrefab;
     public PopupTooltip wallClimbTooltip;
     public PopupTooltip wallDetachTooltip;
+    public float zPos = -2;
 
     [FMODUnity.EventRef]
     public string runSound;
@@ -143,6 +144,11 @@ public class Player : MonoBehaviour
     }
 
     private void Update() {
+        // fixes bug where player stops being in the set z position
+        var pos = transform.position;
+        pos.z = zPos;
+        transform.position = pos;
+
         if (GameManager.GetInstance().GetState() != GameManager.GameState.Pause)
         {
             GetPlayerInput();
