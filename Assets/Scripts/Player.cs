@@ -143,64 +143,70 @@ public class Player : MonoBehaviour
     }
 
     private void Update() {
-        GetPlayerInput();
-
-        // reset variables associated with when and how we left the ground
-        if (IsGrounded())
+        if (GameManager.GetInstance().GetState() != GameManager.GameState.Pause)
         {
-            timeSinceLeftGround = 0;
+            GetPlayerInput();
 
-            if (!wasGrounded) { // we *just* landed!
-                if (landFxPrefab) Instantiate(landFxPrefab, new Vector3(transform.position.x,transform.position.y-1f,transform.position.z), Quaternion.identity);            
+            // reset variables associated with when and how we left the ground
+            if (IsGrounded())
+            {
+                timeSinceLeftGround = 0;
+
+                if (!wasGrounded)
+                { // we *just* landed!
+                    if (landFxPrefab) Instantiate(landFxPrefab, new Vector3(transform.position.x, transform.position.y - 1f, transform.position.z), Quaternion.identity);
+                }
+
+            }
+            else
+            {
+                timeSinceLeftGround += Time.deltaTime;
             }
 
+            if (IsGrounded() && !wasGrounded)
+            {
+                leftGroundFromJump = false;
+            }
+
+            HandleGravity();
+            HandleHorizontalMovement();
+            HandleDash(); // Dash has to be before jump, for jumping at edge to work
+            HandleJump();
+            HandleWallClimb();
+            HandleWallJump();
+            HandleSlide();
+            HandleLookDirection();
+            HandlePushPlayerOverWall();
+
+            if (slideSprite.enabled != isSliding && !isInvincible)
+            {
+                slideSprite.enabled = isSliding;
+                uprightSprite.enabled = !isSliding;
+            }
+
+            DisplayHealth();
+            DisplayDashAvailability();
+
+            // reset level if dead
+            if (health <= 0 && GameManager.GetInstance().GetState() == GameManager.GameState.Play)
+            {
+                Debug.Log("Player Lost");
+                ScoreManager.GetInstance().SaveScore();
+                StopAllLoopingSounds();
+                GameManager.GetInstance().TransitionToRunSummaryState();
+                ResetPos();
+                FreezePos();
+                rigidbody2d.velocity = Vector3.zero;
+            }
+
+            if (useMobileInput) // Reset wall and grab button to not pressed
+            {
+                grabKeyDown = false;
+                jumpAndDashKeyDown = false;
+            }
+
+            wasGrounded = IsGrounded();
         }
-        else
-        {
-            timeSinceLeftGround += Time.deltaTime;
-        }
-
-        if (IsGrounded() && !wasGrounded)
-        {
-            leftGroundFromJump = false;
-        }
-
-        HandleGravity();
-        HandleHorizontalMovement();
-        HandleDash(); // Dash has to be before jump, for jumping at edge to work
-        HandleJump();
-        HandleWallClimb();
-        HandleWallJump();
-        HandleSlide();
-        HandleLookDirection();
-        HandlePushPlayerOverWall();
-
-        if (slideSprite.enabled != isSliding && !isInvincible) {
-            slideSprite.enabled = isSliding;
-            uprightSprite.enabled = !isSliding;
-        }
-
-        DisplayHealth();
-        DisplayDashAvailability();
-
-        // reset level if dead
-        if (health <= 0 && GameManager.GetInstance().GetState() == GameManager.GameState.Play) {
-            Debug.Log("Player Lost");
-            ScoreManager.GetInstance().SaveScore();
-            StopAllLoopingSounds();
-            GameManager.GetInstance().TransitionToRunSummaryState();
-            ResetPos();
-            FreezePos();
-            rigidbody2d.velocity = Vector3.zero;
-        }
-
-        if (useMobileInput) // Reset wall and grab button to not pressed
-        {
-            grabKeyDown = false;
-            jumpAndDashKeyDown = false;
-        }
-
-        wasGrounded = IsGrounded();
     }
 
     void FixedUpdate()
@@ -503,56 +509,53 @@ public class Player : MonoBehaviour
 
     private void HandleLookDirection()
     {
-        if (GameManager.GetInstance().GetState() != GameManager.GameState.Pause)
+        // Set isLookingRight
+        if (isGrabbingWall)
         {
-            // Set isLookingRight
-            if (isGrabbingWall)
-            {
-                if (IsOnLeftWall())
-                {
-                    lookDirection = HorizontalDirection.Left;
-                }
-                else if (IsOnRightWall())
-                {
-                    lookDirection = HorizontalDirection.Right;
-                }
-            }
-            else if (isWallJumpingLeft)
+            if (IsOnLeftWall())
             {
                 lookDirection = HorizontalDirection.Left;
             }
-            else if (isWallJumpingRight)
+            else if (IsOnRightWall())
             {
                 lookDirection = HorizontalDirection.Right;
             }
-            else if (GameManager.GetInstance().GetState() != GameManager.GameState.Play)
+        }
+        else if (isWallJumpingLeft)
+        {
+            lookDirection = HorizontalDirection.Left;
+        }
+        else if (isWallJumpingRight)
+        {
+            lookDirection = HorizontalDirection.Right;
+        }
+        else if (GameManager.GetInstance().GetState() != GameManager.GameState.Play)
+        {
+            if (!isSliding) // Don't allow changing direction mid slide
             {
-                if (!isSliding) // Don't allow changing direction mid slide
+                if (inputHorizontalAxis > 0)
                 {
-                    if (inputHorizontalAxis > 0)
-                    {
-                        lookDirection = HorizontalDirection.Right;
-                    }
-                    else if (inputHorizontalAxis < 0)
-                    {
-                        lookDirection = HorizontalDirection.Left;
-                    }
+                    lookDirection = HorizontalDirection.Right;
+                }
+                else if (inputHorizontalAxis < 0)
+                {
+                    lookDirection = HorizontalDirection.Left;
                 }
             }
-            else
-            {
-                lookDirection = HorizontalDirection.Right;
-            }
+        }
+        else
+        {
+            lookDirection = HorizontalDirection.Right;
+        }
 
-            // Change transform to look left or right
-            if (lookDirection == HorizontalDirection.Right)
-            {
-                transform.rotation = Quaternion.Euler(transform.rotation.x, 0, transform.rotation.z);
-            }
-            else
-            {
-                transform.rotation = Quaternion.Euler(transform.rotation.x, 180, transform.rotation.z);
-            }
+        // Change transform to look left or right
+        if (lookDirection == HorizontalDirection.Right)
+        {
+            transform.rotation = Quaternion.Euler(transform.rotation.x, 0, transform.rotation.z);
+        }
+        else
+        {
+            transform.rotation = Quaternion.Euler(transform.rotation.x, 180, transform.rotation.z);
         }
     }
 
