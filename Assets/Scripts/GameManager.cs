@@ -28,6 +28,11 @@ public class GameManager : MonoBehaviour
     public List<Button> backButtons;
     [FMODUnity.EventRef]
     public string crowSound;
+    [FMODUnity.EventRef]
+    public string gameMusicEvent;
+
+    private FMOD.Studio.EventInstance gameMusicInstance;
+    private FMOD.Studio.PARAMETER_ID isPlayStateParameterId;
 
     private ScoreManager scoreManager;
     private PlusMinusLevelSetting levelInputSetting;
@@ -87,6 +92,14 @@ public class GameManager : MonoBehaviour
     {
         scoreManager = ScoreManager.GetInstance();
 
+        gameMusicInstance = FMODUnity.RuntimeManager.CreateInstance(gameMusicEvent);
+        gameMusicInstance.start();
+
+        FMOD.Studio.EventDescription gameMusicEventDescription = FMODUnity.RuntimeManager.GetEventDescription(gameMusicEvent);
+        FMOD.Studio.PARAMETER_DESCRIPTION isPlayStateParameterDescription;
+        gameMusicEventDescription.getParameterDescriptionByName("IsPlayState", out isPlayStateParameterDescription);
+        isPlayStateParameterId = isPlayStateParameterDescription.id;
+
         TransitionToMainMenuState();
     }
 
@@ -128,6 +141,8 @@ public class GameManager : MonoBehaviour
         fol.xMultiplier = 0;
 
         parallaxBackground.backgroundSpeeds[11] = 0;
+
+        gameMusicInstance.setParameterByID(isPlayStateParameterId, 0);
     }
 
     private void PostRunSummary()
@@ -165,6 +180,8 @@ public class GameManager : MonoBehaviour
 
         // make foreground grass start moving
         parallaxBackground.backgroundSpeeds[11] = ChunkSpawner.GetInstance().levelConfig.speed / 10;
+
+        gameMusicInstance.setParameterByID(isPlayStateParameterId, 1);
     }
 
     public void PauseGame()

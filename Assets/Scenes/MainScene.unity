@@ -13081,6 +13081,10 @@ MonoBehaviour:
   - {fileID: 4551153796685374035, guid: b3fb33f8bddde1f4b90cfc0444710a9e, type: 3}
   - {fileID: 4551153796685374035, guid: be23268d55d136f408465daece18c29d, type: 3}
   - {fileID: 4551153796685374035, guid: 8fcbbaad9b05e1940aaef438ede3a6d4, type: 3}
+  - {fileID: 4551153796685374035, guid: a59d257ed4546104480edaea1bbe9093, type: 3}
+  - {fileID: 4551153796685374035, guid: 182e8f7226809c0418081f4ae8706ba0, type: 3}
+  - {fileID: 4551153796685374035, guid: 54c9b36832093d24a8cd20a56ab6842a, type: 3}
+  - {fileID: 4551153796685374035, guid: ead48e6f54ae4a64698677343f9a6780, type: 3}
   keyInput: {fileID: 0}
   debugForceChunkIndex: -1
   minimumChunksBetweenTutorials: 2
@@ -30348,6 +30352,7 @@ MonoBehaviour:
   - {fileID: 730328381}
   - {fileID: 494108123}
   crowSound: event:/Crows
+  gameMusicEvent: event:/GameMusic
 --- !u!4 &2093883856
 Transform:
   m_ObjectHideFlags: 0

@@ -287,7 +287,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: FMOD/Build/Desktop/Master.bank
   Name: Master
-  lastModified: 637547607139637815
+  lastModified: 637549552236136850
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -360,6 +360,26 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 0
+--- !u!114 &-1099240540207431886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/GameMusic/IsPlayState
+  m_EditorClassIdentifier: 
+  Name: IsPlayState
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 0
 --- !u!114 &-443170735685717406
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -412,12 +432,13 @@ MonoBehaviour:
   - {fileID: -4591615760995640192}
   - {fileID: -443170735685717406}
   - {fileID: 5170205654762372263}
+  - {fileID: 7656546285554631883}
   EditorParameters: []
   MasterBanks:
   - {fileID: -3133939523981617787}
   StringsBanks:
   - {fileID: 4451186097141386055}
-  stringsBankWriteTime: 637547607139667816
+  stringsBankWriteTime: 637549552236176865
   cacheVersion: 5
 --- !u!114 &495876067313185471
 MonoBehaviour:
@@ -539,11 +560,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: FMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
-  lastModified: 637547607139667816
+  lastModified: 637549552236176865
   LoadResult: 0
   FileSizes:
   - Name: 
-    Value: 1242
+    Value: 1336
+  Exists: 1
+--- !u!114 &5080068539086358890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/GameMusic/IsPlayState
+  m_EditorClassIdentifier: 
+  Name: IsPlayState
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
   Exists: 1
 --- !u!114 &5170205654762372263
 MonoBehaviour:
@@ -701,6 +742,30 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 419
+--- !u!114 &7656546285554631883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/GameMusic
+  m_EditorClassIdentifier: 
+  Path: event:/GameMusic
+  guid: dde681c592f7b547b31d23fd678f68fb
+  Banks:
+  - {fileID: -3133939523981617787}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters:
+  - {fileID: 5080068539086358890}
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 57832
 --- !u!114 &7858015988228030443
 MonoBehaviour:
   m_ObjectHideFlags: 0
