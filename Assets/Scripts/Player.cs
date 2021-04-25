@@ -994,7 +994,7 @@ public class Player : MonoBehaviour
 
     public void RemoveHealth(int healthToRemove)
     {
-        if (!isInvincible && healthToRemove > 0)
+        if (!isInvincible && healthToRemove > 0 && health > 0)
         {
             health -= healthToRemove;
             if (health < 0) { health = 0; }
