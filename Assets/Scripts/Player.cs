@@ -213,6 +213,10 @@ public class Player : MonoBehaviour
 
             wasGrounded = IsGrounded();
         }
+        else
+        {
+            StopAllLoopingSounds();
+        }
     }
 
     void FixedUpdate()
