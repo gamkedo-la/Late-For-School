@@ -23,6 +23,7 @@ public class Player : MonoBehaviour
     public float dashVelocity = 25f;
     public float forceFallVelocity = 50f;
     public float speed = 10f;
+    public float airAcceleration = 20f;
     public float slideSpeed = 1f;
     public float wallJumpVelocity = 10f;
     public float wallJumpResetTime = 1f; // Prevents player from getting back to the wall
@@ -295,14 +296,18 @@ public class Player : MonoBehaviour
                     velX += (inputHorizontalAxis * speed) / stuckSlowdownFactor;
                     rigidbody2d.velocity = new Vector2(velX, rigidbody2d.velocity.y);
                 }
-                // normal movement
-                else if (!isWallJumpingLeft && !isWallJumpingRight)
+                // ground movement
+                else if (!isWallJumpingLeft && !isWallJumpingRight && IsGrounded())
                 {
                     if (isSliding && inputHorizontalAxis < 0)
                     {
                         inputHorizontalAxis /= 2;
                     }
                     rigidbody2d.velocity = new Vector2(inputHorizontalAxis * speed, rigidbody2d.velocity.y);
+                } // normal air movement
+                else if (!isWallJumpingLeft && !isWallJumpingRight && !IsGrounded())
+                {
+                    rigidbody2d.velocity = Vector2.Lerp(rigidbody2d.velocity, new Vector2(inputHorizontalAxis * speed, rigidbody2d.velocity.y), airAcceleration * Time.deltaTime);
                 }
                 // prevent moving back to the wall if jumping away from it
                 else

@@ -23122,6 +23122,7 @@ MonoBehaviour:
   dashVelocity: 30
   forceFallVelocity: 30
   speed: 10
+  airAcceleration: 20
   slideSpeed: 7.5
   wallJumpVelocity: 10
   wallJumpResetTime: 1
