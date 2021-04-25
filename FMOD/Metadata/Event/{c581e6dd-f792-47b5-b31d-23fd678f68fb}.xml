@@ -109,7 +109,7 @@
 	<object class="MixerBusPanner" id="{adfdb52f-40ce-47b9-a0d0-f8cb6ead8a7d}" />
 	<object class="SingleSound" id="{156cd9b8-6d57-49f6-b7f4-49c1b8bc9177}">
 		<property name="length">
-			<value>34.179773242630382</value>
+			<value>35.541609977324264</value>
 		</property>
 		<relationship name="audioFile">
 			<destination>{3cd36154-fbff-465a-8fc2-5a72f6b9cdcb}</destination>
@@ -120,13 +120,16 @@
 			<value>40</value>
 		</property>
 		<property name="length">
-			<value>17.832925170068027</value>
+			<value>115.78977324263039</value>
 		</property>
 		<relationship name="audioFile">
 			<destination>{ad4d6ddc-93c2-4825-906f-858e536e4dcd}</destination>
 		</relationship>
 	</object>
 	<object class="EventMixerGroup" id="{1f4b924f-9ff9-4d95-9351-92514610cca3}">
+		<property name="volume">
+			<value>-4.5</value>
+		</property>
 		<property name="name">
 			<value>Audio 1</value>
 		</property>
@@ -145,7 +148,7 @@
 			<value>16</value>
 		</property>
 		<property name="length">
-			<value>15.99999999999998</value>
+			<value>15.999999999999979</value>
 		</property>
 		<relationship name="timeline">
 			<destination>{76726dc0-bb3b-422c-a3b2-75aab67ff643}</destination>
@@ -207,7 +210,7 @@
 			<value>40</value>
 		</property>
 		<property name="length">
-			<value>16</value>
+			<value>112</value>
 		</property>
 		<property name="quantizationInterval">
 			<value>8</value>
@@ -227,7 +230,7 @@
 	</object>
 	<object class="NamedMarker" id="{12d83473-0dc6-4a59-a67a-58a2c60b5aed}">
 		<property name="position">
-			<value>0</value>
+			<value>16</value>
 		</property>
 		<property name="name">
 			<value>Menu</value>
@@ -244,7 +247,7 @@
 			<value>40</value>
 		</property>
 		<property name="length">
-			<value>16</value>
+			<value>112</value>
 		</property>
 		<relationship name="timeline">
 			<destination>{76726dc0-bb3b-422c-a3b2-75aab67ff643}</destination>
