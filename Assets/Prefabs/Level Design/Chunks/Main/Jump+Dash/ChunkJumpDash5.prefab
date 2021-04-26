@@ -306,7 +306,7 @@ MonoBehaviour:
   intensity: 7.5
   tutorialChunk: 0
   includedSkills: 0000000001000000
-  version: 2
+  version: 1
 --- !u!1 &4920372413788820452
 GameObject:
   m_ObjectHideFlags: 0

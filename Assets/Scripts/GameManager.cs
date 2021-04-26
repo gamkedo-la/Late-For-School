@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
 
     private float levelInputSpeedIncrement = 0.5f;
     private float levelInputSpeedMin = 2.5f;
-    private float levelInputSpeedMax = 10f;
+    private float levelInputSpeedMax = 7.5f;
 
     private float levelInputIntensityIncrement = 0.5f;
     private float levelInputIntensityMin = 2.5f;

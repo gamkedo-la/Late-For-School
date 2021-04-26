@@ -13065,7 +13065,7 @@ MonoBehaviour:
   - {fileID: 4551153796685374035, guid: f8050842e0ecaed4ab53ca687e2c9191, type: 3}
   - {fileID: 4551153796685374035, guid: 67af8963fb1a71c45aebd137c7112db2, type: 3}
   - {fileID: 4551153796685374035, guid: 26163e3734d7e454881e5bffd9ec68b4, type: 3}
-  - {fileID: 4551153796685374035, guid: 31da125fe80b058428f6bed1ce857a75, type: 3}
+  - {fileID: 4551153796685374035, guid: ead48e6f54ae4a64698677343f9a6780, type: 3}
   - {fileID: 8397681959016776686, guid: a529116324cb1b84e8531f803a71578e, type: 3}
   - {fileID: 4551153796685374035, guid: be532e2587f590046a999240ded0cfab, type: 3}
   - {fileID: 4551153796685374035, guid: 6be5044292f89fb4899bac410dc58b4f, type: 3}
@@ -13084,12 +13084,12 @@ MonoBehaviour:
   - {fileID: 4551153796685374035, guid: a59d257ed4546104480edaea1bbe9093, type: 3}
   - {fileID: 4551153796685374035, guid: 182e8f7226809c0418081f4ae8706ba0, type: 3}
   - {fileID: 4551153796685374035, guid: 54c9b36832093d24a8cd20a56ab6842a, type: 3}
-  - {fileID: 4551153796685374035, guid: ead48e6f54ae4a64698677343f9a6780, type: 3}
-  - {fileID: 4551153796685374035, guid: 55b2e8db561ce994d960a45b9f9a4700, type: 3}
   - {fileID: 4551153796685374035, guid: 408f6b112a0024a4791c6ca7211263ee, type: 3}
+  - {fileID: 4551153796685374035, guid: 55b2e8db561ce994d960a45b9f9a4700, type: 3}
   keyInput: {fileID: 0}
   debugForceChunkIndex: -1
-  minimumChunksBetweenTutorials: 2
+  minimumChunksBetweenTutorials: 3
+  maximumChunksBetweenTutorials: 10
 --- !u!4 &618240592
 Transform:
   m_ObjectHideFlags: 0

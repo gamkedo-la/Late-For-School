@@ -11,7 +11,8 @@ public class ChunkSpawner : MonoBehaviour
     [Header("Debug Only (set to -1 for normal gameplay)")]
     [Tooltip("Only spawn this one chunk over and over:")]
     public int debugForceChunkIndex = -1;
-    public int minimumChunksBetweenTutorials = 3;
+    public int minimumChunksBetweenTutorials = 2;
+    public int maximumChunksBetweenTutorials = 10;
 
     [HideInInspector] public LevelKeyHandler.LevelConfig levelConfig;
 
@@ -23,6 +24,7 @@ public class ChunkSpawner : MonoBehaviour
     private List<GameObject> usableChunks = new List<GameObject>();
     private List<GameObject> unusableChunks = new List<GameObject>();
     private int chunksSinceLastTutorial;
+    private string lastChosenChunk;
 
     private static ChunkSpawner instance;
     public static ChunkSpawner GetInstance()
@@ -191,6 +193,9 @@ public class ChunkSpawner : MonoBehaviour
 
     private GameObject ChooseNextChunk()
     {
+        UnityEngine.Random.InitState(levelConfig.randomSeed);
+        levelConfig.randomSeed += UnityEngine.Random.Range(1, 10);
+
         // TODO: choose a chunk based on recent intensity & if we still have moves left to teach
         GameObject chosenChunk;
         if (debugForceChunkIndex > -1)
@@ -199,10 +204,50 @@ public class ChunkSpawner : MonoBehaviour
         }
         else
         {
-            int chunkIndex = UnityEngine.Random.Range(0, usableChunks.Count);
-            chosenChunk = usableChunks[chunkIndex];
+            bool allSkillsKnown = true;
+            foreach (Player.Skill skill in levelConfig.includedSkills)
+            {
+                if (!knownSkills.Contains(skill)) { allSkillsKnown = false; }
+            }
+
+
+            if (chunksSinceLastTutorial >= maximumChunksBetweenTutorials &&
+                !allSkillsKnown)
+            {
+                chosenChunk = GetTutorialChunk(usableChunks);
+            }
+            else
+            {
+                int chunkIndex = UnityEngine.Random.Range(0, usableChunks.Count);
+                chosenChunk = usableChunks[chunkIndex];
+            }
+
+            // don't have too many chunks between tutorials
+
+            if (lastChosenChunk != null && chosenChunk.name.Equals(lastChosenChunk))
+            {
+                chosenChunk = ChooseNextChunk();
+            }
+
+            lastChosenChunk = chosenChunk.name;
         }
+
         return chosenChunk;
+    }
+
+    private GameObject GetTutorialChunk(List<GameObject> chunks)
+    {
+        List<GameObject> tutorialChunks = new List<GameObject>();
+        foreach (var chunk in chunks)
+        {
+            if (chunk.GetComponent<Chunk>().tutorialChunk)
+            {
+                tutorialChunks.Add(chunk);
+            }
+        }
+
+        int chunkIndex = UnityEngine.Random.Range(0, tutorialChunks.Count);
+        return tutorialChunks[chunkIndex];
     }
 
     private void ChunkSpawnerUpdate()
@@ -243,8 +288,6 @@ public class ChunkSpawner : MonoBehaviour
 
         if (spawnNewChunk)
         {
-            UnityEngine.Random.InitState(levelConfig.randomSeed);
-
             GameObject chosenChunk = ChooseNextChunk();
             ChunkBounds[] chunkBounds = chosenChunk.GetComponentsInChildren<ChunkBounds>();
             float chunkOffset = 0f;
@@ -293,7 +336,6 @@ public class ChunkSpawner : MonoBehaviour
             }
 
             activeChunks.Add(newChunk);
-            levelConfig.randomSeed++;
         }
 
         foreach (GameObject chunk in toRemove)
