@@ -419,7 +419,14 @@ public class Player : MonoBehaviour
         bool detatchFromWall = (!isOnLeftWall && !isOnRightWall) || 
                                ((isOnLeftWall && inputHorizontalAxis > 0) || (isOnRightWall && inputHorizontalAxis < 0) || 
                                (isGrounded && inputVerticalAxis <= 0));
-        if (IsOnDangerousObjectOnWall()) { attachToWall = false; }
+        if (IsOnDangerousObjectOnWall()) { 
+            attachToWall = false;
+
+            if (isOnRightWall && rigidbody2d.velocity.x > 0 || isOnLeftWall && rigidbody2d.velocity.x < 0)
+            {
+                rigidbody2d.velocity = new Vector2(0, rigidbody2d.velocity.y);
+            }
+        }
 
         if (attachToWall) { isGrabbingWall = true; }
         if (detatchFromWall) { isGrabbingWall = false; }
