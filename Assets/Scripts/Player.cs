@@ -268,7 +268,7 @@ public class Player : MonoBehaviour
         if (!isDashing)
         {
             // jump
-            bool canJump = IsGrounded() || (timeSinceLeftGround <= groundedRecentlyTime && !leftGroundFromJump);
+            bool canJump = (IsGrounded() || (timeSinceLeftGround <= groundedRecentlyTime && !leftGroundFromJump)) && !(isSliding && ObstructionAbove(0.5f));
             if (canJump && (jumpAndDashKeyDown || (upToJump && inputVerticalAxisDown > 0)))
             {
                 if (isSliding)
