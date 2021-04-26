@@ -204,17 +204,25 @@ public class ChunkSpawner : MonoBehaviour
         }
         else
         {
-            bool allSkillsKnown = true;
-            foreach (Player.Skill skill in levelConfig.includedSkills)
+            if (levelConfig.includeTutorialChunks)
             {
-                if (!knownSkills.Contains(skill)) { allSkillsKnown = false; }
-            }
+                // don't have too many chunks between tutorials
+                bool allSkillsKnown = true;
+                foreach (Player.Skill skill in levelConfig.includedSkills)
+                {
+                    if (!knownSkills.Contains(skill)) { allSkillsKnown = false; }
+                }
 
-
-            if (chunksSinceLastTutorial >= maximumChunksBetweenTutorials &&
-                !allSkillsKnown)
-            {
-                chosenChunk = GetTutorialChunk(usableChunks);
+                if (chunksSinceLastTutorial >= maximumChunksBetweenTutorials &&
+                    !allSkillsKnown)
+                {
+                    chosenChunk = GetTutorialChunk(usableChunks);
+                }
+                else
+                {
+                    int chunkIndex = UnityEngine.Random.Range(0, usableChunks.Count);
+                    chosenChunk = usableChunks[chunkIndex];
+                }
             }
             else
             {
@@ -222,7 +230,6 @@ public class ChunkSpawner : MonoBehaviour
                 chosenChunk = usableChunks[chunkIndex];
             }
 
-            // don't have too many chunks between tutorials
 
             if (lastChosenChunk != null && chosenChunk.name.Equals(lastChosenChunk))
             {
